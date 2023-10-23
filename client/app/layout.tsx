@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import '@styles/globals.css'
 import React, { Children } from 'react'
-// import Nav from '@components/Nav'
+import Nav from '@components/Nav'
 
 export const metadata: Metadata = {
   title: 'Artopia',
@@ -19,7 +19,7 @@ function RootLayout ({children, } : {children: React.ReactNode}) {
         </div>
 
         <main className='app'>
-          {/* <Nav></Nav> */}
+          <Nav></Nav>
           {children}
         </main>
       </body>
