@@ -41,8 +41,7 @@ function Nav() {
           </div>
         ) : (
           <>
-            <ConnectButton>
-              Sign In
+            <ConnectButton label="Sign in">
             </ConnectButton>      
           </>
         )}
