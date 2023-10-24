@@ -48,6 +48,8 @@ const wagmiConfig = createConfig({
 
 const Provider = (props: SessionProviderProps) => (
   <WagmiConfig config={wagmiConfig}>
+    <SessionProvider refetchInterval={0} session={props.session}>
+      <RainbowKitSiweNextAuthProvider>
         <RainbowKitProvider 
           theme={lightTheme({
             accentColor: '#7b3fe4',
@@ -57,7 +59,9 @@ const Provider = (props: SessionProviderProps) => (
           chains={chains}
         >
           {props.children}
-        </RainbowKitProvider> 
+        </RainbowKitProvider>
+      </RainbowKitSiweNextAuthProvider>
+    </SessionProvider>
   </WagmiConfig>
 )
 

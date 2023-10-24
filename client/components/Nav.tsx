@@ -26,9 +26,26 @@ function Nav() {
       </div>
 
       <div className='sm:flex hidden'>
+        {loggedIn ? (
+          <div className='flex gap-3 md:gap-5'>
+            <Link href='/create-prompt' className='black_btn'>
+              Create Artwork
+            </Link>
+
+            <button type='button' onClick={(e) => {
+                e.preventDefault()
+            }} className='outline_btn'>
+              Sign Out
+            </button>
+
+          </div>
+        ) : (
+          <>
             <ConnectButton>
               Sign In
             </ConnectButton>      
+          </>
+        )}
       </div>
     </nav>
   )
