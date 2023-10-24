@@ -5,8 +5,15 @@ import Image from '@node_modules/next/image'
 import { useState, useEffect } from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
+import { Input } from 'antd';
+import type { SearchProps } from 'antd';
+
+const { Search } = Input;
+
 function Nav() {
   const loggedIn = false;
+
+  const onSearch: SearchProps['onSearch'] = (value: any, _e: any, info: any) => { console.log(info?.source, value) };
 
   return (
     <nav className='flex-between w-full mb-16 pt-3'>
@@ -21,11 +28,16 @@ function Nav() {
           />
           <p className='logo_text'>Artopia</p>
         </Link>
-        <Link href='/gallery' className='flex-center'>Gallery</Link>
+        <Link href='/collection' className='flex-center'>Collection</Link>
         <Link href='/autction' className='flex-center'>Auction</Link>
+        <Link href='/create' className='flex-center'>Create</Link>
       </div>
 
-      <div className='sm:flex hidden'>
+      <div className='flex'>
+        <Search placeholder="input search text" onSearch={onSearch} style={{ width: 350 }} allowClear/>
+      </div>
+
+      <div className='flex'>
         {loggedIn ? (
           <div className='flex gap-3 md:gap-5'>
             <Link href='/create-prompt' className='black_btn'>
