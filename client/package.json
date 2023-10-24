@@ -9,13 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@rainbow-me/rainbowkit": "^1.1.3",
     "antd": "^5.9.4",
     "ethers": "^5.7.2",
     "next": "13.5.4",
     "next-auth": "^4.24.3",
     "react": "^18",
     "react-dom": "^18",
-    "siwe": "^2.1.4",
+    "viem": "^1.16.6",
     "wagmi": "^1.4.5"
   },
   "devDependencies": {
