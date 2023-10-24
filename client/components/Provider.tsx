@@ -57,6 +57,7 @@ const Provider = (props: SessionProviderProps) => (
             borderRadius: 'medium'
           })}
           chains={chains}
+          showRecentTransactions={true}
         >
           {props.children}
         </RainbowKitProvider>
