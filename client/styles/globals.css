@@ -77,7 +77,7 @@
 }
 
 .nav_link {
-  @apply rounded-md px-3 py-2 text-sm font-medium text-gray-500 transition-colors ease-out hover:text-black
+  @apply rounded-md gap-3 px-1 py-2 text-sm font-medium text-gray-500 transition-colors ease-out hover:text-black
 }
 
 .app {
