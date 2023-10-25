@@ -32,10 +32,9 @@ function Nav() {
         <Link href='/autction' className='nav_link'>Auction</Link>
       </div>
 
-      <Search className='flex-center'
+      <Search className='flex-center w-80 gap-1'
                 placeholder="input search text" 
                 onSearch={onSearch} 
-                style={{ width: 380 }} 
                 allowClear
                 size="large"
         />
@@ -59,6 +58,18 @@ function Nav() {
               <Link href='/' className='flex gap-2 flex-center'>
                 <Image
                   src='/assets/images/shopping-cart.svg'
+                  alt='cart'
+                  width={30}
+                  height={30}
+                  className='object-contain'
+                />
+              </Link>
+            </Tooltip>
+
+            <Tooltip title="Profile">
+              <Link href='/profile' className='flex gap-2 flex-center'>
+                <Image
+                  src='/assets/images/profile-circle.svg'
                   alt='cart'
                   width={30}
                   height={30}
