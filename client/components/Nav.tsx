@@ -5,7 +5,7 @@ import Image from '@node_modules/next/image'
 import { useState, useEffect } from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-import { Input } from 'antd';
+import { Input, Tooltip } from 'antd';
 import type { SearchProps } from 'antd';
 
 const { Search } = Input;
@@ -30,31 +30,42 @@ function Nav() {
         </Link>
         <Link href='/collection' className='nav_link'>Collection</Link>
         <Link href='/autction' className='nav_link'>Auction</Link>
-        <Search className='flex-center' placeholder="input search text" onSearch={onSearch} style={{ width: 300 }} allowClear/>
       </div>
+
+      <Search className='flex-center'
+                placeholder="input search text" 
+                onSearch={onSearch} 
+                style={{ width: 380 }} 
+                allowClear
+                size="large"
+        />
 
       <div className='flex gap-3 md:gap-5 flex-center'>
         {loggedIn ? (
           <div className='flex gap-3 md:gap-5'>
-            <Link href='/' className='flex gap-2 flex-center'>
-              <Image
-                src='/assets/images/paint-brush.svg'
-                alt='create'
-                width={30}
-                height={30}
-                className='object-contain'
-              />
-            </Link>
-
-            <Link href='/' className='flex gap-2 flex-center'>
-              <Image
-                src='/assets/images/shopping-cart.svg'
-                alt='cart'
-                width={30}
-                height={30}
-                className='object-contain'
-              />
-            </Link>
+            <Tooltip title="Create Artwork">
+              <Link href='/create' className='flex gap-2 flex-center'>
+                <Image
+                  src='/assets/images/paint-brush.svg'
+                  alt='create'
+                  width={30}
+                  height={30}
+                  className='object-contain'
+                />
+              </Link>
+            </Tooltip>
+            
+            <Tooltip title="Shopping Cart">
+              <Link href='/' className='flex gap-2 flex-center'>
+                <Image
+                  src='/assets/images/shopping-cart.svg'
+                  alt='cart'
+                  width={30}
+                  height={30}
+                  className='object-contain'
+                />
+              </Link>
+            </Tooltip>
 
             <ConnectButton>
             </ConnectButton> 
