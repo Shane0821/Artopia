@@ -73,7 +73,7 @@
 
 /* Tailwind Styles */
 .nav {
-  @apply flex-between w-full h-14 pt-1 sticky top-0
+  @apply flex-between w-full h-14 py-1 sticky top-0
 }
 
 .nav_link {
