@@ -5,10 +5,27 @@ import Image from '@node_modules/next/image'
 import { useState, useEffect } from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-import { Input, Tooltip } from 'antd';
-import type { SearchProps } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+
+import { Input, Tooltip, Dropdown } from 'antd';
+import type { SearchProps, MenuProps } from 'antd';
 
 const { Search } = Input;
+
+const items: MenuProps['items'] = [
+  {
+    key: '0',
+    label: (
+      <Link href='/collection/jury' style={{fontSize: '1rem'}}>Jury Collection</Link>
+    ),
+  },
+  {
+    key: '1',
+    label: (
+      <Link href='/collection/factory' style={{fontSize: '1rem'}}>Factory Collection</Link>
+    ),
+  }
+]
 
 function Nav() {
   const loggedIn = true;
@@ -28,7 +45,16 @@ function Nav() {
           />
           <p className='logo_text'>Artopia</p>
         </Link>
-        <Link href='/collection' className='nav_link'>Collection</Link>
+        
+        <Dropdown menu={{ items }} placement="bottomLeft">
+          <div className='flex flex-center text-gray-500 hover:text-black'>
+            <Link href='/collection' className='nav_link'>
+              Collection
+            </Link>
+            <DownOutlined style={{ fontSize: '0.7rem' }}/>
+          </div>
+        </Dropdown>
+        
         <Link href='/autction' className='nav_link'>Auction</Link>
       </div>
 
@@ -47,9 +73,9 @@ function Nav() {
                 <Image
                   src='/assets/images/paint-brush.svg'
                   alt='create'
-                  width={30}
-                  height={30}
-                  className='object-contain'
+                  width={25}
+                  height={25}
+                  className='object-contain opacity-75'
                 />
               </Link>
             </Tooltip>
@@ -59,9 +85,9 @@ function Nav() {
                 <Image
                   src='/assets/images/shopping-cart.svg'
                   alt='cart'
-                  width={30}
-                  height={30}
-                  className='object-contain'
+                  width={25}
+                  height={25}
+                  className='object-contain opacity-75'
                 />
               </Link>
             </Tooltip>
@@ -71,9 +97,9 @@ function Nav() {
                 <Image
                   src='/assets/images/profile-circle.svg'
                   alt='cart'
-                  width={30}
-                  height={30}
-                  className='object-contain'
+                  width={25}
+                  height={25}
+                  className='object-contain opacity-75'
                 />
               </Link>
             </Tooltip>
