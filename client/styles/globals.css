@@ -72,9 +72,16 @@
 }
 
 /* Tailwind Styles */
+.nav {
+  @apply flex-between w-full h-14 pt-1 sticky top-0
+}
+
+.nav_link {
+  @apply rounded-md px-3 py-2 text-sm font-medium text-gray-500 transition-colors ease-out hover:text-black
+}
 
 .app {
-  @apply relative z-10 flex justify-center items-center flex-col max-w-7xl mx-auto sm:px-16 px-6;
+  @apply relative max-w-7xl z-10 flex justify-center items-center flex-col mx-auto sm:px-16 px-6;
 }
 
 .black_btn {
