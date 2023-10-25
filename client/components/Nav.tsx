@@ -36,18 +36,35 @@ function Nav() {
       <div className='flex gap-3 md:gap-5 flex-center'>
         {loggedIn ? (
           <div className='flex gap-3 md:gap-5'>
-            <Link href='/create' className='nav_link'>
-              Create
+            <Link href='/' className='flex gap-2 flex-center'>
+              <Image
+                src='/assets/images/paint-brush.svg'
+                alt='create'
+                width={30}
+                height={30}
+                className='object-contain'
+              />
             </Link>
 
+            <Link href='/' className='flex gap-2 flex-center'>
+              <Image
+                src='/assets/images/shopping-cart.svg'
+                alt='cart'
+                width={30}
+                height={30}
+                className='object-contain'
+              />
+            </Link>
 
-
+            <ConnectButton>
+            </ConnectButton> 
           </div>
         ) : (
-          <></>
+          <>        
+            <ConnectButton>
+            </ConnectButton> 
+          </>
         )}
-        <ConnectButton>
-        </ConnectButton> 
       </div>
     </nav>
   )
