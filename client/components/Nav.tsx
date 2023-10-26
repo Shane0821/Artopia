@@ -18,26 +18,26 @@ const items: MenuProps['items'] = [
   {
     key: '0',
     label: (
-      <Link href='/collection/jury' style={{fontSize: '1rem'}}>Jury Collection</Link>
+      <Link href='/collection/jury' style={{ fontSize: '1rem' }}>Jury Collection</Link>
     ),
   },
   {
     key: '1',
     label: (
-      <Link href='/collection/factory' style={{fontSize: '1rem'}}>Factory Collection</Link>
+      <Link href='/collection/factory' style={{ fontSize: '1rem' }}>Factory Collection</Link>
     ),
   }
 ]
 
 function Nav() {
- const islogin = true;
+  const islogin = true;
   const { data: session, status } = useSession()
   const { address, isConnected } = useAccount()
 
   const onSearch: SearchProps['onSearch'] = (value: any, _e: any, info: any) => { console.log(info?.source, value) };
 
   return (
-    <nav className='nav' style={{background: '#fafafa'}}>
+    <nav className='nav' style={{ background: '#fafafa' }}>
       <div className='flex gap-3 md:gap-5 flex-center'>
         <Link href='/' className='flex gap-2 flex-center'>
           <Image
@@ -49,28 +49,28 @@ function Nav() {
           />
           <p className='logo_text'>Artopia</p>
         </Link>
-        
+
         <Dropdown menu={{ items }} placement="bottomLeft">
           <div className='flex flex-center text-gray-500 hover:text-black'>
             <Link href='/collection' className='nav_link'>
               Collection
             </Link>
-            <DownOutlined style={{ fontSize: '0.7rem' }}/>
+            <DownOutlined style={{ fontSize: '0.7rem' }} />
           </div>
         </Dropdown>
-        
+
         <Link href='/autction' className='nav_link'>Auction</Link>
       </div>
 
       <Search className='flex-center w-80 gap-1'
-              placeholder="input search text" 
-              onSearch={onSearch} 
-              allowClear
-              size="large"
-        />
+        placeholder="input search text"
+        onSearch={onSearch}
+        allowClear
+        size="large"
+      />
 
       <div className='flex gap-3 md:gap-5 flex-center'>
-        {isConnected && session?.user  ? (
+        {isConnected && session?.user ? (
           <div className='flex gap-3 md:gap-5'>
             <Tooltip title="Create Artwork">
               <Link href='/create' className='flex gap-2 flex-center'>
@@ -83,7 +83,7 @@ function Nav() {
                 />
               </Link>
             </Tooltip>
-            
+
             <Tooltip title="Shopping Cart">
               <Link href='/' className='flex gap-2 flex-center'>
                 <Image
@@ -109,12 +109,12 @@ function Nav() {
             </Tooltip>
 
             <ConnectButton>
-            </ConnectButton> 
+            </ConnectButton>
           </div>
         ) : (
-          <>        
+          <>
             <ConnectButton>
-            </ConnectButton> 
+            </ConnectButton>
           </>
         )}
       </div>
