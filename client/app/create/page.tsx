@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 
-import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
+import { LaptopOutlined, NotificationOutlined, UserOutlined, FormatPainterOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu, theme, Space, Button } from 'antd';
 
@@ -38,7 +38,14 @@ const Create = () => {
             <Layout>
                 <Content style={{ padding: '0 0px' }}>
                     <Layout style={{ padding: '24px 0', background: "white" }}>
-                        <div style={{ height: 600, overflowY: 'auto' }}>
+                        <div style={{
+                            height: 600,
+                            overflowY: 'auto',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center'
+                        }}>
+                            Generate
                             {/* Left Part */}
                             <Sider style={{ background: "white" }} width={350}>
                                 <Menu
@@ -50,18 +57,25 @@ const Create = () => {
                                 />
                             </Sider>
 
-                            <Button icon={<UserOutlined />} style={{ position: 'absolute', bottom: 40 }}>
+                            <Button style={{
+                                width: 300,
+                                height: 55,
+                                position: 'absolute',
+                                backgroundColor: "white",
+                                bottom: 10
+                            }}>
                                 Generate Image
+                                <FormatPainterOutlined />
                             </Button>
                         </div>
 
-                        <Content style={{ padding: '0 24px', height: 600 }}>
+                        <Content style={{ padding: '0 24px', height: 600, overflowY: 'auto' }}>
                             Content
                         </Content>
                     </Layout>
                 </Content>
-            </Layout>
-        </Space>
+            </Layout >
+        </Space >
     )
 }
 
