@@ -2,15 +2,17 @@
 
 import Link from '@node_modules/next/link'
 import Image from '@node_modules/next/image'
-import { useState, useEffect } from 'react'
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useState, useEffect, useCallback } from 'react'
 
 import { DownOutlined } from '@ant-design/icons';
-
 import { Input, Tooltip, Dropdown } from 'antd';
 import type { SearchProps, MenuProps } from 'antd';
-
 const { Search } = Input;
+
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+
+import { getCsrfToken, useSession } from "next-auth/react"
+import { useAccount, useConnect, useNetwork, useSignMessage } from "wagmi"
 
 const items: MenuProps['items'] = [
   {
@@ -28,7 +30,9 @@ const items: MenuProps['items'] = [
 ]
 
 function Nav() {
-  const loggedIn = true;
+ const islogin = true;
+  const { data: session, status } = useSession()
+  const { address, isConnected } = useAccount()
 
   const onSearch: SearchProps['onSearch'] = (value: any, _e: any, info: any) => { console.log(info?.source, value) };
 
@@ -59,14 +63,14 @@ function Nav() {
       </div>
 
       <Search className='flex-center w-80 gap-1'
-                placeholder="input search text" 
-                onSearch={onSearch} 
-                allowClear
-                size="large"
+              placeholder="input search text" 
+              onSearch={onSearch} 
+              allowClear
+              size="large"
         />
 
       <div className='flex gap-3 md:gap-5 flex-center'>
-        {loggedIn ? (
+        {isConnected && session?.user  ? (
           <div className='flex gap-3 md:gap-5'>
             <Tooltip title="Create Artwork">
               <Link href='/create' className='flex gap-2 flex-center'>
