@@ -3,14 +3,9 @@ import React from 'react';
 
 import { LaptopOutlined, NotificationOutlined, UserOutlined, FormatPainterOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme, Space, Button } from 'antd';
+import { Layout, Menu, Space, Button } from 'antd';
 
-const { Header, Content, Footer, Sider } = Layout;
-
-const items1: MenuProps['items'] = ['1', '2', '3'].map((key) => ({
-    key,
-    label: `nav ${key}`,
-}));
+const { Content, Sider } = Layout;
 
 const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
     (icon, index) => {
