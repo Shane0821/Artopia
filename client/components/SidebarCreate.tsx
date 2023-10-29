@@ -11,11 +11,13 @@ const { Option } = Select;
 const { Panel } = Collapse;
 
 function SidebarCreate() {
+    const [model, setModel] = useState('model1');
     const [height, setHeight] = useState(512);
     const [width, setWidth] = useState(512);
     const [step, setStep] = useState(25);
     const [guidanceScale, setGuidanceScale] = useState(7.5);
     const [seed, setSeed] = useState('');
+    const [sampler, setSampler] = useState('sampler1')
 
     return (
         <Sider style={{ background: "white" }} width={350}>
@@ -35,7 +37,12 @@ function SidebarCreate() {
                     key="1"
                     style={{ backgroundColor: '#fff', border: 0 }}
                 >
-                    <Select style={{ width: '100%' }} placeholder="Select Model">
+                    <Select
+                        style={{ width: '100%' }}
+                        placeholder="Select Model"
+                        value={model}
+                        onChange={(value) => setModel(value)}
+                    >
                         <Option value="model1">Model 1</Option>
                         <Option value="model2">Model 2</Option>
                     </Select>
@@ -146,7 +153,12 @@ function SidebarCreate() {
                     style={{ backgroundColor: '#fff', border: 0 }}
 
                 >
-                    <Select style={{ width: '100%' }} placeholder="Select Sampler">
+                    <Select
+                        style={{ width: '100%' }}
+                        placeholder="Select Sampler"
+                        value={sampler}
+                        onChange={(value) => setSampler(value)}
+                    >
                         <Option value="sampler1">Sampler 1</Option>
                         <Option value="sampler2">Sampler 2</Option>
                     </Select>
