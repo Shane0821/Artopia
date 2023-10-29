@@ -11,13 +11,13 @@ const { Option } = Select;
 const { Panel } = Collapse;
 
 function SidebarCreate() {
-    const [model, setModel] = useState('model1');
+    const [model, setModel] = useState('stable-diffusion-v1-5');
     const [height, setHeight] = useState(512);
     const [width, setWidth] = useState(512);
     const [step, setStep] = useState(25);
     const [guidanceScale, setGuidanceScale] = useState(7.5);
     const [seed, setSeed] = useState('');
-    const [sampler, setSampler] = useState('sampler1')
+    const [sampler, setSampler] = useState('dpmsolver++')
 
     return (
         <Sider style={{ background: "white" }} width={350}>
@@ -43,8 +43,10 @@ function SidebarCreate() {
                         value={model}
                         onChange={(value) => setModel(value)}
                     >
-                        <Option value="model1">Model 1</Option>
-                        <Option value="model2">Model 2</Option>
+                        <Option value="stable-diffusion-v1-5">Stable Diffusion Inpainting v1.5</Option>
+                        <Option value="dark-sushi-mix-v2-25">Dark Sushi Mix v2.25</Option>
+                        <Option value="arcane-diffusion">Arcane Diffusion</Option>
+                        <Option value="anashel-rpg">RPG</Option>
                     </Select>
                 </Panel>
             </Collapse>
@@ -159,8 +161,10 @@ function SidebarCreate() {
                         value={sampler}
                         onChange={(value) => setSampler(value)}
                     >
-                        <Option value="sampler1">Sampler 1</Option>
-                        <Option value="sampler2">Sampler 2</Option>
+                        <Option value="dpmsolver++">dpmsolver++</Option>
+                        <Option value="pndm">pndm</Option>
+                        <Option value="ddim">ddim</Option>
+                        <Option value="euler">euler</Option>
                     </Select>
                 </Panel>
             </Collapse>
