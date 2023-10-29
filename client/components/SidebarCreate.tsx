@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Select, Slider, Input, Collapse, Divider } from 'antd';
+import { Layout, Select, Slider, Input, Collapse, Divider, Image, Space } from 'antd';
 import {
     UpOutlined, DownOutlined, HighlightOutlined,
     FullscreenOutlined, UnorderedListOutlined,
@@ -43,7 +43,21 @@ function SidebarCreate() {
                         value={model}
                         onChange={(value) => setModel(value)}
                     >
-                        <Option value="stable-diffusion-v1-5">Stable Diffusion Inpainting v1.5</Option>
+                        <Option value="stable-diffusion-v1-5">
+                            <Space align="center">
+                                <div style={{ marginTop: '8px' }}>
+                                    <Image
+                                        src="/assets/images/logo.svg"
+                                        alt="model1"
+                                        width={23}
+                                        height={23}
+                                    />
+                                </div>
+                                <div>
+                                    Stable Diffusion Inpainting v1.5
+                                </div>
+                            </Space>
+                        </Option>
                         <Option value="dark-sushi-mix-v2-25">Dark Sushi Mix v2.25</Option>
                         <Option value="arcane-diffusion">Arcane Diffusion</Option>
                         <Option value="anashel-rpg">RPG</Option>
