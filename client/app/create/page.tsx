@@ -78,7 +78,7 @@ const Create = () => {
                         }}>
                             Generate
                             {/* Left Part */}
-                            <SidebarCreate  />
+                            <SidebarCreate />
                             {/* <Menu
                                     onClick={onClick}
                                     style={{ width: 350 }}

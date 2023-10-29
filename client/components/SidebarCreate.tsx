@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Layout, Select, Slider, Input, Collapse } from 'antd';
-import { UpOutlined, DownOutlined } from '@ant-design/icons';
+import {
+    UpOutlined, DownOutlined, HighlightOutlined,
+    FullscreenOutlined, UnorderedListOutlined,
+    PieChartOutlined, SketchOutlined
+} from '@ant-design/icons';
 
 const { Sider } = Layout;
 const { Option } = Select;
@@ -15,15 +19,6 @@ function SidebarCreate() {
 
     return (
         <Sider style={{ background: "white" }} width={350}>
-            <Select
-                style={{ width: '100%' }}
-                placeholder="Select Model"
-                bordered={false}
-            >
-                <Option value="model1">Model 1</Option>
-                <Option value="model2">Model 2</Option>
-            </Select>
-
             <Collapse
                 defaultActiveKey={['1']}
                 expandIcon={({ isActive }) => isActive ? <UpOutlined style={{ color: 'gray' }} /> : <DownOutlined style={{ color: 'gray' }} />}
@@ -31,13 +26,19 @@ function SidebarCreate() {
                 ghost
             >
                 <Panel
-                    header="Prompt"
+                    header={
+                        <div>
+                            <SketchOutlined />
+                            <span style={{ marginLeft: '10px' }}>Model</span>
+                        </div>
+                    }
                     key="1"
                     style={{ backgroundColor: '#fff', border: 0 }}
-
                 >
-                    <Input.TextArea placeholder="Enter prompt" />
-                    <Input.TextArea placeholder="Enter negative prompt" />
+                    <Select style={{ width: '100%' }} placeholder="Select Model">
+                        <Option value="model1">Model 1</Option>
+                        <Option value="model2">Model 2</Option>
+                    </Select>
                 </Panel>
             </Collapse>
 
@@ -48,7 +49,33 @@ function SidebarCreate() {
                 ghost
             >
                 <Panel
-                    header="Resolution"
+                    header={
+                        <div>
+                            <HighlightOutlined />
+                            <span style={{ marginLeft: '10px' }}>Prompt</span>
+                        </div>
+                    }
+                    key="1"
+                    style={{ backgroundColor: '#fff', border: 0 }}
+                >
+                    <Input.TextArea placeholder="Enter prompt" />
+                    <Input.TextArea placeholder="Enter negative prompt" />
+                </Panel>
+            </Collapse>
+
+            <Collapse
+                defaultActiveKey={['0']}
+                expandIcon={({ isActive }) => isActive ? <UpOutlined style={{ color: 'gray' }} /> : <DownOutlined style={{ color: 'gray' }} />}
+                expandIconPosition="right"
+                ghost
+            >
+                <Panel
+                    header={
+                        <div>
+                            <FullscreenOutlined />
+                            <span style={{ marginLeft: '10px' }}>Resolution</span>
+                        </div>
+                    }
                     key="1"
                     style={{ backgroundColor: '#fff', border: 0 }}
 
@@ -61,13 +88,18 @@ function SidebarCreate() {
             </Collapse>
 
             <Collapse
-                defaultActiveKey={['1']}
+                defaultActiveKey={['0']}
                 expandIcon={({ isActive }) => isActive ? <UpOutlined style={{ color: 'gray' }} /> : <DownOutlined style={{ color: 'gray' }} />}
                 expandIconPosition="right"
                 ghost
             >
                 <Panel
-                    header="Generation Parameters"
+                    header={
+                        <div>
+                            <UnorderedListOutlined />
+                            <span style={{ marginLeft: '10px' }}>Generation Parameters</span>
+                        </div>
+                    }
                     key="1"
                     style={{ backgroundColor: '#fff', border: 0 }}
 
@@ -82,13 +114,18 @@ function SidebarCreate() {
             </Collapse>
 
             <Collapse
-                defaultActiveKey={['1']}
+                defaultActiveKey={['0']}
                 expandIcon={({ isActive }) => isActive ? <UpOutlined style={{ color: 'gray' }} /> : <DownOutlined style={{ color: 'gray' }} />}
                 expandIconPosition="right"
                 ghost
             >
                 <Panel
-                    header="Sampler"
+                    header={
+                        <div>
+                            <PieChartOutlined />
+                            <span style={{ marginLeft: '10px' }}>Sampler</span>
+                        </div>
+                    }
                     key="1"
                     style={{ backgroundColor: '#fff', border: 0 }}
 
@@ -99,7 +136,7 @@ function SidebarCreate() {
                     </Select>
                 </Panel>
             </Collapse>
-        </Sider>
+        </Sider >
     );
 }
 
