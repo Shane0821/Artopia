@@ -1,6 +1,8 @@
 "use client"
 import React from 'react';
 
+import './style.css'
+
 import SidebarCreate from '@components/SidebarCreate'
 
 import {
@@ -69,12 +71,12 @@ const Create = () => {
             <Layout>
                 <Content style={{ padding: '0 0px' }}>
                     <Layout style={{ padding: '24px 0', background: "white" }}>
-                        <div style={{
+                        <div className="hide-scrollbar" style={{
                             height: 550,
                             overflowY: 'auto',
                             display: 'flex',
                             flexDirection: 'column',
-                            alignItems: 'center'
+                            alignItems: 'center',
                         }}>
                             Generate
                             {/* Left Part */}
