@@ -43,24 +43,69 @@ function SidebarCreate() {
                         value={model}
                         onChange={(value) => setModel(value)}
                     >
-                        <Option value="stable-diffusion-v1-5">
+                        <Option value="absolute-reality-v1-8-1">
                             <Space align="center">
                                 <div style={{ marginTop: '8px' }}>
                                     <Image
-                                        src="/assets/images/logo.svg"
+                                        src="/assets/images/absolute-reality-v1-8-1.jpeg"
                                         alt="model1"
                                         width={23}
                                         height={23}
                                     />
                                 </div>
                                 <div>
-                                    Stable Diffusion Inpainting v1.5
+                                    AbsoluteReality v1.8.1
                                 </div>
                             </Space>
                         </Option>
-                        <Option value="dark-sushi-mix-v2-25">Dark Sushi Mix v2.25</Option>
-                        <Option value="arcane-diffusion">Arcane Diffusion</Option>
-                        <Option value="anashel-rpg">RPG</Option>
+
+                        <Option value="eimis-anime-diffusion-v1-0">
+                            <Space align="center">
+                                <div style={{ marginTop: '8px' }}>
+                                    <Image
+                                        src="/assets/images/eimis-anime-diffusion-v1-0.jpeg"
+                                        alt="model2"
+                                        width={23}
+                                        height={23}
+                                    />
+                                </div>
+                                <div>
+                                    Anime Diffusion
+                                </div>
+                            </Space>
+                        </Option>
+
+                        <Option value="dark-sushi-mix-v2-25">
+                            <Space align="center">
+                                <div style={{ marginTop: '8px' }}>
+                                    <Image
+                                        src="/assets/images/dark-sushi-mix-v2-25.jpeg"
+                                        alt="model3"
+                                        width={23}
+                                        height={23}
+                                    />
+                                </div>
+                                <div>
+                                    Dark Sushi Mix v2.25
+                                </div>
+                            </Space>
+                        </Option>
+
+                        <Option value="arcane-diffusion">
+                            <Space align="center">
+                                <div style={{ marginTop: '8px' }}>
+                                    <Image
+                                        src="/assets/images/arcane-diffusion.jpeg"
+                                        alt="model1"
+                                        width={23}
+                                        height={23}
+                                    />
+                                </div>
+                                <div>
+                                    Arcane Diffusion
+                                </div>
+                            </Space>
+                        </Option>
                     </Select>
                 </Panel>
             </Collapse>
