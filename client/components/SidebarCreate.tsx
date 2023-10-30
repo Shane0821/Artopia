@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout, Select, Slider, Input, Collapse, Divider, Image, Space } from 'antd';
 import {
     UpOutlined, DownOutlined, HighlightOutlined,
@@ -10,7 +10,7 @@ const { Sider } = Layout;
 const { Option } = Select;
 const { Panel } = Collapse;
 
-function SidebarCreate() {
+function SidebarCreate({ generating, resetGenerating }) {
     const [model, setModel] = useState('stable-diffusion-v1-5');
     const [height, setHeight] = useState(512);
     const [width, setWidth] = useState(512);
@@ -18,6 +18,15 @@ function SidebarCreate() {
     const [guidanceScale, setGuidanceScale] = useState(7.5);
     const [seed, setSeed] = useState('');
     const [sampler, setSampler] = useState('dpmsolver++')
+
+    useEffect(() => {
+        if (generating) {
+            // Call your post function here
+            // After the post function is done, reset the signal
+            console.log("generating...")
+            resetGenerating();
+        }
+    }, [generating]);
 
     return (
         <Sider style={{ background: "white" }} width={350}>
