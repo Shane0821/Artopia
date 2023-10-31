@@ -16,7 +16,7 @@ interface SidebarCreateProps {
 }
 
 function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
-    const [model, setModel] = useState('stable-diffusion-v1-5');
+    const [model, setModel] = useState('absolute-reality-v1-8-1');
     const [height, setHeight] = useState(512);
     const [width, setWidth] = useState(512);
     const [step, setStep] = useState(25);
