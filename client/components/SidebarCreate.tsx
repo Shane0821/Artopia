@@ -10,7 +10,12 @@ const { Sider } = Layout;
 const { Option } = Select;
 const { Panel } = Collapse;
 
-function SidebarCreate({ generating, resetGenerating }) {
+interface SidebarCreateProps {
+    generating: boolean;
+    resetGenerating: () => void;
+}
+
+function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
     const [model, setModel] = useState('stable-diffusion-v1-5');
     const [height, setHeight] = useState(512);
     const [width, setWidth] = useState(512);
@@ -20,12 +25,48 @@ function SidebarCreate({ generating, resetGenerating }) {
     const [sampler, setSampler] = useState('dpmsolver++')
 
     useEffect(() => {
-        if (generating) {
-            // Call your post function here
-            // After the post function is done, reset the signal
-            console.log("generating...")
-            resetGenerating();
+        const fetchData = async () => {
+            if (generating) {
+                // Prepare data
+                let data = {
+                    model: model,
+                    height: height,
+                    width: width,
+                    step: step,
+                    guidanceScale: guidanceScale,
+                    sampler: sampler,
+                    seed: seed ? seed : undefined
+                };
+
+                // Make the POST request
+                try {
+                    const response = await fetch("/api/create", {
+                        method: "POST",
+                        body: JSON.stringify(
+                            data
+                        )
+                    });
+
+                    // Handle the response
+                    if (!response.ok) {
+                        const message = `An error has occurred: ${response.status}`;
+                        throw new Error(message);
+                    }
+
+                    const result = await response.json();
+                    console.log(result);
+
+                    // After the post function is done, reset the signal
+                    resetGenerating();
+                } catch (error) {
+                    console.log(error)
+                    // After the post function is done, reset the signal
+                    resetGenerating();
+                }
+            }
         }
+        console.log("generating...");
+        fetchData();
     }, [generating]);
 
     return (
