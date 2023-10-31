@@ -23,10 +23,13 @@ function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
     const [guidanceScale, setGuidanceScale] = useState(7.5);
     const [seed, setSeed] = useState('');
     const [sampler, setSampler] = useState('dpmsolver++')
+    const [prompt, setPrompt] = useState('');
+    const [negative_prompt, setNegativePrompt] = useState('Disfigured, cartoon, blurry');
 
     useEffect(() => {
         const fetchData = async () => {
             if (generating) {
+                console.log("generating...");
                 // Prepare data
                 let data = {
                     model: model,
@@ -35,7 +38,9 @@ function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
                     step: step,
                     guidanceScale: guidanceScale,
                     sampler: sampler,
-                    seed: seed ? seed : undefined
+                    seed: seed ? seed : undefined,
+                    prompt: prompt,
+                    negative_prompt: negative_prompt
                 };
 
                 // Make the POST request
@@ -65,7 +70,6 @@ function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
                 }
             }
         }
-        console.log("generating...");
         fetchData();
     }, [generating]);
 
@@ -184,11 +188,19 @@ function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
                             placeholder="Describe something you'd like to see generated. Experiment with different words and styles... "
                             style={{ marginTop: '10px', marginBottom: '20px' }}
                             autoSize={{ minRows: 4 }}
+                            value={prompt}
+                            onChange={(e) => setPrompt(e.target.value)}
                         />
                     </div>
                     <div>
                         Negative prompt
-                        <Input.TextArea placeholder="Enter negative prompt: Disfigured, cartoon, blurry, ..." style={{ marginTop: '10px' }} />
+                        <Input.TextArea
+                            placeholder="Enter negative prompt: Disfigured, cartoon, blurry, ..."
+                            style={{ marginTop: '10px' }}
+                            autoSize={{ minRows: 3 }}
+                            value={negative_prompt}
+                            onChange={(e) => setNegativePrompt(e.target.value)}
+                        />
                     </div>
                 </Panel>
             </Collapse>
