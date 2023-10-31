@@ -19,7 +19,7 @@ function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
     const [model, setModel] = useState('absolute-reality-v1-8-1');
     const [height, setHeight] = useState(512);
     const [width, setWidth] = useState(512);
-    const [step, setStep] = useState(25);
+    const [steps, setSteps] = useState(25);
     const [guidanceScale, setGuidanceScale] = useState(7.5);
     const [seed, setSeed] = useState('');
     const [sampler, setSampler] = useState('dpmsolver++')
@@ -35,7 +35,7 @@ function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
                     model: model,
                     height: height,
                     width: width,
-                    step: step,
+                    step: steps,
                     guidanceScale: guidanceScale,
                     sampler: sampler,
                     seed: seed ? seed : undefined,
@@ -249,8 +249,8 @@ function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
                     style={{ backgroundColor: '#fff', border: 0 }}
 
                 >
-                    Step: {step}
-                    <Slider min={1} max={100} value={step} onChange={(value) => setStep(value)} />
+                    Step: {steps}
+                    <Slider min={1} max={100} value={steps} onChange={(value) => setSteps(value)} />
                     Guidance Scale: {guidanceScale}
                     <Slider min={0} max={20} value={guidanceScale} step={0.5} onChange={(value) => setGuidanceScale(value)} />
                     Seed:
