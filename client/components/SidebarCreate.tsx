@@ -35,7 +35,7 @@ function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
                     model: model,
                     height: height,
                     width: width,
-                    step: steps,
+                    steps: steps,
                     guidanceScale: guidanceScale,
                     sampler: sampler,
                     seed: seed ? seed : undefined,
