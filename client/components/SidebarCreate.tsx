@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Select, Slider, Input, Collapse, Divider, Image, Space } from 'antd';
+import {
+    Layout, Select, Slider, Input,
+    Collapse, Divider, Image, Space, notification
+} from 'antd';
 import {
     UpOutlined, DownOutlined, HighlightOutlined,
     FullscreenOutlined, UnorderedListOutlined,
@@ -25,11 +28,20 @@ function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
     const [sampler, setSampler] = useState('dpmsolver++')
     const [prompt, setPrompt] = useState('');
     const [negative_prompt, setNegativePrompt] = useState('Disfigured, cartoon, blurry');
+    const [noti, contextHolder] = notification.useNotification();
 
     useEffect(() => {
         const fetchData = async () => {
             if (generating) {
                 console.log("generating...");
+
+                noti['info']({
+                    message: 'Message:',
+                    description:
+                        'Start generating...',
+                    duration: 3,
+                });
+
                 // Prepare data
                 let data = {
                     model: model,
@@ -61,10 +73,24 @@ function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
                     const result = await response.json();
                     console.log(result);
 
+                    noti['success']({
+                        message: 'Message:',
+                        description:
+                            'Successfully generated an image.',
+                        duration: 3,
+                    });
+
                     // After the post function is done, reset the signal
                     resetGenerating();
                 } catch (error) {
                     console.log(error)
+
+                    noti['error']({
+                        message: 'Message:',
+                        description:
+                            `${error}`,
+                        duration: 3,
+                    });
                     // After the post function is done, reset the signal
                     resetGenerating();
                 }
@@ -75,6 +101,7 @@ function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
 
     return (
         <Sider style={{ background: "white" }} width={350}>
+            {contextHolder}
             <Collapse
                 defaultActiveKey={['1']}
                 expandIcon={({ isActive }) => isActive ? <UpOutlined style={{ color: 'gray' }} /> : <DownOutlined style={{ color: 'gray' }} />}

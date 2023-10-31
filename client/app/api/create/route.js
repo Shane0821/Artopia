@@ -48,8 +48,6 @@ export const POST = async (request) => {
             }
         }
 
-        console.log(res.data)
-
         return new Response(
             JSON.stringify(res.data),
             { status: 200 }
