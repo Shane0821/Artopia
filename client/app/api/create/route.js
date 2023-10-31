@@ -32,8 +32,21 @@ export const POST = async (request) => {
 
         console.log(options)
 
+
+
         // const res = await axios.request(options);
-        res = {}
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        await sleep(3000)
+        const res = {
+            data: {
+                image: '',
+                seed: 0
+            }
+        }
 
         console.log(res.data)
 
