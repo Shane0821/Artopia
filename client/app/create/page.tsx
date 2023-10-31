@@ -14,10 +14,16 @@ const { Content } = Layout;
 
 const Create = () => {
     const [generating, setGenerating] = useState(false);
+    const [cooldown, setCooldown] = useState(false);
 
     const handleClick = () => {
         console.log('handleclick', generating)
         setGenerating(true);
+
+        setCooldown(true);
+        setTimeout(() => {
+            setCooldown(false);
+        }, 8000);
     };
 
     const resetGenerating = () => {
@@ -58,6 +64,7 @@ const Create = () => {
                                     backgroundColor: "white",
                                     bottom: 10
                                 }}
+                                loading={generating || cooldown}
                                 onClick={handleClick}
                             >
                                 Generate Image
