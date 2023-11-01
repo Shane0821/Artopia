@@ -73,7 +73,7 @@
 
 /* Tailwind Styles */
 .nav {
-  @apply flex-between w-full h-14 py-1 sticky top-0
+  @apply flex-between max-w-7xl w-full h-14 py-1 sticky top-0 sm:px-16 px-6
 }
 
 .nav_link {
@@ -81,7 +81,7 @@
 }
 
 .app {
-  @apply relative max-w-7xl z-10 flex justify-center items-center flex-col mx-auto sm:px-16 px-6;
+  @apply relative z-10 flex items-center flex-col mx-auto min-h-screen
 }
 
 .black_btn {
