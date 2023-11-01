@@ -63,7 +63,8 @@ function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
                         sampler: sampler,
                         seed: seed ? seed : undefined,
                         prompt: prompt,
-                        negative_prompt: negative_prompt
+                        negative_prompt: negative_prompt,
+                        address: session?.user.name
                     };
 
                     // Make the POST request
