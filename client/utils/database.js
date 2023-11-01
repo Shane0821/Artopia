@@ -1,23 +1,26 @@
+import mongoose from 'mongoose';
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = process.env.MONGODB_URI;
+let isConnected = false; // track the connection
 
-if (!uri) throw new Error('Please add your Mongo uri to .env')
+export const connectToDB = async () => {
+    mongoose.set('strictQuery', true);
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-let client = new MongoClient(uri, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
+    if (isConnected) {
+        console.log('MongoDB is already connected');
+        return;
     }
-});
-let clientPromise
 
-if (!global._mongoClientPromise) {
-    global._mongoClientPromise = client.connect()
+    try {
+        await mongoose.connect(process.env.MONGODB_URI, {
+            dbName: process.env.DB_NAME,
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        })
+
+        isConnected = true;
+
+        console.log('MongoDB connected')
+    } catch (error) {
+        console.log(error);
+    }
 }
-
-clientPromise = global._mongoClientPromise
-
-export default clientPromise
