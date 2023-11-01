@@ -31,7 +31,7 @@ const Create = () => {
     };
 
     return (
-        <Space direction="vertical" style={{ width: '100%' }}>
+        <Space direction="vertical" style={{ width: '100%' }} className="sm:px-16 px-6 max-w-7xl">
             <Layout>
                 <Content style={{ padding: '0 0px' }}>
                     <Layout style={{ padding: '24px 0', background: "white" }}>
