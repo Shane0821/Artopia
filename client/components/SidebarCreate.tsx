@@ -9,6 +9,9 @@ import {
     PieChartOutlined, SketchOutlined
 } from '@ant-design/icons';
 
+import { useSession } from "next-auth/react"
+import { useAccount } from "wagmi"
+
 const { Sider } = Layout;
 const { Option } = Select;
 const { Panel } = Collapse;
@@ -28,35 +31,43 @@ function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
     const [sampler, setSampler] = useState('dpmsolver++')
     const [prompt, setPrompt] = useState('');
     const [negative_prompt, setNegativePrompt] = useState('Disfigured, cartoon, blurry');
+
     const [noti, contextHolder] = notification.useNotification();
+    const { data: session, status } = useSession()
+    const { address, isConnected } = useAccount()
 
     useEffect(() => {
         const fetchData = async () => {
             if (generating) {
-                console.log("generating...");
-
-                noti['info']({
-                    message: 'Message:',
-                    description:
-                        'Start generating...',
-                    duration: 3,
-                });
-
-                // Prepare data
-                let data = {
-                    model: model,
-                    height: height,
-                    width: width,
-                    steps: steps,
-                    guidanceScale: guidanceScale,
-                    sampler: sampler,
-                    seed: seed ? seed : undefined,
-                    prompt: prompt,
-                    negative_prompt: negative_prompt
-                };
-
-                // Make the POST request
                 try {
+                    if (!(isConnected && session?.user)) {
+                        throw new Error('You are not logged in.');
+                    }
+
+                    console.log("generating...");
+
+                    noti['info']({
+                        message: 'Message:',
+                        description:
+                            'Start generating...',
+                        duration: 3,
+                    });
+
+                    // Prepare data
+                    let data = {
+                        model: model,
+                        height: height,
+                        width: width,
+                        steps: steps,
+                        guidanceScale: guidanceScale,
+                        sampler: sampler,
+                        seed: seed ? seed : undefined,
+                        prompt: prompt,
+                        negative_prompt: negative_prompt
+                    };
+
+                    // Make the POST request
+
                     const response = await fetch("/api/create", {
                         method: "POST",
                         body: JSON.stringify(

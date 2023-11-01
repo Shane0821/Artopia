@@ -10,11 +10,17 @@ import {
 } from '@ant-design/icons';
 import { Layout, Space, Button } from 'antd';
 
+import { useSession } from "next-auth/react"
+import { useAccount } from "wagmi"
+
 const { Content } = Layout;
 
 const Create = () => {
     const [generating, setGenerating] = useState(false);
     const [cooldown, setCooldown] = useState(false);
+
+    const { data: session, status } = useSession()
+    const { address, isConnected } = useAccount()
 
     const handleClick = () => {
         console.log('handleclick', generating)
@@ -64,7 +70,7 @@ const Create = () => {
                                     backgroundColor: "white",
                                     bottom: 10
                                 }}
-                                loading={generating || cooldown}
+                                loading={generating || cooldown || (!(isConnected && session?.user))}
                                 onClick={handleClick}
                             >
                                 Generate Image
