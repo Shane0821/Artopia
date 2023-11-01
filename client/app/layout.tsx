@@ -3,6 +3,7 @@ import '@styles/globals.css'
 import React, { Children } from 'react'
 import Nav from '@components/Nav'
 import Provider from '@components/Provider'
+import Footer from '@components/Footer'
 
 export const metadata: Metadata = {
   title: 'Artopia',
@@ -22,8 +23,10 @@ function RootLayout ({children, } : {children: React.ReactNode}) {
 
           <main className='app'>
             <Nav></Nav>
-            {children}
-          </main>
+              {children} 
+          </main>  
+
+          <Footer></Footer>
         </Provider>
       </body>
     </html>
