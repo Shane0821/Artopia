@@ -1,11 +1,10 @@
 import { Schema, model, models } from 'mongoose';
 
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
-
+// prompt should be set to true later
 const ArtSchema = new Schema({
+    base64: { type: String, required: true },
     model: { type: String, required: true },
-    prompt: { type: String, required: true },
+    prompt: { type: String, required: false, default: 'art' },
     negative_prompt: { type: String, required: true },
     width: { type: Number, required: true },
     height: { type: Number, required: true },
@@ -15,11 +14,7 @@ const ArtSchema = new Schema({
     scheduler: { type: String, required: true },
     address: {
         type: String,
-        required: true,
-        validate: {
-            validator: (v) => /^(\d+)$/.test(v),
-            message: `{address} is not an integer value`
-        }
+        required: true
     },
     created_at: {
         type: Date,
