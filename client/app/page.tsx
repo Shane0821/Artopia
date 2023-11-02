@@ -1,20 +1,9 @@
 const Home = () => {
-  const centerImg = ['boy.png', 'pumpkin.png', 'eye.png', 'bone-king.png', 'bone-king-2.png', 'bone-queen.png', 'jinx1.jpg']
+  const centerImg = ['boy.png', 'boy.png', 'pumpkin.png', 'pumpkin-girl.png', 'eye.png', 'bone-king.png', 
+                     'bone-king-2.png', 'bone-queen.png', 'jinx1.jpg', 'jinx2.jpg']
   const getRandomCenterName = () => {
     var randomIndex = Math.floor(Math.random () * centerImg.length)
     return `/assets/images/${centerImg[randomIndex]}`
-  }
-
-  const rightImg = ['sona.jpg', 'sona.jpg', 'pumpkin-girl.png']
-  const getRandomRightName = () => {
-    var randomIndex = Math.floor(Math.random () * rightImg.length)
-    return `/assets/images/${rightImg[randomIndex]}`
-  }
-
-  const bottomLeftImg = ['ari.jpg', 'ari.jpg', 'jinx2.jpg']
-  const getRandomBottomLeftName = () => {
-    var randomIndex = Math.floor(Math.random () * bottomLeftImg.length)
-    return `/assets/images/${bottomLeftImg[randomIndex]}`
   }
 
   return (
@@ -34,10 +23,10 @@ const Home = () => {
         <img src="/assets/images/museum.jpg" />
         <img src={getRandomCenterName()} />
         <img src="/assets/images/blue-hair-girl.png" />
-        <img src={getRandomBottomLeftName()}  />
+        <img src="/assets/images/ari.jpg"  />
         <img src="/assets/images/star-hall.png" />
         <img src="/assets/images/castle.png" />
-        <img src={getRandomRightName()} />
+        <img src="/assets/images/sona.jpg" />
       </div>
     </section>
   )
