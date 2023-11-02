@@ -5,7 +5,7 @@ const ArtSchema = new Schema({
     base64: { type: String, required: true },
     model: { type: String, required: true },
     prompt: { type: String, required: false, default: 'art' },
-    negative_prompt: { type: String, required: true },
+    negative_prompt: { type: String, required: false },
     width: { type: Number, required: true },
     height: { type: Number, required: true },
     steps: { type: Number, required: true },
