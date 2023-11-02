@@ -59,6 +59,7 @@ function Nav() {
           </div>
         </Dropdown>
         
+        <Link href='/prompts' className='nav_link'>Prompts</Link>
         <Link href='/autction' className='nav_link'>Auction</Link>
       </div>
 
