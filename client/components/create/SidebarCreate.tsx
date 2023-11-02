@@ -91,18 +91,18 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
                     const result = await response.json();
                     console.log(result);
 
-                    const artDataComplete = {
-                        completed: true
-                        /* your base64 image info */
-                    };
-                    setJsonData(artDataComplete);
-
                     noti['success']({
                         message: 'Message:',
                         description:
                             'Successfully generated an image.',
                         duration: 3,
                     });
+
+                    const artDataComplete = {
+                        completed: true,
+                        base64: result.image
+                    };
+                    setJsonData(artDataComplete);
 
                     // After the post function is done, reset the signal
                     resetGenerating();
