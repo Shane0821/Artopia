@@ -46,13 +46,25 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
     }, [jsonData]);
 
     return (
-        <Content style={{ padding: '0 24px', height: 600, overflowY: 'auto' }}>
-            <Row gutter={16}>
+        <Content style={{
+            padding: '0 24px',
+            height: 600,
+            overflowY: 'auto'
+        }}>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+            }}>
+                Generative Arts
+            </div>
+
+            <Row gutter={10}>
                 {dataArray.map((data, index) => (
                     <Col span={6} key={index}>
                         <div>
                             {data.base64 ? (
-                                <Image
+                                <img
                                     src={`data:image/jpeg;base64,${data.base64}`}
                                     style={{ width: '100%', height: '100%' }}
                                 />
@@ -68,7 +80,8 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
                     </Col>
                 ))}
             </Row>
-        </Content>
+
+        </Content >
     );
 }
 

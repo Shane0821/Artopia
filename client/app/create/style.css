@@ -9,3 +9,13 @@
     display: none;
     /* For Chrome, Safari and Opera */
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* For Chrome, Safari and Opera */
+}
+
+.hide-scrollbar::before,
+.hide-scrollbar::after {
+    display: none;
+}

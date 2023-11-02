@@ -32,7 +32,7 @@ const Create = () => {
         setCooldown(true);
         setTimeout(() => {
             setCooldown(false);
-        }, 6000);
+        }, 0); // 6000
     };
 
     const resetGenerating = () => {
@@ -75,7 +75,10 @@ const Create = () => {
                             </Button>
                         </div>
 
+
+
                         <ContentCreate jsonData={jsonData} />
+
                     </Layout>
                 </Content>
             </Layout >

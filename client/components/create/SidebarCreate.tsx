@@ -59,6 +59,8 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
                         duration: 3,
                     });
 
+                    throw new Error('test')
+
                     // Prepare data
                     let data = {
                         model: model,
