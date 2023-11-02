@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 
 import './style.css'
 
-import SidebarCreate from '@components/SidebarCreate'
+import SidebarCreate from '@components/create/SidebarCreate'
+import ContentCreate from '@components/create/ContentCreate'
 
 import {
     FormatPainterOutlined
@@ -78,9 +79,7 @@ const Create = () => {
                             </Button>
                         </div>
 
-                        <Content style={{ padding: '0 24px', height: 600, overflowY: 'auto' }}>
-                            Content
-                        </Content>
+                        <ContentCreate />
                     </Layout>
                 </Content>
             </Layout >
