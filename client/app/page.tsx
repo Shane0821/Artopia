@@ -15,10 +15,10 @@ const Home = () => {
       <div className="home_img_container">
         <img src="/assets/images/museum.jpg" />
         <img src="/assets/images/bone-king.png" />
-        <img src="/assets/images/ari.jpg" />
-        <img src="/assets/images/castle.png" />
         <img src="/assets/images/blue-hair-girl.png" />
+        <img src="/assets/images/ari.jpg" />
         <img src="/assets/images/star-hall.png" />
+        <img src="/assets/images/castle.png" />
         <img src="/assets/images/sona.jpg" />
       </div>
     </section>
