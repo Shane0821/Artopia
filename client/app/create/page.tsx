@@ -23,6 +23,8 @@ const Create = () => {
     const { data: session, status } = useSession()
     const { address, isConnected } = useAccount()
 
+    const [jsonData, setJsonData] = useState(null);
+
     const handleClick = () => {
         console.log('handleclick', generating)
         setGenerating(true);
@@ -54,14 +56,8 @@ const Create = () => {
                             <SidebarCreate
                                 generating={generating}
                                 resetGenerating={resetGenerating}
+                                setJsonData={setJsonData}
                             />
-                            {/* <Menu
-                                    onClick={onClick}
-                                    style={{ width: 350 }}
-                                    items={items}
-                                    mode="inline"
-                                /> */}
-                            {/* <SidebarCreate /> */}
 
                             <Button
                                 style={{
@@ -79,7 +75,7 @@ const Create = () => {
                             </Button>
                         </div>
 
-                        <ContentCreate />
+                        <ContentCreate jsonData={jsonData} />
                     </Layout>
                 </Content>
             </Layout >

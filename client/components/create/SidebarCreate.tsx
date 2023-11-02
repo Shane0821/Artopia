@@ -19,9 +19,10 @@ const { Panel } = Collapse;
 interface SidebarCreateProps {
     generating: boolean;
     resetGenerating: () => void;
+    setJsonData: (jsonData: any) => void;
 }
 
-function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
+function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCreateProps) {
     const [model, setModel] = useState('absolute-reality-v1-8-1');
     const [height, setHeight] = useState(512);
     const [width, setWidth] = useState(512);
@@ -43,6 +44,11 @@ function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
                     if (!(isConnected && session?.user)) {
                         throw new Error('You are not logged in.');
                     }
+
+                    const artData = {
+                        completed: false
+                    };
+                    setJsonData(artData);
 
                     console.log("generating...");
 
@@ -84,6 +90,12 @@ function SidebarCreate({ generating, resetGenerating }: SidebarCreateProps) {
 
                     const result = await response.json();
                     console.log(result);
+
+                    const artDataComplete = {
+                        completed: true
+                        /* your base64 image info */
+                    };
+                    setJsonData(artDataComplete);
 
                     noti['success']({
                         message: 'Message:',
