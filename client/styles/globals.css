@@ -71,6 +71,50 @@
   }
 }
 
+.home_img_container  {
+  --s: 200px; /* control the size */
+  --g: 10px;  /* control the gap */
+  display: grid;
+  margin: calc(var(--s) + var(--g));
+}
+
+.home_img_container  > img {
+  grid-area: 1/1;
+  width: var(--s);
+  aspect-ratio: 0.866;
+  object-fit: cover;
+  clip-path: polygon(0% 25%,0% 75%,50% 100%,100% 75%,100% 25%,50% 0);
+  transform: translate(var(--_x,0),var(--_y,0)) scale(var(--_t,1));
+  cursor: pointer;
+  filter: grayscale(20%);
+  opacity: 80%;
+  transition: .2s linear;
+}
+
+.home_img_container  > img:hover {
+  filter: grayscale(0);
+  opacity: 100%;
+  z-index: 1;
+  --_t: 1.2;
+}
+
+.home_img_container  > img:nth-child(1) {--_x: calc(-100% - var(--g))}
+.home_img_container  > img:nth-child(7) {--_x: calc( 100% + var(--g))}
+.home_img_container  > img:nth-child(3),
+.home_img_container  > img:nth-child(5) {--_y: calc(-75% - .87*var(--g))}
+.home_img_container  > img:nth-child(4),
+.home_img_container  > img:nth-child(6) {--_y: calc( 75% + .87*var(--g))}
+.home_img_container  > img:nth-child(3),
+.home_img_container  > img:nth-child(4) {--_x: calc(-50% - .5*var(--g))}
+.home_img_container  > img:nth-child(5), 
+.home_img_container  > img:nth-child(6) {--_x: calc( 50% + .5*var(--g))}
+
+@media (max-width: 1024px) {
+  .home_img_container {
+    display: none;
+  }
+}
+
 /* Tailwind Styles */
 .nav {
   @apply flex-between max-w-7xl w-full h-14 py-1 sticky top-0 sm:px-16 px-6

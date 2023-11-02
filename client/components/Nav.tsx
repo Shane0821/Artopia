@@ -58,7 +58,8 @@ function Nav() {
             <DownOutlined style={{ fontSize: '0.7rem' }} />
           </div>
         </Dropdown>
-
+        
+        <Link href='/prompts' className='nav_link'>Prompts</Link>
         <Link href='/autction' className='nav_link'>Auction</Link>
       </div>
 
