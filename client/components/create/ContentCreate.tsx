@@ -4,7 +4,9 @@ import {
     Collapse, Divider, Image, Space, notification
 } from 'antd';
 
-import { Row, Col } from 'antd';
+import '@styles/gallery.css'
+
+import { Row, Col, Card } from 'antd';
 
 import {
     UpOutlined, DownOutlined, HighlightOutlined,
@@ -35,6 +37,7 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
     React.useEffect(() => {
         if (jsonData) {
             if (!jsonData.completed) {
+                console.log(jsonData)
                 setDataArray(prevArray => [jsonData, ...prevArray]);
             } else {
                 setDataArray((prevArray) => {
@@ -59,27 +62,33 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
                 Generative Arts
             </div>
 
-            <Row gutter={7}>
-                {dataArray.map((data, index) => (
-                    <Col span={6} key={index}>
-                        <div style={{ marginTop: '1.5px' }}>
-                            {data.base64 ? (
-                                <img
-                                    src={`data:image/jpeg;base64,${data.base64}`}
-                                    style={{ borderRadius: '4px', width: '100%', height: '100%' }}
-                                />
-                            ) : (
-                                <Image
-                                    src="/assets/images/gray.jpg"
-                                    style={{ borderRadius: '6px', width: '100%', height: '100%' }}
-                                    preview={false}
-                                />
-                            )}
-                            {/* Display your data here */}
+            {/* <Col span={6}>
+                {dataArray.map((data: any, index) => (
+                    <Row gutter={7}>
+                        <div style={{ marginTop: '1.5px', verticalAlign: 'top' }}>
+                            <Image
+                                style={{ borderRadius: '6px', width: '100%', height: 'auto' }}
+                                src={`${data.base64}`}
+                                fallback="/assets/images/gray.jpg"
+                                preview={false}
+                            />
                         </div>
-                    </Col>
+                    </Row>
                 ))}
-            </Row>
+            </Col> */}
+
+            <div className="gallery">
+                {dataArray.map((data: any, index) => (
+                    <div className="pics" key={index}>
+                        <Image
+                            style={{ borderRadius: '6px', width: '100%' }}
+                            src={`${data.base64}`}
+                            fallback="/assets/images/gray.jpg"
+                            preview={false}
+                        />
+                    </div>
+                ))}
+            </div>
 
         </Content >
     );

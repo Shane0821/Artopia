@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 
-import './style.css'
+import '@styles/create.css'
 
 import SidebarCreate from '@components/create/SidebarCreate'
 import ContentCreate from '@components/create/ContentCreate'

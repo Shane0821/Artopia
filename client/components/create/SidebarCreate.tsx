@@ -16,6 +16,23 @@ const { Sider } = Layout;
 const { Option } = Select;
 const { Panel } = Collapse;
 
+function createGrayscaleBase64Image(width: Number, height: Number) {
+    // Create a canvas element
+    let canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    let ctx = canvas.getContext('2d');
+
+    // Create a grayscale image
+    ctx.fillStyle = 'gray'; // Set the fill color to gray
+    ctx.fillRect(0, 0, width, height);
+
+    // Convert the canvas to a Base64 encoded JPEG image
+    let dataURL = canvas.toDataURL('image/jpeg');
+
+    return dataURL;
+}
+
 interface SidebarCreateProps {
     generating: boolean;
     resetGenerating: () => void;
@@ -46,7 +63,10 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
                     }
 
                     const artData = {
-                        completed: false
+                        completed: false,
+                        base64: createGrayscaleBase64Image(width, height),
+                        height: height,
+                        width: width
                     };
                     setJsonData(artData);
 
@@ -102,7 +122,9 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
 
                     const artDataComplete = {
                         completed: true,
-                        base64: result.image
+                        base64: `data:image/jpeg;base64,${result.image}`,
+                        height: height,
+                        width: width
                     };
                     setJsonData(artDataComplete);
 
