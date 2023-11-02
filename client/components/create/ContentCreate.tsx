@@ -54,6 +54,7 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
             height: 600,
             overflowY: 'auto'
         }}>
+
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -80,11 +81,9 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
             <div className="gallery">
                 {dataArray.map((data: any, index) => (
                     <div className="pics" key={index}>
-                        <Image
+                        <img
                             style={{ borderRadius: '6px', width: '100%' }}
                             src={`${data.base64}`}
-                            fallback="/assets/images/gray.jpg"
-                            preview={false}
                         />
                     </div>
                 ))}

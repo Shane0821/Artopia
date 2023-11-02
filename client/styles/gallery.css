@@ -1,18 +1,19 @@
 .gallery {
-    -webkit-column-count: 4;
-    -moz-column-count: 4;
-    column-count: 4;
-    -webkit-column-width: 25%;
-    -moz-column-width: 25%;
-    column-width: 25%;
-    padding: 0 12px;
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+    -webkit-column-width: 33.4%;
+    -moz-column-width: 33.3%;
+    column-width: 33.3%;
+    padding: 0 8px;
 }
 
 .gallery .pics {
     -webkit-transition: all 350ms ease;
     transition: all 350ms ease;
     cursor: pointer;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+    margin-left: -4px;
 }
 
 .gallery .pics:hover {

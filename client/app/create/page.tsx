@@ -9,7 +9,7 @@ import ContentCreate from '@components/create/ContentCreate'
 import {
     FormatPainterOutlined
 } from '@ant-design/icons';
-import { Layout, Space, Button } from 'antd';
+import { Layout, Space, Button, Divider } from 'antd';
 
 import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
@@ -74,8 +74,6 @@ const Create = () => {
                                 <FormatPainterOutlined />
                             </Button>
                         </div>
-
-
 
                         <ContentCreate jsonData={jsonData} />
 
