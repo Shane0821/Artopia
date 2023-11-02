@@ -19,6 +19,10 @@ const ArtSchema = new Schema({
     created_at: {
         type: Date,
         default: Date.now
+    },
+    shared: {
+        type: Boolean,
+        default: false
     }
 });
 
