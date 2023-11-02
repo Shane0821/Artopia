@@ -46,7 +46,7 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
     }, [jsonData]);
 
     return (
-        <Content style={{
+        <Content className="hide-scrollbar" style={{
             padding: '0 24px',
             height: 600,
             overflowY: 'auto'
@@ -59,19 +59,19 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
                 Generative Arts
             </div>
 
-            <Row gutter={10}>
+            <Row gutter={7}>
                 {dataArray.map((data, index) => (
                     <Col span={6} key={index}>
-                        <div>
+                        <div style={{ marginTop: '1.5px' }}>
                             {data.base64 ? (
                                 <img
                                     src={`data:image/jpeg;base64,${data.base64}`}
-                                    style={{ width: '100%', height: '100%' }}
+                                    style={{ borderRadius: '4px', width: '100%', height: '100%' }}
                                 />
                             ) : (
                                 <Image
                                     src="/assets/images/gray.jpg"
-                                    style={{ width: '100%', height: '100%' }}
+                                    style={{ borderRadius: '6px', width: '100%', height: '100%' }}
                                     preview={false}
                                 />
                             )}
