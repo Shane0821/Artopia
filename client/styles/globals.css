@@ -87,11 +87,13 @@
   transform: translate(var(--_x,0),var(--_y,0)) scale(var(--_t,1));
   cursor: pointer;
   filter: grayscale(20%);
+  opacity: 80%;
   transition: .2s linear;
 }
 
 .home_img_container  > img:hover {
   filter: grayscale(0);
+  opacity: 100%;
   z-index: 1;
   --_t: 1.2;
 }
