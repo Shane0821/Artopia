@@ -90,7 +90,7 @@ export const GET = async (request, { params }) => {
     try {
         await connectToDB()
 
-        const art = await Art.findAll();
+        const art = await Art.find({ address: params.address });
 
         return new Response(
             JSON.stringify({ art: art }),
