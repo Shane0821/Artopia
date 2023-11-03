@@ -64,32 +64,6 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
                 Generative Arts
             </div>
 
-            {/* <Col span={6}>
-                {dataArray.map((data: any, index) => (
-                    <Row gutter={7}>
-                        <div style={{ marginTop: '1.5px', verticalAlign: 'top' }}>
-                            <Image
-                                style={{ borderRadius: '6px', width: '100%', height: 'auto' }}
-                                src={`${data.base64}`}
-                                fallback="/assets/images/gray.jpg"
-                                preview={false}
-                            />
-                        </div>
-                    </Row>
-                ))}
-            </Col> */}
-
-            {/* <div className="gallery">
-                {dataArray.map((data: any, index) => (
-                    <div className="pics" key={index}>
-                        <img
-                            style={{ borderRadius: '6px', width: '100%' }}
-                            src={`${data.base64}`}
-                        />
-                    </div>
-                ))}
-            </div> */}
-
             <Masonry className="gallery" columnsCount={3}>
                 {dataArray.map((data: any, index) => (
                     <div className="pics" key={index}>
