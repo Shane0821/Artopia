@@ -1,6 +1,8 @@
 const Home = () => {
   const centerImg = ['boy.png', 'boy.png', 'pumpkin.png', 'pumpkin-girl.png', 'eye.png', 'bone-king.png', 
-                     'bone-king-2.png', 'bone-queen.png', 'jinx1.jpg', 'jinx2.jpg']
+                     'bone-king-2.png', 'bone-queen.png', 'jinx1.jpg', 'jinx2.jpg', 'christmas.png',
+                     'chrysta-bell.png', 'elegant-lady.png']
+  
   const getRandomCenterName = () => {
     var randomIndex = Math.floor(Math.random () * centerImg.length)
     return `/assets/images/${centerImg[randomIndex]}`
