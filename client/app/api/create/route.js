@@ -86,5 +86,21 @@ export const POST = async (request) => {
 }
 
 export const GET = async (request, { params }) => {
-    await connectToDB()
+
+    try {
+        await connectToDB()
+
+        const art = await Art.findAll();
+
+        return new Response(
+            JSON.stringify({ art: art }),
+            { status: 200 }
+        )
+    } catch (error) {
+        console.log(error)
+        return new Response(JSON.stringify({
+            message: 'Failed to get',
+            error: error
+        }), { status: 500 });
+    }
 }
