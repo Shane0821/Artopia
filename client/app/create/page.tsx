@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 
 import '@styles/create.css'
 
-import SidebarCreate from '@app/create/SidebarCreate'
-import ContentCreate from '@app/create/ContentCreate'
+import SidebarCreate from '@app/create/Sidebar'
+import ContentCreate from '@app/create/Content'
 
 import {
     FormatPainterOutlined
