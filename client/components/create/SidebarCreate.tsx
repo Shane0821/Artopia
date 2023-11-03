@@ -153,7 +153,7 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
             <Collapse
                 defaultActiveKey={['1']}
                 expandIcon={({ isActive }) => isActive ? <UpOutlined style={{ color: 'gray' }} /> : <DownOutlined style={{ color: 'gray' }} />}
-                expandIconPosition="right"
+                expandIconPosition="end"
                 ghost
             >
                 <Panel
@@ -244,7 +244,7 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
             <Collapse
                 defaultActiveKey={['1']}
                 expandIcon={({ isActive }) => isActive ? <UpOutlined style={{ color: 'gray' }} /> : <DownOutlined style={{ color: 'gray' }} />}
-                expandIconPosition="right"
+                expandIconPosition="end"
                 ghost
             >
                 <Panel
@@ -285,7 +285,7 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
             <Collapse
                 defaultActiveKey={['0']}
                 expandIcon={({ isActive }) => isActive ? <UpOutlined style={{ color: 'gray' }} /> : <DownOutlined style={{ color: 'gray' }} />}
-                expandIconPosition="right"
+                expandIconPosition="end"
                 ghost
             >
                 <Panel
@@ -310,7 +310,7 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
             <Collapse
                 defaultActiveKey={['0']}
                 expandIcon={({ isActive }) => isActive ? <UpOutlined style={{ color: 'gray' }} /> : <DownOutlined style={{ color: 'gray' }} />}
-                expandIconPosition="right"
+                expandIconPosition="end"
                 ghost
             >
                 <Panel
@@ -337,7 +337,7 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
             <Collapse
                 defaultActiveKey={['0']}
                 expandIcon={({ isActive }) => isActive ? <UpOutlined style={{ color: 'gray' }} /> : <DownOutlined style={{ color: 'gray' }} />}
-                expandIconPosition="right"
+                expandIconPosition="end"
                 ghost
             >
                 <Panel
