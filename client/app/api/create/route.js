@@ -54,11 +54,9 @@ export const POST = async (request) => {
         // connect to database to store art
         await connectToDB()
 
-        console.log(data)
-
         const newArt = new Art({
             address: data.address,
-            base64: res.data.image,
+            base64: `data:image/jpeg;base64,${res.data.image}`,
             seed: res.data.seed,
             model: data.model,
             prompt: `${data.prompt}`,
@@ -73,7 +71,7 @@ export const POST = async (request) => {
         await newArt.save();
 
         return new Response(
-            JSON.stringify(res.data),
+            JSON.stringify(newArt),
             { status: 200 }
         )
     } catch (error) {

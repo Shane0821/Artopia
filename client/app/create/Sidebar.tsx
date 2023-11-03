@@ -79,7 +79,7 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
                         duration: 3,
                     });
 
-                    throw new Error('test')
+                    // throw new Error('test')
 
                     // Prepare data
                     let data = {
@@ -113,20 +113,15 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
                     const result = await response.json();
                     console.log(result);
 
+                    result.completed = true;
+                    setJsonData(result);
+
                     noti['success']({
                         message: 'Message:',
                         description:
                             'Successfully generated an image.',
                         duration: 3,
                     });
-
-                    const artDataComplete = {
-                        completed: true,
-                        base64: `data:image/jpeg;base64,${result.image}`,
-                        height: height,
-                        width: width
-                    };
-                    setJsonData(artDataComplete);
 
                     // After the post function is done, reset the signal
                     resetGenerating();

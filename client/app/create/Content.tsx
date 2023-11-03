@@ -37,12 +37,10 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
     React.useEffect(() => {
         if (jsonData) {
             if (!jsonData.completed) {
-                console.log(jsonData)
                 setDataArray(prevArray => [jsonData, ...prevArray]);
             } else {
                 setDataArray((prevArray) => {
-                    prevArray[0] = jsonData
-                    return prevArray;
+                    return [jsonData, ...prevArray.slice(1)];
                 });
             }
         }
@@ -65,6 +63,14 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
                 console.log("fetching..")
                 const response = await fetch(`/api/create/${session?.user.name}`);
                 const data = await response.json();
+
+                data.forEach(item => {
+                    if (item) {
+                        item.completed = true;
+                    }
+                });
+
+                setDataArray(data)
 
                 console.log(data)
                 // setDataArray(data.art);
