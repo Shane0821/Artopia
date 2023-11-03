@@ -5,9 +5,7 @@ import {
 } from 'antd';
 
 import '@styles/gallery.css'
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
-
-import { Row, Col, Card } from 'antd';
+import Masonry from "react-responsive-masonry"
 
 import {
     UpOutlined, DownOutlined, HighlightOutlined,
@@ -20,7 +18,6 @@ const { Content } = Layout;
 
 import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
-import { AnyARecord } from 'dns';
 
 interface ContentCreateProps {
     jsonData: any;
@@ -33,6 +30,8 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
     const { address, isConnected } = useAccount()
 
     const [dataArray, setDataArray] = useState([]);
+
+    const [userConnected, setUserConnected] = useState(false);
 
     // Use useEffect to update the array whenever jsonData changes
     React.useEffect(() => {
@@ -48,6 +47,33 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
             }
         }
     }, [jsonData]);
+
+    // Use useEffect to check connection whenever isConnected and session?.user change
+    // prevent double get requests
+    useEffect(() => {
+        if (isConnected && session?.user) {
+            setUserConnected(true);
+        }
+        else {
+            setUserConnected(false);
+        }
+    }, [isConnected, session?.user]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (userConnected && session?.user) {
+                console.log("fetching..")
+                const response = await fetch(`/api/create/${session?.user.name}`);
+                const data = await response.json();
+
+                console.log(data)
+                // setDataArray(data.art);
+            }
+        };
+        console.log(userConnected)
+        fetchData();
+    }, [userConnected]);
+
 
     return (
         <Content className="hide-scrollbar" style={{
