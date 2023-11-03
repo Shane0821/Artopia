@@ -32,7 +32,7 @@ const Create = () => {
         setCooldown(true);
         setTimeout(() => {
             setCooldown(false);
-        }, 0); // 6000
+        }, 6000);
     };
 
     const resetGenerating = () => {
