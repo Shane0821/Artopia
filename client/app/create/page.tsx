@@ -19,6 +19,7 @@ const { Content } = Layout;
 const Create = () => {
     const [generating, setGenerating] = useState(false);
     const [cooldown, setCooldown] = useState(false);
+    const [fetching, setFetching] = useState(false);
 
     const { data: session, status } = useSession()
     const { address, isConnected } = useAccount()
@@ -67,7 +68,7 @@ const Create = () => {
                                     backgroundColor: "white",
                                     bottom: 10
                                 }}
-                                loading={generating || cooldown || (!(isConnected && session?.user))}
+                                loading={generating || cooldown || (!(isConnected && session?.user)) || fetching}
                                 onClick={handleClick}
                             >
                                 Generate Image
@@ -75,7 +76,7 @@ const Create = () => {
                             </Button>
                         </div>
 
-                        <ContentCreate jsonData={jsonData} />
+                        <ContentCreate jsonData={jsonData} setFetching={setFetching} fetching={fetching} />
 
                     </Layout>
                 </Content>

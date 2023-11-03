@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Layout, Select, Slider, Input,
-    Collapse, Divider, Image, Space, notification
+    Layout, notification, Spin
 } from 'antd';
+
+import { LoadingOutlined } from '@ant-design/icons';
+
+const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
 import '@styles/gallery.css'
 import Masonry from "react-responsive-masonry"
 
-import {
-    UpOutlined, DownOutlined, HighlightOutlined,
-    FullscreenOutlined, UnorderedListOutlined,
-    PieChartOutlined, SketchOutlined
-} from '@ant-design/icons';
 
 
 const { Content } = Layout;
@@ -21,9 +19,11 @@ import { useAccount } from "wagmi"
 
 interface ContentCreateProps {
     jsonData: any;
+    fetching: boolean;
+    setFetching: (fetching: boolean) => void;
 }
 
-function ContentCreate({ jsonData }: ContentCreateProps) {
+function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) {
     const [noti, contextHolder] = notification.useNotification();
 
     const { data: session, status } = useSession()
@@ -60,23 +60,48 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
     useEffect(() => {
         const fetchData = async () => {
             if (userConnected && session?.user) {
-                console.log("fetching..")
-                const response = await fetch(`/api/create/${session?.user.name}`);
-                const data = await response.json();
+                try {
+                    console.log("fetching..")
+                    setFetching(true);
 
-                data.forEach(item => {
-                    if (item) {
-                        item.completed = true;
-                    }
-                });
+                    noti['info']({
+                        message: 'Message:',
+                        description:
+                            'Fetching art...',
+                        duration: 3,
+                    });
 
-                setDataArray(data)
+                    const response = await fetch(`/api/create/${session?.user.name}`);
+                    const data = await response.json();
 
-                console.log(data)
-                // setDataArray(data.art);
+
+                    data.forEach(item => {
+                        if (item) {
+                            item.completed = true;
+                        }
+                    });
+
+                    setDataArray(data)
+                    setFetching(false);
+
+                    noti['success']({
+                        message: 'Message:',
+                        description:
+                            'Wellcome back.',
+                        duration: 3,
+                    });
+                } catch (error) {
+                    noti['error']({
+                        message: 'Message:',
+                        description:
+                            `${error}`,
+                        duration: 3,
+                    });
+                    setFetching(false);
+                }
             }
         };
-        console.log(userConnected)
+        // console.log(userConnected)
         fetchData();
     }, [userConnected]);
 
@@ -87,7 +112,7 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
             height: 600,
             overflowY: 'auto'
         }}>
-
+            {contextHolder}
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -95,6 +120,19 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
             }}>
                 Generative Arts
             </div>
+
+            <Spin
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '90vh' // This will make the div take up the full viewport height}}
+                }}
+                indicator={antIcon}
+                spinning={(!(isConnected && session?.user)) || fetching}
+            />;
+
 
             <Masonry className="gallery" columnsCount={3}>
                 {dataArray.map((data: any, index) => (
