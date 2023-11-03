@@ -22,6 +22,7 @@
     "pino-pretty": "^10.2.3",
     "react": "^18",
     "react-dom": "^18",
+    "react-responsive-masonry": "^2.1.7",
     "siwe": "^2.1.4",
     "viem": "^1.16.6",
     "wagmi": "^1.4.5"

@@ -1,10 +1,4 @@
 .gallery {
-    -webkit-column-count: 3;
-    -moz-column-count: 3;
-    column-count: 3;
-    -webkit-column-width: 33.4%;
-    -moz-column-width: 33.3%;
-    column-width: 33.3%;
     padding: 0 8px;
 }
 
@@ -13,7 +7,7 @@
     transition: all 350ms ease;
     cursor: pointer;
     margin-bottom: 8px;
-    margin-left: -4px;
+    margin-left: 8px;
 }
 
 .gallery .pics:hover {

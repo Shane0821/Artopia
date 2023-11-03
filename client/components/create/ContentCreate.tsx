@@ -5,6 +5,7 @@ import {
 } from 'antd';
 
 import '@styles/gallery.css'
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import { Row, Col, Card } from 'antd';
 
@@ -78,7 +79,7 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
                 ))}
             </Col> */}
 
-            <div className="gallery">
+            {/* <div className="gallery">
                 {dataArray.map((data: any, index) => (
                     <div className="pics" key={index}>
                         <img
@@ -87,7 +88,18 @@ function ContentCreate({ jsonData }: ContentCreateProps) {
                         />
                     </div>
                 ))}
-            </div>
+            </div> */}
+
+            <Masonry className="gallery" columnsCount={3}>
+                {dataArray.map((data: any, index) => (
+                    <div className="pics" key={index}>
+                        <img
+                            style={{ borderRadius: '6px', width: '100%' }}
+                            src={`${data.base64}`}
+                        />
+                    </div>
+                ))}
+            </Masonry>
 
         </Content >
     );
