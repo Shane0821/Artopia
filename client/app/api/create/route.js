@@ -84,3 +84,7 @@ export const POST = async (request) => {
         }), { status: 500 });
     }
 }
+
+export const GET = async (request, { params }) => {
+    await connectToDB()
+}
