@@ -91,7 +91,7 @@ function Nav() {
             <Tooltip title="Shopping Cart">
               <Link href='/' className='flex gap-2 flex-center'>
                 <Image
-                  src='/assets/images/shopping-cart.svg'
+                  src='/assets/icons/shopping-cart.svg'
                   alt='cart'
                   width={25}
                   height={25}
