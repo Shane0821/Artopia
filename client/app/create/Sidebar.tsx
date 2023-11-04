@@ -92,7 +92,6 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
                         seed: seed ? seed : undefined,
                         prompt: prompt,
                         negative_prompt: negative_prompt,
-                        address: session?.user.name
                     };
 
                     // Make the POST request

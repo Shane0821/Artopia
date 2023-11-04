@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Layout, notification, Spin
+    Layout, notification, Spin, Tooltip
 } from 'antd';
 
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined, DeleteOutlined, DeploymentUnitOutlined, EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
 import '@styles/gallery.css'
 import Masonry from "react-responsive-masonry"
 
-
-
 const { Content } = Layout;
+
 
 import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
@@ -71,7 +70,9 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                         duration: 3,
                     });
 
-                    const response = await fetch(`/api/create/${session?.user.name}`);
+                    const response = await fetch(`/api/create/`, {
+                        method: 'GET'
+                    });
                     const data = await response.json();
 
 
@@ -107,6 +108,32 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
         fetchData();
     }, [userConnected]);
 
+    // handle delete button on clicked
+    const handleDelete = (index: Number) => {
+        const deleteArt = async () => {
+            try {
+                const artId = dataArray[index]._id;
+                console.log('deleting...', index, artId);
+
+                // first, delete art in dataArray
+
+                const response = await fetch(`/api/create/${artId}`, {
+                    method: 'DELETE',
+                });
+
+            } catch (error) {
+                noti['error']({
+                    message: 'Message:',
+                    description:
+                        `${error}`,
+                    duration: 3,
+                });
+            }
+        }
+
+        deleteArt();
+    };
+
 
     return (
         <Content className="hide-scrollbar" style={{
@@ -133,20 +160,44 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                 }}
                 indicator={antIcon}
                 spinning={(!(isConnected && session?.user)) || fetching}
-            />;
-
+            />
 
             <Masonry className="gallery" columnsCount={3}>
                 {dataArray.map((data: any, index) => (
-                    <div className="pics" key={index}>
+                    <div className="pics relative group" key={index}> {/* Add relative and group classes */}
                         <img
+                            className="no-visual-search"
                             style={{ borderRadius: '6px', width: '100%' }}
                             src={`${data.base64}`}
                         />
+                        <div hidden={!data.completed} className="absolute bottom-0 right-0 p-2 opacity-0 group-hover:opacity-100">
+                            <Tooltip placement="topLeft" title="Delete">
+                                <button className="buttonStyle" onClick={() => handleDelete(index)}>
+                                    <DeleteOutlined /> {/* Delete icon */}
+                                </button>
+                            </Tooltip>
+                        </div>
+
+                        <div hidden={!data.completed} className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100">
+                            <Tooltip placement="bottomLeft" title={data.shared ? "Private" : "Make public"}>
+                                <button className="buttonStyle">
+                                    {data.shared ? (
+                                        <EyeInvisibleOutlined /> // Private
+                                    ) : (
+                                        <EyeOutlined /> // Public icon
+                                    )}
+                                </button>
+                            </Tooltip>
+
+                            <Tooltip placement="bottomLeft" title="Mint">
+                                <button className="buttonStyle">
+                                    <DeploymentUnitOutlined />{/* Mint icon */}
+                                </button>
+                            </Tooltip>
+                        </div>
                     </div>
                 ))}
             </Masonry>
-
         </Content >
     );
 }
