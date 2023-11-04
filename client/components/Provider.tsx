@@ -11,7 +11,8 @@ import type { SessionProviderProps } from "next-auth/react"
 import {
   getDefaultWallets,
   RainbowKitProvider,
-  lightTheme
+  lightTheme,
+  Chain
 } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
@@ -25,8 +26,37 @@ import {
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
+
+const ariestestnet: Chain = {
+  id: 23411,
+  name: 'Aries',
+  network: 'aries',
+  iconUrl: '/assets/icons/aries.svg',
+  iconBackground: '#fff',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'AXM',
+    symbol: 'AXM',
+  },
+  rpcUrls: {
+    public: { http: ['https://rpc1.aries.axiomesh.io'] },
+    default: { http: ['https://rpc1.aries.axiomesh.io'] },
+  },
+  blockExplorers: {
+    default: { name: 'aries', url: 'https://scan.aries.axiomesh.io' },
+    etherscan: { name: 'aries', url: 'https://scan.aries.axiomesh.io' },
+  },
+  contracts: {
+    // multicall3: {
+    //   address: '0xca11bde05977b3631167028862be2a173976ca11',
+    //   blockCreated: 11_907_934,
+    // },
+  },
+  testnet: true,
+};
+
 const { chains, publicClient } = configureChains(
-  [mainnet, sepolia, polygon, optimism, arbitrum, base],
+  [mainnet, ariestestnet, sepolia, polygon, optimism, arbitrum, base],
   [
     // alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
     publicProvider()
