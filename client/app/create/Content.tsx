@@ -99,6 +99,8 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                     });
                     setFetching(false);
                 }
+            } else {
+                setDataArray(prevArray => []);
             }
         };
         // console.log(userConnected)
