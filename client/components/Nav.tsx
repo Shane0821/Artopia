@@ -2,7 +2,6 @@
 
 import Link from '@node_modules/next/link'
 import Image from '@node_modules/next/image'
-import { useState, useEffect, useCallback } from 'react'
 
 import { DownOutlined } from '@ant-design/icons';
 import { Input, Tooltip, Dropdown } from 'antd';
@@ -11,8 +10,8 @@ const { Search } = Input;
 
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-import { getCsrfToken, useSession } from "next-auth/react"
-import { useAccount, useConnect, useNetwork, useSignMessage } from "wagmi"
+import { useSession } from "next-auth/react"
+import { useAccount } from "wagmi"
 
 const items: MenuProps['items'] = [
   {
@@ -36,7 +35,6 @@ const items: MenuProps['items'] = [
 ]
 
 function Nav() {
-  const islogin = true;
   const { data: session, status } = useSession()
   const { address, isConnected } = useAccount()
 
