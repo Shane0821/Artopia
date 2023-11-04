@@ -133,7 +133,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                 }}
                 indicator={antIcon}
                 spinning={(!(isConnected && session?.user)) || fetching}
-            />;
+            />
 
 
             <Masonry className="gallery" columnsCount={3}>
