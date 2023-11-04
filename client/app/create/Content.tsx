@@ -70,7 +70,9 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                         duration: 3,
                     });
 
-                    const response = await fetch(`/api/create/${session?.user.name}`);
+                    const response = await fetch(`/api/create/`, {
+                        method: 'GET'
+                    });
                     const data = await response.json();
 
 
@@ -105,6 +107,32 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
         // console.log(userConnected)
         fetchData();
     }, [userConnected]);
+
+    // handle delete button on clicked
+    const handleDelete = (index: Number) => {
+        const deleteArt = async () => {
+            try {
+                const artId = dataArray[index]._id;
+                console.log('deleting...', index, artId);
+
+                // first, delete art in dataArray
+
+                const response = await fetch(`/api/create/${artId}`, {
+                    method: 'DELETE',
+                });
+
+            } catch (error) {
+                noti['error']({
+                    message: 'Message:',
+                    description:
+                        `${error}`,
+                    duration: 3,
+                });
+            }
+        }
+
+        deleteArt();
+    };
 
 
     return (
@@ -142,15 +170,15 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                             style={{ borderRadius: '6px', width: '100%' }}
                             src={`${data.base64}`}
                         />
-                        <div className="absolute bottom-0 right-0 p-2 opacity-0 group-hover:opacity-100">
+                        <div hidden={!data.completed} className="absolute bottom-0 right-0 p-2 opacity-0 group-hover:opacity-100">
                             <Tooltip placement="topLeft" title="Delete">
-                                <button className="buttonStyle">
+                                <button className="buttonStyle" onClick={() => handleDelete(index)}>
                                     <DeleteOutlined /> {/* Delete icon */}
                                 </button>
                             </Tooltip>
                         </div>
 
-                        <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100">
+                        <div hidden={!data.completed} className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100">
                             <Tooltip placement="bottomLeft" title={data.shared ? "Private" : "Make public"}>
                                 <button className="buttonStyle">
                                     {data.shared ? (
@@ -170,10 +198,6 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                     </div>
                 ))}
             </Masonry>
-
-
-
-
         </Content >
     );
 }
