@@ -18,6 +18,33 @@
     pointer-events: none;
 }
 
+.buttonStyle {
+    background-color: rgb(120, 120, 120);
+    /* slightly green */
+    color: white;
+    border-radius: 0.5rem;
+    /* rounded corners */
+    padding: 0.20rem;
+    /* padding */
+    margin-right: 0.20rem;
+    /* margin to the right */
+    border: none;
+    /* white border */
+    width: 2.2rem;
+    /* width */
+    height: 2.2rem;
+    /* height */
+
+    opacity: 0.9;
+    margin-left: 1.0rem;
+}
+
+.buttonStyle:hover {
+    background-color: rgb(67, 67, 67);
+    /* darker gray when hovered */
+}
+
+
 @media(max-width: 1000px) {
     .gallery {
         -webkit-column-count: 1;
