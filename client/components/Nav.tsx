@@ -45,7 +45,7 @@ function Nav() {
       <div className='flex gap-3 md:gap-5 flex-center'>
         <Link href='/' className='flex gap-2 flex-center'>
           <Image
-            src='/assets/images/logo.svg'
+            src='/assets/icons/logo.svg'
             alt='Artopia logo'
             width={35}
             height={35}
@@ -79,7 +79,7 @@ function Nav() {
             <Tooltip title="Create Artwork">
               <Link href='/create' className='flex gap-2 flex-center'>
                 <Image
-                  src='/assets/images/paint-brush.svg'
+                  src='/assets/icons/paint-brush.svg'
                   alt='create'
                   width={25}
                   height={25}
@@ -91,7 +91,7 @@ function Nav() {
             <Tooltip title="Shopping Cart">
               <Link href='/' className='flex gap-2 flex-center'>
                 <Image
-                  src='/assets/images/shopping-cart.svg'
+                  src='/assets/icons/shopping-cart.svg'
                   alt='cart'
                   width={25}
                   height={25}
@@ -103,7 +103,7 @@ function Nav() {
             <Tooltip title="Profile">
               <Link href='/profile' className='flex gap-2 flex-center'>
                 <Image
-                  src='/assets/images/profile-circle.svg'
+                  src='/assets/icons/profile-circle.svg'
                   alt='cart'
                   width={25}
                   height={25}
