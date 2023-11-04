@@ -26,6 +26,12 @@ const items: MenuProps['items'] = [
     label: (
       <Link href='/collection/factory' style={{ fontSize: '1rem' }}>Factory Collection</Link>
     ),
+  },
+  {
+    key: '2',
+    label: (
+      <Link href='/collection/bid' style={{ fontSize: '1rem' }}>Bid Collection</Link>
+    ),
   }
 ]
 
@@ -60,10 +66,9 @@ function Nav() {
         </Dropdown>
         
         <Link href='/prompts' className='nav_link'>Prompts</Link>
-        <Link href='/autction' className='nav_link'>Auction</Link>
       </div>
 
-      <Search className='flex-center w-80 gap-1'
+      <Search className='flex-center w-80 gap-2'
         placeholder="input search text"
         onSearch={onSearch}
         allowClear
@@ -109,12 +114,12 @@ function Nav() {
               </Link>
             </Tooltip>
 
-            <ConnectButton>
+            <ConnectButton showBalance={false}>
             </ConnectButton>
           </div>
         ) : (
           <>
-            <ConnectButton>
+            <ConnectButton showBalance={false}>
             </ConnectButton>
           </>
         )}
