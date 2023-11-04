@@ -1,5 +1,5 @@
 .gallery {
-    padding: 0 8px;
+    padding: 8px 8px;
 }
 
 .gallery .pics {
@@ -13,6 +13,40 @@
 .gallery .pics:hover {
     filter: opacity(.9);
 }
+
+.no-visual-search {
+    pointer-events: none;
+}
+
+.buttonStyle {
+    background-color: rgb(70, 70, 70);
+    /* slightly green */
+    color: white;
+    border-radius: 0.5rem;
+    /* rounded corners */
+    padding: 0.20rem;
+    /* padding */
+    margin-right: 0.20rem;
+    /* margin to the right */
+    border: none;
+    /* white border */
+    width: 2.2rem;
+    /* width */
+    height: 2.2rem;
+    /* height */
+
+    opacity: 0.9;
+    margin-left: 1.0rem;
+    margin-right: 0.5rem;
+    margin-top: 0.10rem;
+    margin-bottom: 0.3rem;
+}
+
+.buttonStyle:hover {
+    background-color: rgb(30, 30, 30);
+    /* darker gray when hovered */
+}
+
 
 @media(max-width: 1000px) {
     .gallery {
