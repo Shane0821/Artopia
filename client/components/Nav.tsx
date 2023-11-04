@@ -66,14 +66,16 @@ function Nav() {
         <Link href='/prompts' className='nav_link'>Prompts</Link>
       </div>
 
-      <Search className='flex-center w-80 gap-2'
-        placeholder="input search text"
-        onSearch={onSearch}
-        allowClear
-        size="large"
-      />
+      <div className='hidden lg:flex items-center justify-center w-80 gap-2'>
+        <Search placeholder="input search text"
+              onSearch={onSearch}
+              allowClear
+              size="large"
+        />
+      </div>
+     
 
-      <div className='flex gap-3 md:gap-5 flex-center'>
+      <div className='hidden sm:flex gap-3 items-center justify-center'>
         {isConnected && session?.user ? (
           <div className='flex gap-3 md:gap-5'>
             <Tooltip title="Create Artwork">
