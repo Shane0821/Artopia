@@ -19,7 +19,7 @@
 }
 
 .buttonStyle {
-    background-color: rgb(120, 120, 120);
+    background-color: rgb(70, 70, 70);
     /* slightly green */
     color: white;
     border-radius: 0.5rem;
@@ -37,10 +37,13 @@
 
     opacity: 0.9;
     margin-left: 1.0rem;
+    margin-right: 0.5rem;
+    margin-top: 0.10rem;
+    margin-bottom: 0.3rem;
 }
 
 .buttonStyle:hover {
-    background-color: rgb(67, 67, 67);
+    background-color: rgb(30, 30, 30);
     /* darker gray when hovered */
 }
 

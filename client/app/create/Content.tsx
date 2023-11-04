@@ -142,13 +142,15 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                             style={{ borderRadius: '6px', width: '100%' }}
                             src={`${data.base64}`}
                         />
-                        <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100">
-                            <Tooltip placement="bottomLeft" title="Delete">
+                        <div className="absolute bottom-0 right-0 p-2 opacity-0 group-hover:opacity-100">
+                            <Tooltip placement="topLeft" title="Delete">
                                 <button className="buttonStyle">
                                     <DeleteOutlined /> {/* Delete icon */}
                                 </button>
                             </Tooltip>
+                        </div>
 
+                        <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100">
                             <Tooltip placement="bottomLeft" title={data.shared ? "Private" : "Make public"}>
                                 <button className="buttonStyle">
                                     {data.shared ? (
