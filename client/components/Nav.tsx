@@ -2,7 +2,6 @@
 
 import Link from '@node_modules/next/link'
 import Image from '@node_modules/next/image'
-import { useState, useEffect, useCallback } from 'react'
 
 import { DownOutlined } from '@ant-design/icons';
 import { Input, Tooltip, Dropdown } from 'antd';
@@ -11,8 +10,8 @@ const { Search } = Input;
 
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-import { getCsrfToken, useSession } from "next-auth/react"
-import { useAccount, useConnect, useNetwork, useSignMessage } from "wagmi"
+import { useSession } from "next-auth/react"
+import { useAccount } from "wagmi"
 
 const items: MenuProps['items'] = [
   {
@@ -26,11 +25,16 @@ const items: MenuProps['items'] = [
     label: (
       <Link href='/collection/factory' style={{ fontSize: '1rem' }}>Factory Collection</Link>
     ),
+  },
+  {
+    key: '2',
+    label: (
+      <Link href='/collection/bid' style={{ fontSize: '1rem' }}>Bid Collection</Link>
+    ),
   }
 ]
 
 function Nav() {
-  const islogin = true;
   const { data: session, status } = useSession()
   const { address, isConnected } = useAccount()
 
@@ -60,10 +64,9 @@ function Nav() {
         </Dropdown>
         
         <Link href='/prompts' className='nav_link'>Prompts</Link>
-        <Link href='/autction' className='nav_link'>Auction</Link>
       </div>
 
-      <Search className='flex-center w-80 gap-1'
+      <Search className='flex-center w-80 gap-2'
         placeholder="input search text"
         onSearch={onSearch}
         allowClear
@@ -109,12 +112,12 @@ function Nav() {
               </Link>
             </Tooltip>
 
-            <ConnectButton>
+            <ConnectButton showBalance={false}>
             </ConnectButton>
           </div>
         ) : (
           <>
-            <ConnectButton>
+            <ConnectButton showBalance={false}>
             </ConnectButton>
           </>
         )}
