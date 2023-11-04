@@ -56,7 +56,7 @@ const ariestestnet: Chain = {
 };
 
 const { chains, publicClient } = configureChains(
-  [mainnet, ariestestnet, sepolia, polygon, optimism, arbitrum, base],
+  [ariestestnet, mainnet, sepolia, polygon, optimism, arbitrum, base],
   [
     // alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
     publicProvider()
