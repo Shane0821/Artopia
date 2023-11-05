@@ -24,9 +24,45 @@ export const DELETE = async (request, { params }) => {
     } catch (error) {
         console.log(error)
         return new Response(JSON.stringify({
-            message: 'Failed to create a new prompt',
+            message: 'Failed to create delete art.',
             error: error
         }), { status: 500 });
     }
 }
+
+export const PATCH = async (request, { params }) => {
+    const { title } = await request.json();
+
+    try {
+        const token = await getToken({ req: request });
+        // Not Signed in
+        if (!token) throw new Error("Unauthorized.");
+        // get address
+        const address = token.sub;
+        const _id = params.artId;
+
+        // console.log(address, _id)
+
+        await connectToDB()
+        const art = await Art.findOne({ _id, address });
+
+        if (!art) throw new Error('Art not found.')
+
+        art.title = title;
+
+        await art.save();
+
+        return new Response(
+            JSON.stringify({}),
+            { status: 200 }
+        )
+    } catch (error) {
+        console.log(error)
+        return new Response(JSON.stringify({
+            message: 'Failed to update art title.',
+            error: error
+        }), { status: 500 });
+    }
+}
+
 

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 
-import { Drawer, Input, Button, Typography, Divider, Row, Col } from 'antd';
+import { Drawer, Input, Button, Typography, Divider, Row, Col, notification } from 'antd';
 
 const { Paragraph, Text } = Typography;
 
 import '@styles/detail.css'
+import { hexDataSlice } from 'ethers/lib/utils';
 
 interface DetailProps {
     popup: boolean;
@@ -28,6 +29,10 @@ const DescriptionItem = ({ title, content }: DescriptionItemProps) => (
 const Detail = ({ popup, setPopup, data }: DetailProps) => {
     const [title, setTitle] = useState(data.title);
 
+    const [noti, contextHolder] = notification.useNotification();
+
+    const [saveLoading, setSaveLoading] = useState(false);
+
     const onClose = () => {
         setPopup(false);
     };
@@ -39,8 +44,49 @@ const Detail = ({ popup, setPopup, data }: DetailProps) => {
     }, [popup]);
 
 
+    const saveTitle = () => {
+        const update = async () => {
+            try {
+                const artId = data._id;
+
+                data.title = title;
+
+                // then call api to delte it in database
+                const response = await fetch(`/api/create/${artId}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({
+                        title
+                    })
+                });
+
+                if (response.status == 500) throw new Error('Error occured when saving title.')
+
+                noti['success']({
+                    message: 'Message:',
+                    description:
+                        `Art title saved.`,
+                    duration: 3,
+                });
+                setSaveLoading(false);
+                setPopup(false);
+            } catch (error) {
+                noti['error']({
+                    message: 'Message:',
+                    description:
+                        `${error}`,
+                    duration: 3,
+                });
+                setSaveLoading(false);
+                setPopup(false);
+            }
+        }
+        setSaveLoading(true);
+        update();
+    }
+
     return (
         <>
+            {contextHolder}
             <Drawer
                 title={
                     <div
@@ -57,9 +103,8 @@ const Detail = ({ popup, setPopup, data }: DetailProps) => {
                             maxLength={100}
                         />
                         <Button
-                            onClick={() => {
-                                setPopup(false)
-                            }}
+                            onClick={saveTitle}
+                            loading={saveLoading}
                             style={{ marginLeft: '18px' }}
                         >
                             Save
