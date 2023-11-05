@@ -30,7 +30,7 @@
 
 .main:after {
   content: "";
-  background-image: url("/assets/images/grid.svg");
+  background-image: url("/assets/icons/grid.svg");
   z-index: 1;
   position: absolute;
   width: 100%;
@@ -117,7 +117,7 @@
 
 /* Tailwind Styles */
 .nav {
-  @apply flex-between max-w-7xl w-full h-14 py-1 sticky top-0 sm:px-8 px-6 z-20
+  @apply flex-between max-w-7xl w-full h-14 py-1 sticky top-0 sm:px-12 px-6 z-20
 }
 
 .nav_link {

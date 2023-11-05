@@ -56,6 +56,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
         }
     }, [isConnected, session?.user]);
 
+    // fetch art
     useEffect(() => {
         const fetchData = async () => {
             if (userConnected && session?.user) {
@@ -75,7 +76,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                     });
                     const data = await response.json();
 
-
+                    data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                     data.forEach(item => {
                         if (item) {
                             item.completed = true;
@@ -108,25 +109,25 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
         fetchData();
     }, [userConnected]);
 
-    // handle delete button on clicked
-    const handleDelete = (index: Number) => {
+    // handle art deletion on button clicked
+    const handleDelete = (index: number) => {
         const deleteArt = async () => {
             try {
                 const artId = dataArray[index]._id;
                 console.log('deleting...', index, artId);
 
-                // fisrt call api to delte it in database
-                await fetch(`/api/create/${artId}`, {
-                    method: 'DELETE',
-                });
-
-                // if success, delete art in dataArray
+                // first, delete art in dataArray
                 setDataArray((prevArray) => {
                     let newArray = [...prevArray];
                     if (index >= 0 && index < newArray.length) {
                         newArray.splice(index, 1);
                     }
                     return newArray;
+                });
+
+                // then call api to delte it in database
+                await fetch(`/api/create/${artId}`, {
+                    method: 'DELETE',
                 });
 
                 noti['success']({

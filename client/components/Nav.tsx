@@ -2,7 +2,6 @@
 
 import Link from '@node_modules/next/link'
 import Image from '@node_modules/next/image'
-import { useState, useEffect, useCallback } from 'react'
 
 import { DownOutlined } from '@ant-design/icons';
 import { Input, Tooltip, Dropdown } from 'antd';
@@ -11,8 +10,8 @@ const { Search } = Input;
 
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-import { getCsrfToken, useSession } from "next-auth/react"
-import { useAccount, useConnect, useNetwork, useSignMessage } from "wagmi"
+import { useSession } from "next-auth/react"
+import { useAccount } from "wagmi"
 
 const items: MenuProps['items'] = [
   {
@@ -26,11 +25,16 @@ const items: MenuProps['items'] = [
     label: (
       <Link href='/collection/factory' style={{ fontSize: '1rem' }}>Factory Collection</Link>
     ),
+  },
+  {
+    key: '2',
+    label: (
+      <Link href='/collection/bid' style={{ fontSize: '1rem' }}>Bid Collection</Link>
+    ),
   }
 ]
 
 function Nav() {
-  const islogin = true;
   const { data: session, status } = useSession()
   const { address, isConnected } = useAccount()
 
@@ -41,7 +45,7 @@ function Nav() {
       <div className='flex gap-3 md:gap-5 flex-center'>
         <Link href='/' className='flex gap-2 flex-center'>
           <Image
-            src='/assets/images/logo.svg'
+            src='/assets/icons/logo.svg'
             alt='Artopia logo'
             width={35}
             height={35}
@@ -60,23 +64,24 @@ function Nav() {
         </Dropdown>
         
         <Link href='/prompts' className='nav_link'>Prompts</Link>
-        <Link href='/autction' className='nav_link'>Auction</Link>
       </div>
 
-      <Search className='flex-center w-80 gap-1'
-        placeholder="input search text"
-        onSearch={onSearch}
-        allowClear
-        size="large"
-      />
+      <div className='hidden lg:flex items-center justify-center w-80 gap-2'>
+        <Search placeholder="input search text"
+              onSearch={onSearch}
+              allowClear
+              size="large"
+        />
+      </div>
+     
 
-      <div className='flex gap-3 md:gap-5 flex-center'>
+      <div className='hidden sm:flex gap-3 items-center justify-center'>
         {isConnected && session?.user ? (
           <div className='flex gap-3 md:gap-5'>
             <Tooltip title="Create Artwork">
               <Link href='/create' className='flex gap-2 flex-center'>
                 <Image
-                  src='/assets/images/paint-brush.svg'
+                  src='/assets/icons/paint-brush.svg'
                   alt='create'
                   width={25}
                   height={25}
@@ -88,7 +93,7 @@ function Nav() {
             <Tooltip title="Shopping Cart">
               <Link href='/' className='flex gap-2 flex-center'>
                 <Image
-                  src='/assets/images/shopping-cart.svg'
+                  src='/assets/icons/shopping-cart.svg'
                   alt='cart'
                   width={25}
                   height={25}
@@ -100,7 +105,7 @@ function Nav() {
             <Tooltip title="Profile">
               <Link href='/profile' className='flex gap-2 flex-center'>
                 <Image
-                  src='/assets/images/profile-circle.svg'
+                  src='/assets/icons/profile-circle.svg'
                   alt='cart'
                   width={25}
                   height={25}
@@ -109,12 +114,12 @@ function Nav() {
               </Link>
             </Tooltip>
 
-            <ConnectButton>
+            <ConnectButton showBalance={false}>
             </ConnectButton>
           </div>
         ) : (
           <>
-            <ConnectButton>
+            <ConnectButton showBalance={false}>
             </ConnectButton>
           </>
         )}

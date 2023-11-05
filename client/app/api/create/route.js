@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 import Art from "@models/Art";
 import { connectToDB } from "@utils/database";
 import { default64_1, default64_2 } from './default64.js';
