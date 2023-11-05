@@ -11,4 +11,30 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 20px;
+}
+
+.ant-drawer-body p.site-description-item-profile-p {
+    display: block;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 18px;
+    line-height: 1.1715;
+}
+
+.site-description-item-profile-p-label {
+    display: inline-block;
+    margin-right: 8px;
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.site-description-item-profile-wrapper {
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 14px;
+    line-height: 1.1715;
+}
+
+.prompt {
+    color: rgba(0, 0, 0, 0.55);
+    font-size: 16px;
+    line-height: 1.5715;
 }
