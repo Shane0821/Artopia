@@ -16,6 +16,8 @@ const { Content } = Layout;
 import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
 
+import Detail from '@app/create/Detail'
+
 interface ContentCreateProps {
     jsonData: any;
     fetching: boolean;
@@ -29,6 +31,8 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
     const { address, isConnected } = useAccount()
 
     const [dataArray, setDataArray] = useState([]);
+    const [popup, setPopup] = useState(false);
+    const [popupData, setPopupData] = useState();
 
     const [userConnected, setUserConnected] = useState(false);
 
@@ -126,14 +130,14 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                 });
 
                 // then call api to delte it in database
-                await fetch(`/api/create/${artId}`, {
+                const response = await fetch(`/api/create/${artId}`, {
                     method: 'DELETE',
                 });
 
                 noti['success']({
                     message: 'Message:',
                     description:
-                        `Art deleted.`,
+                        `Art is permanently deleted from artopia.`,
                     duration: 3,
                 });
             } catch (error) {
@@ -156,6 +160,8 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
             height: 600,
             overflowY: 'auto'
         }}>
+            <Detail popup={popup} setPopup={setPopup} data={popupData} />
+
             {contextHolder}
             <div style={{
                 display: 'flex',
@@ -179,13 +185,27 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
 
             <Masonry className="gallery" columnsCount={3}>
                 {dataArray.map((data: any, index) => (
-                    <div className="pics relative group" key={index}> {/* Add relative and group classes */}
+                    <div
+                        className="pics relative group"
+                        key={index}
+                        onClick={() => {
+                            console.log('click')
+                            setPopup(true);
+                            setPopupData(data);
+                        }}
+                    > {/* Add relative and group classes */}
                         <img
                             className="no-visual-search"
                             style={{ borderRadius: '6px', width: '100%' }}
                             src={`${data.base64}`}
                         />
-                        <div hidden={!data.completed} className="absolute bottom-0 right-0 p-2 opacity-0 group-hover:opacity-100">
+
+                        {/* buttons */}
+                        <div
+                            hidden={!data.completed}
+                            className="absolute bottom-0 right-0 p-2 opacity-0 group-hover:opacity-100"
+                            onClick={(e) => e.stopPropagation()}
+                        >
                             <Tooltip placement="topLeft" title="Delete">
                                 <button className="buttonStyle" onClick={() => handleDelete(index)}>
                                     <DeleteOutlined /> {/* Delete icon */}
@@ -193,7 +213,12 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                             </Tooltip>
                         </div>
 
-                        <div hidden={!data.completed} className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100">
+                        {/* buttons */}
+                        < div
+                            hidden={!data.completed}
+                            className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100"
+                            onClick={(e) => e.stopPropagation()}
+                        >
                             <Tooltip placement="bottomLeft" title={data.shared ? "Private" : "Make public"}>
                                 <button className="buttonStyle">
                                     {data.shared ? (
@@ -211,8 +236,9 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                             </Tooltip>
                         </div>
                     </div>
-                ))}
-            </Masonry>
+                ))
+                }
+            </Masonry >
         </Content >
     );
 }

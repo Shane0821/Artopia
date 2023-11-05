@@ -12,7 +12,7 @@ export const DELETE = async (request, { params }) => {
         const address = token.sub;
         const _id = params.artId;
 
-        console.log(address, _id)
+        // console.log(address, _id)
 
         await connectToDB()
         await Art.deleteOne({ _id, address });
