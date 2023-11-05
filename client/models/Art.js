@@ -3,6 +3,7 @@ import { Schema, model, models } from 'mongoose';
 // prompt should be set to true later
 const ArtSchema = new Schema({
     base64: { type: String, required: true },
+    title: { type: String, required: false },
     model: { type: String, required: true },
     prompt: { type: String, required: false, default: 'art' },
     negative_prompt: { type: String, required: false },
