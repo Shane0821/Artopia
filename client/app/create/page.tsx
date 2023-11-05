@@ -66,7 +66,7 @@ const Create = () => {
                                     height: 55,
                                     position: 'absolute',
                                     backgroundColor: "white",
-                                    bottom: 10
+                                    top: 640
                                 }}
                                 loading={generating || cooldown || (!(isConnected && session?.user)) || fetching}
                                 onClick={handleClick}
