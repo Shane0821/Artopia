@@ -99,6 +99,7 @@ const Detail = ({ popup, setPopup, data }: DetailProps) => {
                             justifyContent: 'space-between',
                             alignItems: 'center'
                         }}>
+                        <p className="site-description-item-profile-p">Title</p>
                         <Input
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
