@@ -78,6 +78,13 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                     const response = await fetch(`/api/create/`, {
                         method: 'GET'
                     });
+
+                    // Handle the response
+                    if (!response.ok) {
+                        const message = `An error has occurred: ${response.status}`;
+                        throw new Error(message);
+                    }
+
                     const data = await response.json();
 
                     data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -134,7 +141,11 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                     method: 'DELETE',
                 });
 
-                if (response.status == 500) throw new Error('Error occured when deleting art.')
+                // Handle the response
+                if (!response.ok) {
+                    const message = `An error has occurred: ${response.status}`;
+                    throw new Error(message);
+                }
 
                 noti['success']({
                     message: 'Message:',

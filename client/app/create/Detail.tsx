@@ -59,7 +59,11 @@ const Detail = ({ popup, setPopup, data }: DetailProps) => {
                     })
                 });
 
-                if (response.status == 500) throw new Error('Error occured when saving title.')
+                // Handle the response
+                if (!response.ok) {
+                    const message = `An error has occurred: ${response.status}`;
+                    throw new Error(message);
+                }
 
                 noti['success']({
                     message: 'Message:',
