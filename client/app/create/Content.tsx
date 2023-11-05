@@ -32,7 +32,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
 
     const [dataArray, setDataArray] = useState([]);
     const [popup, setPopup] = useState(false);
-    const [popupData, setPopupData] = useState();
+    const [popupData, setPopupData] = useState({});
 
     const [userConnected, setUserConnected] = useState(false);
 

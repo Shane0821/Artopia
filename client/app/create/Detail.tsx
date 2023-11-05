@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Drawer, Form, Input, Popover, Row, Select, Space } from 'antd';
 
-const { Option } = Select;
+import { Drawer, Input, Button, Typography } from 'antd';
+
+const { Paragraph, Text } = Typography;
+
+import '@styles/detail.css'
 
 interface DetailProps {
     popup: boolean;
@@ -11,6 +14,8 @@ interface DetailProps {
 }
 
 const Detail = ({ popup, setPopup, data }: DetailProps) => {
+    const [title, setTitle] = useState(data.title);
+
     const onClose = () => {
         setPopup(false);
     };
@@ -18,7 +23,29 @@ const Detail = ({ popup, setPopup, data }: DetailProps) => {
     return (
         <>
             <Drawer
-                title="Art detail"
+                title={
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                        }}>
+                        <Input
+                            value={data.title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            style={{ marginLeft: '8px' }}
+                            placeholder="Title"
+                        />
+                        <Button
+                            onClick={() => {
+                                setPopup(false)
+                            }}
+                            style={{ marginLeft: '18px' }}
+                        >
+                            Save
+                        </Button>
+                    </div>
+                }
                 width={720}
                 onClose={onClose}
                 open={popup}
@@ -27,110 +54,31 @@ const Detail = ({ popup, setPopup, data }: DetailProps) => {
                         paddingBottom: 80,
                     },
                 }}
-                extra={
-                    <Space>
-                        <Button onClick={onClose}>Cancel</Button>
-                        <Button onClick={onClose}>
-                            Submit
-                        </Button>
-                    </Space>
-                }
             >
-                <Form layout="vertical" hideRequiredMark>
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <Form.Item
-                                name="name"
-                                label="Name"
-                                rules={[{ required: true, message: 'Please enter user name' }]}
-                            >
-                                <Input placeholder="Please enter user name" />
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                name="url"
-                                label="Url"
-                                rules={[{ required: true, message: 'Please enter url' }]}
-                            >
-                                <Input
-                                    style={{ width: '100%' }}
-                                    addonBefore="http://"
-                                    addonAfter=".com"
-                                    placeholder="Please enter url"
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <Form.Item
-                                name="owner"
-                                label="Owner"
-                                rules={[{ required: true, message: 'Please select an owner' }]}
-                            >
-                                <Select placeholder="Please select an owner">
-                                    <Option value="xiao">Xiaoxiao Fu</Option>
-                                    <Option value="mao">Maomao Zhou</Option>
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                name="type"
-                                label="Type"
-                                rules={[{ required: true, message: 'Please choose the type' }]}
-                            >
-                                <Select placeholder="Please choose the type">
-                                    <Option value="private">Private</Option>
-                                    <Option value="public">Public</Option>
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <Form.Item
-                                name="approver"
-                                label="Approver"
-                                rules={[{ required: true, message: 'Please choose the approver' }]}
-                            >
-                                <Select placeholder="Please choose the approver">
-                                    <Option value="jack">Jack Ma</Option>
-                                    <Option value="tom">Tom Liu</Option>
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                name="dateTime"
-                                label="DateTime"
-                                rules={[{ required: true, message: 'Please choose the dateTime' }]}
-                            >
-                                <DatePicker.RangePicker
-                                    style={{ width: '100%' }}
-                                    getPopupContainer={(trigger) => trigger.parentElement!}
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={24}>
-                            <Form.Item
-                                name="description"
-                                label="Description"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'please enter url description',
-                                    },
-                                ]}
-                            >
-                                <Input.TextArea rows={4} placeholder="please enter url description" />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                </Form>
+                {data.base64 && <img className="image no-visual-search" src={`${data.base64}`} />}
+                <Paragraph>
+                    <Text strong>Model:</Text> {data.model}
+                    <br />
+                    <Text strong>Prompt:</Text> {data.prompt}
+                    <br />
+                    <Text strong>Negative Prompt:</Text> {data.negative_prompt}
+                    <br />
+                    <Text strong>Width:</Text> {data.width}
+                    <br />
+                    <Text strong>Height:</Text> {data.height}
+                    <br />
+                    <Text strong>Steps:</Text> {data.steps}
+                    <br />
+                    <Text strong>Guidance:</Text> {data.guidance}
+                    <br />
+                    <Text strong>Seed:</Text> {data.seed}
+                    <br />
+                    <Text strong>Scheduler:</Text> {data.scheduler}
+                    <br />
+                    <Text strong>Created At:</Text> {data.created_at}
+                    <br />
+                    <Text strong>Visibility:</Text> {data.shared ? 'public' : 'private'}
+                </Paragraph>
             </Drawer >
         </>
     );

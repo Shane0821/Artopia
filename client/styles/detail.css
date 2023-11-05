@@ -1,0 +1,14 @@
+.no-visual-search {
+    pointer-events: none;
+}
+
+.image {
+    width: 80%;
+    /* you can adjust this value as needed */
+    height: auto;
+    /* maintain the aspect ratio */
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
