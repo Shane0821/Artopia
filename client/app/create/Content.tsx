@@ -75,7 +75,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                     });
                     const data = await response.json();
 
-
+                    data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                     data.forEach(item => {
                         if (item) {
                             item.completed = true;
