@@ -134,6 +134,8 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                     method: 'DELETE',
                 });
 
+                if (response.status == 500) throw new Error('Error occured when deleting art.')
+
                 noti['success']({
                     message: 'Message:',
                     description:
