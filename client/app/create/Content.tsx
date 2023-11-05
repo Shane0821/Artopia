@@ -115,12 +115,26 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                 const artId = dataArray[index]._id;
                 console.log('deleting...', index, artId);
 
-                // first, delete art in dataArray
-
-                const response = await fetch(`/api/create/${artId}`, {
+                // fisrt call api to delte it in database
+                await fetch(`/api/create/${artId}`, {
                     method: 'DELETE',
                 });
 
+                // if success, delete art in dataArray
+                setDataArray((prevArray) => {
+                    let newArray = [...prevArray];
+                    if (index >= 0 && index < newArray.length) {
+                        newArray.splice(index, 1);
+                    }
+                    return newArray;
+                });
+
+                noti['success']({
+                    message: 'Message:',
+                    description:
+                        `Art deleted.`,
+                    duration: 3,
+                });
             } catch (error) {
                 noti['error']({
                     message: 'Message:',
