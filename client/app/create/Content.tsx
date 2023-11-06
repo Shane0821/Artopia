@@ -33,7 +33,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
     const [dataArray, setDataArray] = useState([]);
     const [popup, setPopup] = useState(false);
     const [popupData, setPopupData] = useState({});
-    const [prepareMinting, setPrepareMinting] = useState(false);
+    const [prepareMinting, setPrepareMinting] = useState(-1);
 
     const [userConnected, setUserConnected] = useState(false);
 
@@ -165,13 +165,24 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
             }
         }
 
+        // if minting art, deletion is not allowed.
+        if (prepareMinting != -1) {
+            noti['info']({
+                message: 'Message:',
+                description:
+                    `Deletion is not allowed when minting your art nft.`,
+                duration: 4,
+            });
+            return;
+        }
+
         deleteArt();
     };
 
     // prepare for minting
     const handleMint = (data: any, index: number) => {
         const prepare = async () => {
-            setPrepareMinting(true);
+            setPrepareMinting(index);
 
             noti['info']({
                 message: 'Message:',
@@ -179,6 +190,17 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                     'Preparing for minting art.',
                 duration: 3,
             });
+        }
+
+        // one piece of art minting at one time
+        if (prepareMinting != -1) {
+            noti['info']({
+                message: 'Message:',
+                description:
+                    'Another art is minting.',
+                duration: 4,
+            });
+            return;
         }
 
         prepare();
@@ -262,7 +284,9 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                             <Tooltip placement="bottomLeft" title="Mint">
                                 <Button
                                     className="buttonStyle"
+                                    loading={prepareMinting === index}
                                     icon={<DeploymentUnitOutlined />}
+                                    onClick={() => { handleMint(data, index); }}
                                 />
                             </Tooltip>
                         </div>
