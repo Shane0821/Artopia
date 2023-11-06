@@ -193,7 +193,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                 const response = await fetch("/api/mint", {
                     method: "POST",
                     body: JSON.stringify(
-                        data
+                        { _id: data._id }
                     )
                 });
 
