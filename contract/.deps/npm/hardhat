@@ -1,0 +1,8 @@
+/**
+ * Minified by jsDelivr using Terser v5.19.2.
+ * Original file: /npm/hardhat@2.17.4/internal/lib/hardhat-lib.js
+ *
+ * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+ */
+"use strict";var __importDefault=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};const debug_1=__importDefault(require("debug")),context_1=require("../context"),config_loading_1=require("../core/config/config-loading"),errors_1=require("../core/errors"),errors_list_1=require("../core/errors-list"),env_variables_1=require("../core/params/env-variables"),hardhat_params_1=require("../core/params/hardhat-params"),runtime_environment_1=require("../core/runtime-environment");let ctx,env;if(context_1.HardhatContext.isCreated()){if(ctx=context_1.HardhatContext.getHardhatContext(),void 0===ctx.environment)throw new errors_1.HardhatError(errors_list_1.ERRORS.GENERAL.LIB_IMPORTED_FROM_THE_CONFIG);env=ctx.environment}else{ctx=context_1.HardhatContext.createHardhatContext();const e=(0,env_variables_1.getEnvHardhatArguments)(hardhat_params_1.HARDHAT_PARAM_DEFINITIONS,process.env);e.verbose&&debug_1.default.enable("hardhat*");const{resolvedConfig:r,userConfig:t}=(0,config_loading_1.loadConfigAndTasks)(e);env=new runtime_environment_1.Environment(r,e,ctx.tasksDSL.getTaskDefinitions(),ctx.environmentExtenders,ctx.experimentalHardhatNetworkMessageTraceHooks,t,ctx.providerExtenders),ctx.setHardhatRuntimeEnvironment(env)}module.exports=env;
+//# sourceMappingURL=/sm/c83263fde10adaa55a3509e4c23e228d8ed676933f1be895f241b23234afbfab.map
