@@ -10,14 +10,14 @@ const pinataApiSecret = process.env.PINTA_API_SECRET
 const axios = require('axios');
 const FormData = require('form-data');
 
-async function uploadImageToPinata(title, base64Image) {
+async function uploadImageToPinata(title, id, base64Image) {
     // Convert base64 image to buffer
     let imageBuffer = Buffer.from(base64Image.substring(23), 'base64');
 
     // Create form data
     let formData = new FormData();
     formData.append('file', imageBuffer, {
-        filename: `${title}.jpeg`,
+        filename: `${title}_${id}.jpeg`,
         contentType: 'image/jpeg',
     });
 
@@ -41,21 +41,21 @@ async function uploadTextToPinata(prompt, negativePrompt) {
     // Upload text to pinata
     let textData = {
         prompt: prompt,
-        negativePrompt: negativePrompt,
+        negative_prompt: negativePrompt,
     };
 
     // Set pinata api endpoint
-    let pinataUploadEndpoint = 'https://api.pinata.cloud/pinning/pinFileToIPFS';
+    let pinataUploadEndpoint = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
 
-    let response = await axios.post(pinataUploadEndpoint, textData, {
+    let response = await axios.post(pinataUploadEndpoint, JSON.stringify(textData), {
         headers: {
-            'Content-Type': 'application/json',
-            Authorization: PINATA
+            pinata_api_key: pinataApiKey,
+            pinata_secret_api_key: pinataApiSecret,
         },
     });
+
     return response;
 }
-
 
 export const POST = async (request) => {
     const data = await request.json();
@@ -73,19 +73,14 @@ export const POST = async (request) => {
 
         if (!art) throw new Error('Art not found.')
 
-        const res_art = await uploadImageToPinata(art.title, art.base64);
-
-        console.log(res_art);
-
-        // QmYq8vYmdbpWocUPaD43M7Uma1nj4uxFG7pi6kZjatMqjd
-
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-        await sleep(3000)
+        const res_art = await uploadImageToPinata(art.title, art._id, art.base64);
+        const res_prompt = await uploadTextToPinata(art.prompt, art.negative_prompt);
 
         return new Response(
-            JSON.stringify({}),
+            JSON.stringify({
+                img_ipfs: res_art.data.IpfsHash,
+                prompt_ipfs: res_prompt.data.IpfsHash
+            }),
             { status: 200 }
         )
     } catch (error) {
