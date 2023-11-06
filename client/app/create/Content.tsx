@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Layout, notification, Spin, Tooltip
+    Layout, notification, Spin, Tooltip, Button
 } from 'antd';
 
 import { LoadingOutlined, DeleteOutlined, DeploymentUnitOutlined, EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
@@ -33,8 +33,10 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
     const [dataArray, setDataArray] = useState([]);
     const [popup, setPopup] = useState(false);
     const [popupData, setPopupData] = useState({});
+    const [prepareMinting, setPrepareMinting] = useState(false);
 
     const [userConnected, setUserConnected] = useState(false);
+
 
     // Use useEffect to update the array whenever jsonData changes
     React.useEffect(() => {
@@ -150,7 +152,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                 noti['success']({
                     message: 'Message:',
                     description:
-                        `Art is permanently deleted from artopia.`,
+                        `Art is permanently deleted from your collection.`,
                     duration: 3,
                 });
             } catch (error) {
@@ -166,6 +168,21 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
         deleteArt();
     };
 
+    // prepare for minting
+    const handleMint = (data: any, index: number) => {
+        const prepare = async () => {
+            setPrepareMinting(true);
+
+            noti['info']({
+                message: 'Message:',
+                description:
+                    'Preparing for minting art.',
+                duration: 3,
+            });
+        }
+
+        prepare();
+    }
 
     return (
         <Content className="hide-scrollbar" style={{
@@ -220,9 +237,11 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                             onClick={(e) => e.stopPropagation()}
                         >
                             <Tooltip placement="topLeft" title="Delete">
-                                <button className="buttonStyle" onClick={() => handleDelete(index)}>
-                                    <DeleteOutlined /> {/* Delete icon */}
-                                </button>
+                                <Button
+                                    className="buttonStyle"
+                                    icon={<DeleteOutlined />}
+                                    onClick={() => handleDelete(index)}
+                                />
                             </Tooltip>
                         </div>
 
@@ -233,19 +252,18 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                             onClick={(e) => e.stopPropagation()}
                         >
                             <Tooltip placement="bottomLeft" title={data.shared ? "Private" : "Make public"}>
-                                <button className="buttonStyle">
-                                    {data.shared ? (
-                                        <EyeInvisibleOutlined /> // Private
-                                    ) : (
-                                        <EyeOutlined /> // Public icon
-                                    )}
-                                </button>
+                                {data.shared ? (
+                                    <Button className="buttonStyle" icon={<EyeInvisibleOutlined />} />
+                                ) : (
+                                    <Button className="buttonStyle" icon={<EyeOutlined />} /> // Public icon
+                                )}
                             </Tooltip>
 
                             <Tooltip placement="bottomLeft" title="Mint">
-                                <button className="buttonStyle">
-                                    <DeploymentUnitOutlined />{/* Mint icon */}
-                                </button>
+                                <Button
+                                    className="buttonStyle"
+                                    icon={<DeploymentUnitOutlined />}
+                                />
                             </Tooltip>
                         </div>
                     </div>
