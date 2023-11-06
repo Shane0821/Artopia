@@ -182,21 +182,42 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
     // prepare for minting
     const handleMint = (data: any, index: number) => {
         const prepare = async () => {
-            setPrepareMinting(index);
+            try {
+                noti['info']({
+                    message: 'Message:',
+                    description:
+                        'Preparing for minting art.',
+                    duration: 3,
+                });
 
-            const response = await fetch("/api/mint", {
-                method: "POST",
-                body: JSON.stringify(
-                    data
-                )
-            });
+                const response = await fetch("/api/mint", {
+                    method: "POST",
+                    body: JSON.stringify(
+                        data
+                    )
+                });
 
-            noti['info']({
-                message: 'Message:',
-                description:
-                    'Preparing for minting art.',
-                duration: 3,
-            });
+                if (!response.ok) {
+                    const message = `An error has occurred: ${response.status}`;
+                    throw new Error(message);
+                }
+
+                noti['success']({
+                    message: 'Message:',
+                    description:
+                        `Art is prepared to mint`,
+                    duration: 3,
+                });
+                setPrepareMinting(-1);
+            } catch (error) {
+                noti['error']({
+                    message: 'Message:',
+                    description:
+                        `${error}`,
+                    duration: 3,
+                });
+                setPrepareMinting(-1);
+            }
         }
 
         // one piece of art minting at one time
@@ -210,6 +231,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
             return;
         }
 
+        setPrepareMinting(index);
         prepare();
     }
 
