@@ -202,6 +202,9 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                     throw new Error(message);
                 }
 
+                const result = await response.json();
+                console.log(result)
+
                 noti['success']({
                     message: 'Message:',
                     description:
