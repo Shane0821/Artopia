@@ -152,7 +152,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                 noti['success']({
                     message: 'Message:',
                     description:
-                        `Art is permanently deleted from your collection.`,
+                        `Art is permanently deleted from your create workbench.`,
                     duration: 3,
                 });
             } catch (error) {
@@ -183,6 +183,13 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
     const handleMint = (data: any, index: number) => {
         const prepare = async () => {
             setPrepareMinting(index);
+
+            const response = await fetch("/api/mint", {
+                method: "POST",
+                body: JSON.stringify(
+                    data
+                )
+            });
 
             noti['info']({
                 message: 'Message:',
