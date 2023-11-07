@@ -69,6 +69,6 @@ describe("ImageNFT Test", function () {
 
     await expect(myToken.awardItem(myAddress, "ipfs://Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
                                   "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp")).
-          to.be.revertedWith("cid already exists") 
+          to.be.revertedWith("artwork already exists") 
   })
 });
