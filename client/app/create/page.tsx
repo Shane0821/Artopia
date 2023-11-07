@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 import { Layout, Space, Button } from 'antd';
 
-import { useSession, getSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
 
 const { Content } = Layout;
