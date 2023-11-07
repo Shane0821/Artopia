@@ -21,7 +21,7 @@ describe("PromptNFT Test", function () {
     expect(tokenOwner).to.equal(myAddress);
 
     let tokenURI = await myToken.tokenURI(0);
-    expect(tokenURI).to.equal("moon mountain");
+    expect(tokenURI).to.equal("ipfs://moon mountain");
 
     tx = await myToken.awardItem(myAddress, "moon mountain water");
     await tx.wait();
@@ -30,7 +30,7 @@ describe("PromptNFT Test", function () {
     expect(tokenOwner).to.equal(myAddress);
 
     tokenURI = await myToken.tokenURI(1);
-    expect(tokenURI).to.equal("moon mountain water");
+    expect(tokenURI).to.equal("ipfs://moon mountain water");
   });
 
   it("transfer test", async function () {

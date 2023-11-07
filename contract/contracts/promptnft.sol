@@ -9,19 +9,21 @@ contract PromptNFT is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    mapping(string => uint8) prompts;
+    mapping(string => uint8) cids;
 
     constructor() ERC721("PromptNFT", "PNFT") {}
 
-    function awardItem(address user, string memory prompt)
+    function awardItem(address user, string memory cid)
         public returns (uint256) {
-        require(prompts[prompt] != 1, "prompt already exists");
+        require(cids[cid] != 1, "prompt already exists");
 
-        prompts[prompt] = 1;
+        cids[cid] = 1;
 
         uint256 newItemId = _tokenIds.current();
         _mint(user, newItemId);
-        _setTokenURI(newItemId, prompt);
+
+        string memory metadataURI = string.concat("ipfs://", cid);
+        _setTokenURI(newItemId, metadataURI);
 
         _tokenIds.increment();
         return newItemId;
