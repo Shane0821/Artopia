@@ -46,7 +46,7 @@ const Create = () => {
                 <Content style={{ padding: '0 0px' }}>
                     <Layout style={{ padding: '24px 0', background: "white" }}>
                         <div className="hide-scrollbar" style={{
-                            height: 550,
+                            height: '34.375rem',
                             overflowY: 'auto',
                             display: 'flex',
                             flexDirection: 'column',
@@ -66,7 +66,7 @@ const Create = () => {
                                     height: 55,
                                     position: 'absolute',
                                     backgroundColor: "white",
-                                    top: 640
+                                    top: '40rem'
                                 }}
                                 loading={generating || cooldown || (!(isConnected && session?.user)) || fetching}
                                 onClick={handleClick}
