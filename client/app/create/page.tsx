@@ -44,33 +44,42 @@ const Create = () => {
     return (
         <Space direction="vertical" style={{ width: '100%' }} className="sm:px-16 px-6 max-w-7xl" >
             {
-                (isConnected && session?.user) ?
+                (true) ?
                     (<Layout>
                         <Content style={{ padding: '0 0px' }}>
                             <Layout style={{ padding: '24px 0', background: "white", height: '100vh' }}>
-                                <div className="hide-scrollbar" style={{
-                                    height: '73vh',
-                                    overflowY: 'auto',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    borderBottom: '1px solid rgba(128, 128, 128, 0.1)',
-                                }}>
-                                    Generate
-                                    {/* Left Part */}
-                                    <SidebarCreate
-                                        generating={generating}
-                                        resetGenerating={resetGenerating}
-                                        setJsonData={setJsonData}
-                                    />
+                                <div
+                                    style={{
+                                        height: '100vh',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between'
+                                    }}
+                                >
+                                    <div className="hide-scrollbar" style={{
+                                        height: '73vh',
+                                        overflowY: 'auto',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        borderBottom: '1px solid rgba(128, 128, 128, 0.1)',
+                                    }}>
+                                        Generate
+                                        {/* Left Part */}
+                                        <SidebarCreate
+                                            generating={generating}
+                                            resetGenerating={resetGenerating}
+                                            setJsonData={setJsonData}
+                                        />
+                                    </div>
 
                                     <Button
                                         style={{
                                             width: 300,
-                                            height: '8vh',
-                                            position: 'absolute',
+                                            height: 55,
                                             backgroundColor: "white",
-                                            top: '88vh'
+                                            marginBottom: '15vh'
                                         }}
                                         loading={generating || cooldown || (!(isConnected && session?.user)) || fetching}
                                         onClick={handleClick}
@@ -79,6 +88,7 @@ const Create = () => {
                                         <FormatPainterOutlined />
                                     </Button>
                                 </div>
+
 
                                 <ContentCreate jsonData={jsonData} setFetching={setFetching} fetching={fetching} />
 
