@@ -41,10 +41,17 @@ const Create = () => {
         setGenerating(false);
     };
 
+    React.useEffect(() => {
+        console.log('hook', isConnected, session?.user, status)
+        if (!isConnected) {
+
+        }
+    }, []);
+
     return (
         <Space direction="vertical" style={{ width: '100%' }} className="sm:px-16 px-6 max-w-7xl" >
             {
-                (isConnected && session?.user) ?
+                (true) ?
                     (<Layout>
                         <Content style={{ padding: '0 0px' }}>
                             <Layout style={{ padding: '24px 0', background: "white", height: '100vh' }}>
@@ -79,7 +86,8 @@ const Create = () => {
                                             width: 300,
                                             height: 55,
                                             backgroundColor: "white",
-                                            marginBottom: '15vh'
+                                            marginBottom: '15vh',
+                                            marginTop: 5
                                         }}
                                         loading={generating || cooldown || (!(isConnected && session?.user)) || fetching}
                                         onClick={handleClick}
