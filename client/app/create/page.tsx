@@ -5,11 +5,12 @@ import '@styles/create.css'
 
 import SidebarCreate from '@app/create/Sidebar'
 import ContentCreate from '@app/create/Content'
+import { redirect } from 'next/navigation'
 
 import {
     FormatPainterOutlined
 } from '@ant-design/icons';
-import { Layout, Space, Button } from 'antd';
+import { Layout, Space, Button, notification } from 'antd';
 
 import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
@@ -17,6 +18,8 @@ import { useAccount } from "wagmi"
 const { Content } = Layout;
 
 const Create = () => {
+    const [noti, contextHolder] = notification.useNotification();
+
     const [generating, setGenerating] = useState(false);
     const [cooldown, setCooldown] = useState(false);
     const [fetching, setFetching] = useState(false);
@@ -25,7 +28,6 @@ const Create = () => {
     const { address, isConnected } = useAccount();
 
     const [jsonData, setJsonData] = useState(null);
-
 
     const handleClick = () => {
         console.log('handleclick', generating)
@@ -42,16 +44,15 @@ const Create = () => {
     };
 
     React.useEffect(() => {
-        console.log('hook', isConnected, session?.user, status)
         if (!isConnected) {
-
+            redirect('/');
         }
-    }, []);
+    }, [isConnected]);
 
     return (
         <Space direction="vertical" style={{ width: '100%' }} className="sm:px-16 px-6 max-w-7xl" >
             {
-                (true) ?
+                (isConnected && session?.user) ?
                     (<Layout>
                         <Content style={{ padding: '0 0px' }}>
                             <Layout style={{ padding: '24px 0', background: "white", height: '100vh' }}>
@@ -103,7 +104,7 @@ const Create = () => {
                             </Layout>
                         </Content>
                     </Layout >)
-                    : (<></>)
+                    : (<>{contextHolder}</>)
             }
         </Space >
     )
