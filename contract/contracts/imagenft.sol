@@ -15,7 +15,7 @@ contract ImageNFT is ERC721URIStorage {
 
     function awardItem(address user, string memory metadataURI, string memory cid)
         public returns (uint256) {
-        require(cids[cid] != 1, "cid already exists");
+        require(cids[cid] != 1, "artwork already exists");
 
         cids[cid] = 1;
 
