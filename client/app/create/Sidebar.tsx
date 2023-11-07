@@ -142,9 +142,14 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
     }, [generating]);
 
     return (
-        <Sider style={{ background: "white" }} width={350}>
+        <Sider
+            style={{
+                background: "white"
+            }}
+            width={350}
+        >
             {contextHolder}
-            <Collapse
+            < Collapse
                 defaultActiveKey={['1']}
                 expandIcon={({ isActive }) => isActive ? <UpOutlined style={{ color: 'gray' }} /> : <DownOutlined style={{ color: 'gray' }} />}
                 expandIconPosition="end"
@@ -231,7 +236,7 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
                         </Option>
                     </Select>
                 </Panel>
-            </Collapse>
+            </Collapse >
             <Divider style={{ margin: '5px 0' }} />
 
 
@@ -358,7 +363,6 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
                     </Select>
                 </Panel>
             </Collapse>
-            <Divider style={{ margin: '5px 0' }} />
         </Sider >
     );
 }
