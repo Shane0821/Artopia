@@ -14,8 +14,6 @@ import GalleryItem from '@app/publicGallery/GalleryItem'
 
 import Masonry from "react-responsive-masonry"
 
-const { Content } = Layout;
-
 import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
 

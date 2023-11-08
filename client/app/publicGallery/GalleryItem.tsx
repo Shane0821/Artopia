@@ -20,7 +20,14 @@ function getRandomTransition() {
     return `${duration} ${timingFunction}`;
 }
 
-const GalleryItem = ({ data, index, setPopup, setPopupData }) => {
+interface GalleryItemProps {
+    data: any,
+    index: number,
+    setPopup: (popup: boolean) => void,
+    setPopupData: (popupData: any) => void
+}
+
+const GalleryItem = ({ data, index, setPopup, setPopupData }: GalleryItemProps) => {
     const [ref, inView] = useInView({
         threshold: 0,
         triggerOnce: true,
