@@ -12,9 +12,12 @@ import Masonry from "react-responsive-masonry"
 
 const { Content } = Layout;
 
-
-import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
+import { useSession } from "next-auth/react"
+
+import { readContract, writeContract, waitForTransaction } from '@wagmi/core'
+import imgABI from '/abi/imagenft.json'
+import promptABI from '/abi/promptnft.json'
 
 import Detail from '@app/create/Detail'
 
@@ -36,7 +39,6 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
     const [prepareMinting, setPrepareMinting] = useState('');
 
     const [userConnected, setUserConnected] = useState(false);
-
 
     // Use useEffect to update the array whenever jsonData changes
     React.useEffect(() => {
@@ -179,8 +181,99 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
         deleteArt();
     };
 
+    // call smart contract to mint art and prompt
+    const mint = async(user: string, metadataUri: string, imgCid: string, promptCid: string) => {
+        console.log(user, metadataUri, imgCid, promptCid);
+        
+        // mint prompt
+        try {
+            // check prompt ownership
+            const owner = await readContract({
+                address: process.env.NEXT_PUBLIC_PROMPT_NFT_CONTRACT,
+                abi: promptABI,
+                functionName: 'getOnwerByCID',
+                chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
+                args: ["cid1"]
+            })
+            if (owner !== '0x0000000000000000000000000000000000000000' && owner !== user) {
+                throw new Error('You can\'t mint this art because you are not the owner of this prompt!');
+            }
+
+            // mint prompt when owner is 0x0000
+            if (owner === '0x0000000000000000000000000000000000000000') {
+                const {hash} = await writeContract({
+                    address: process.env.NEXT_PUBLIC_PROMPT_NFT_CONTRACT,
+                    abi: promptABI,
+                    functionName: 'awardItem',
+                    chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
+                    args: [user, "cid1"]
+                })
+                // wait for confirmation
+                const data = await waitForTransaction({
+                    hash: hash,
+                })
+                // tokenId is in data.logs[1].data 
+                // or data.logs[0].topics[3]
+                console.log(data)
+                if (data.status === "success") {
+                    noti['success']({
+                        message: 'Message:',
+                        description:
+                            'Successfully minted prompt!',
+                        duration: 3,
+                    });
+                } else if (data.status == "error") {
+                   throw new Error('Failed to mint prompt!');
+                }
+            }
+        } catch (error) {
+            console.log(error)
+            noti['error']({
+                message: 'Message:',
+                description: `${error}`,
+                duration: 3,
+            });
+        }
+        
+        // mint art
+        try {
+            const {hash} = await writeContract({
+                address: process.env.NEXT_PUBLIC_IMG_NFT_CONTRACT,
+                abi: imgABI,
+                functionName: 'awardItem',
+                chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
+                args: [user, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
+                             "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp"],
+            })
+            // wait for confirmation
+            const data = await waitForTransaction({
+                hash: hash,
+            })
+            if (data.status === "success") {
+                noti['success']({
+                    message: 'Message:',
+                    description:
+                        'Successfully minted art!',
+                    duration: 3,
+                });
+            } else if (data.status == "error") {
+               throw new Error('Failed to mint art!');
+            }
+        } catch (error) {
+            let desc = `${error}`;
+            if (error?.toString().search("artwork already exists")!=-1)
+                desc = `Failed to mint art! This artwork already exists on the blockchain!`;
+            noti['error']({
+                message: 'Message:',
+                description: desc,
+                duration: 3,
+            });
+        } 
+        setPrepareMinting('');
+    }
+
     // prepare for minting
-    const handleMint = (data: any, index: number) => {
+    const handleMint = async(data: any, index: number) => {
         const prepare = async () => {
             try {
                 noti['info']({
@@ -211,7 +304,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                         `Art is prepared to mint`,
                     duration: 3,
                 });
-                setPrepareMinting('');
+                return result
             } catch (error) {
                 noti['error']({
                     message: 'Message:',
@@ -235,7 +328,9 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
         }
 
         setPrepareMinting(data._id);
-        prepare();
+        const {meta_data_cid} = await prepare();
+        console.log(meta_data_cid)
+        await mint(session?.user?.name, meta_data_cid, "img", "prompt");
     }
 
     return (
