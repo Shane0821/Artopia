@@ -2,14 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-    Layout, notification, Spin, Tooltip, Button, Space
+    Layout, notification, Spin, Space
 } from 'antd';
 
-import { LoadingOutlined, EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
 import '@styles/gallery.css'
+import GalleryItem from '@app/publicGallery/GalleryItem'
+
 import Masonry from "react-responsive-masonry"
 
 const { Content } = Layout;
@@ -119,40 +121,16 @@ function PublicGalery() {
             />
 
             <Masonry className="gallery" columnsCount={4}>
-                {dataArray.map((data: any, index) => (
-                    <div
-                        className="publicPics relative group"
+                {dataArray.map((data, index) => (
+                    <GalleryItem
                         key={index}
-                        onClick={() => {
-                            console.log('click')
-                            setPopup(true);
-                            setPopupData(data);
-                        }}
-                    > {/* Add relative and group classes */}
-                        <img
-                            className="no-visual-search"
-                            style={{ width: '100%' }}
-                            src={`${data.base64}`}
-                        />
-
-                        {/* buttons */}
-                        < div
-                            hidden={!data.completed}
-                            className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <Tooltip placement="bottomLeft" title={data.shared ? "Private" : "Make public"}>
-                                {data.shared ? (
-                                    <Button className="buttonStyle" icon={<EyeInvisibleOutlined />} />
-                                ) : (
-                                    <Button className="buttonStyle" icon={<EyeOutlined />} /> // Public icon
-                                )}
-                            </Tooltip>
-                        </div>
-                    </div>
-                ))
-                }
-            </Masonry >
+                        data={data}
+                        index={index}
+                        setPopup={setPopup}
+                        setPopupData={setPopupData}
+                    />
+                ))}
+            </Masonry>
         </Space >
     );
 }

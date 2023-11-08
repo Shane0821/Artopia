@@ -10,9 +10,8 @@
     margin-left: 8px;
 }
 
-.publicPics {
-    -webkit-transition: all 350ms ease;
-    transition: all 350ms ease;
+.publicPics:hover {
+    filter: opacity(.9);
     cursor: pointer;
 }
 
