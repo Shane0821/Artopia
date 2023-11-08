@@ -89,7 +89,7 @@ const GalleryItem = ({ data, index, setPopup, setPopupData }: GalleryItemProps) 
                 style={{
                     backgroundColor: 'rgba(0, 0, 0, 0.6)',
                     color: '#f8f8f8',
-                    padding: '6px 8px', // Smaller padding will reduce the bar height
+                    padding: '6px 10px', // Smaller padding will reduce the bar height
                     fontSize: '0.85rem'
                 }}
                 onClick={(e) => e.stopPropagation()}
@@ -97,9 +97,9 @@ const GalleryItem = ({ data, index, setPopup, setPopupData }: GalleryItemProps) 
                 {/* Left-aligned items: avatar and address */}
                 <div className="flex items-center">
                     <img src={data.avatar} alt="avatar" className="w-6 h-6 rounded-full mr-2" /> {/* Avatar image */}
-                    <span>
+                    <Tooltip placement="topLeft" title={data.address} color='rgba(0, 0, 0, 0.6)'>
                         {truncateMiddle(data.address, 4, 4)}
-                    </span> {/* Address */}
+                    </Tooltip>
                 </div>
 
                 {/* Right-aligned items: views and likes */}
