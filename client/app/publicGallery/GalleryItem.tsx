@@ -9,6 +9,15 @@ import { useInView } from 'react-intersection-observer';
 
 import { EyeOutlined, EyeInvisibleOutlined, HeartOutlined } from '@ant-design/icons';
 
+function truncateMiddle(str: string, frontChars: number, backChars: number, ellipsis = '...') {
+    if (str.length <= frontChars + backChars) {
+        return str;
+    }
+    var frontStr = str.substring(0, frontChars);
+    var backStr = str.substring(str.length - backChars);
+    return frontStr + ellipsis + backStr;
+}
+
 function getRandomTransition() {
     const durations = ['0.5s', '1.5s', '2.5s', '3.5s']; // Add more durations as needed
     const timingFunctions = ['ease', 'ease-in', 'ease-out', 'ease-in-out', 'linear']; // Add more timing functions as needed
@@ -73,6 +82,37 @@ const GalleryItem = ({ data, index, setPopup, setPopupData }: GalleryItemProps) 
                         icon={<HeartOutlined />}
                     />
                 </Tooltip>
+            </div>
+
+            <div
+                className="absolute bottom-0 left-0 w-full p-2 flex items-center justify-between opacity-0 group-hover:opacity-100"
+                style={{
+                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                    color: '#f8f8f8',
+                    padding: '6px 8px', // Smaller padding will reduce the bar height
+                    fontSize: '0.85rem'
+                }}
+                onClick={(e) => e.stopPropagation()}
+            >
+                {/* Left-aligned items: avatar and address */}
+                <div className="flex items-center">
+                    <img src={data.avatar} alt="avatar" className="w-6 h-6 rounded-full mr-2" /> {/* Avatar image */}
+                    <span>
+                        {truncateMiddle(data.address, 4, 4)}
+                    </span> {/* Address */}
+                </div>
+
+                {/* Right-aligned items: views and likes */}
+                <div className="flex items-center">
+                    <div className="flex items-center mr-4">
+                        <span className="mr-2">{data.views}</span> {/* Views count */}
+                        <EyeOutlined />
+                    </div>
+                    <div className="flex items-center">
+                        <span className="mr-2">{data.likes}</span> {/* Likes count */}
+                        <HeartOutlined />
+                    </div>
+                </div>
             </div>
         </div >
 
