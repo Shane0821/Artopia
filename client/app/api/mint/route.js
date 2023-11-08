@@ -139,6 +139,8 @@ export const POST = async (request) => {
         return new Response(
             JSON.stringify({
                 meta_data_ipfs: res_meta.data.IpfsHash,
+                art_ipfs: res_art.data.IpfsHash,
+                prompt_ipfs: res_prompt.data.IpfsHash
             }),
             { status: 200 }
         )
