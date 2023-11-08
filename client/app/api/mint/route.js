@@ -44,15 +44,74 @@ async function uploadTextToPinata(prompt, negativePrompt) {
         negative_prompt: negativePrompt,
     };
 
-    // Set pinata api endpoint
-    let pinataUploadEndpoint = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
-
-    let response = await axios.post(pinataUploadEndpoint, JSON.stringify(textData), {
+    const options = {
+        method: 'POST',
+        url: 'https://api.pinata.cloud/pinning/pinJSONToIPFS',
         headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
             pinata_api_key: pinataApiKey,
-            pinata_secret_api_key: pinataApiSecret,
+            pinata_secret_api_key: pinataApiSecret
         },
-    });
+        data: { textData }
+    };
+
+    let response = await axios.request(options);
+
+    return response;
+}
+
+async function uploadMetaDataToPinata(artIpfs, promptIpfs, art) {
+    // Upload meta data to pinata
+    let metaData = {
+        name: art.title || "",
+        description: art.title || "",
+        image: artIpfs,
+        attributes: [
+            {
+                trait_type: "Model",
+                value: art.model
+            },
+            {
+                trait_type: "Prompt",
+                value: promptIpfs
+            },
+            {
+                trait_type: "Steps",
+                value: art.steps
+            },
+            {
+                trait_type: "GuidanceScale",
+                value: art.guidance
+            },
+            {
+                trait_type: "Seed",
+                value: art.seed
+            },
+            {
+                trait_type: "Sampler",
+                value: art.scheduler
+            },
+            {
+                trait_type: "CreatedAt",
+                value: art.created_at
+            }
+        ]
+    };
+
+    const options = {
+        method: 'POST',
+        url: 'https://api.pinata.cloud/pinning/pinJSONToIPFS',
+        headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            pinata_api_key: pinataApiKey,
+            pinata_secret_api_key: pinataApiSecret
+        },
+        data: metaData
+    };
+
+    let response = await axios.request(options);
 
     return response;
 }
@@ -75,11 +134,11 @@ export const POST = async (request) => {
 
         const res_art = await uploadImageToPinata(art.title, art._id, art.base64);
         const res_prompt = await uploadTextToPinata(art.prompt, art.negative_prompt);
+        const res_meta = await uploadMetaDataToPinata(res_art.data.IpfsHash, res_prompt.data.IpfsHash, art);
 
         return new Response(
             JSON.stringify({
-                img_ipfs: res_art.data.IpfsHash,
-                prompt_ipfs: res_prompt.data.IpfsHash
+                meta_data_ipfs: res_meta.data.IpfsHash,
             }),
             { status: 200 }
         )
