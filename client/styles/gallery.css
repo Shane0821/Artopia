@@ -10,6 +10,34 @@
     margin-left: 8px;
 }
 
+.publicPics {
+    -webkit-transition: all 350ms ease;
+    transition: all 350ms ease;
+    cursor: pointer;
+}
+
+.hide-scrollbar {
+    scrollbar-width: none;
+    /* For Firefox */
+    msOverflowStyle: none;
+    /* For Internet Explorer and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* For Chrome, Safari and Opera */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* For Chrome, Safari and Opera */
+}
+
+.hide-scrollbar::before,
+.hide-scrollbar::after {
+    display: none;
+}
+
 .gallery .pics:hover {
     filter: opacity(.9);
 }
