@@ -17,7 +17,7 @@ import Masonry from "react-responsive-masonry"
 import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
 
-import Detail from '@app/create/Detail'
+import Detail from '@app/publicGallery/GalleryDetail'
 
 function PublicGalery() {
     const [noti, contextHolder] = notification.useNotification();
