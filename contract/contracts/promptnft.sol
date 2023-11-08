@@ -10,8 +10,7 @@ contract PromptNFT is ERC721URIStorage, ERC721Enumerable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    // Mapping from cid to tokenId
-    mapping(string => uint256) cids;
+    mapping(string => uint256) cids; // cid to tokenId
 
     constructor() ERC721("PromptNFT", "PNFT") {}
 
