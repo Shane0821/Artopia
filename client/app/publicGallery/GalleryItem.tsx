@@ -7,7 +7,7 @@ import {
 import '@styles/gallery.css'
 import { useInView } from 'react-intersection-observer';
 
-import { EyeOutlined, EyeInvisibleOutlined, HeartOutlined } from '@ant-design/icons';
+import { EyeOutlined, EyeInvisibleOutlined, HeartOutlined, UserOutlined } from '@ant-design/icons';
 
 function truncateMiddle(str: string, frontChars: number, backChars: number, ellipsis = '...') {
     if (str.length <= frontChars + backChars) {
@@ -55,7 +55,7 @@ const GalleryItem = ({ data, index, setPopup, setPopupData }: GalleryItemProps) 
                 setPopup(true);
                 setPopupData(data);
             }}
-        > {/* Add relative and group classes */}
+        >
             < img
                 className="no-visual-search"
                 style={{ width: '100%' }}
@@ -96,9 +96,9 @@ const GalleryItem = ({ data, index, setPopup, setPopupData }: GalleryItemProps) 
             >
                 {/* Left-aligned items: avatar and address */}
                 <div className="flex items-center">
-                    <img src={data.avatar} alt="avatar" className="w-6 h-6 rounded-full mr-2" /> {/* Avatar image */}
-                    <Tooltip placement="topLeft" title={data.address} color='rgba(0, 0, 0, 0.6)'>
-                        {truncateMiddle(data.address, 4, 4)}
+                    <UserOutlined style={{ marginRight: 10 }} />
+                    <Tooltip placement="topLeft" color='rgba(0, 0, 0, 0.6)'>
+                        {truncateMiddle(data.address, 7, 7)}
                     </Tooltip>
                 </div>
 
