@@ -32,7 +32,7 @@ contract PromptNFT is ERC721URIStorage {
     }
 
     function getOnwerByCID(string memory cid) public view returns (address) {
-        require(cids[cid] > 0, "prompt is not owned by anyone");
+        if (cids[cid] == 0) return address(0);
         return ownerOf(cids[cid]);
     }
 }
