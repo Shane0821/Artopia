@@ -7,7 +7,7 @@ import {
 import '@styles/gallery.css'
 import { useInView } from 'react-intersection-observer';
 
-import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import { EyeOutlined, EyeInvisibleOutlined, HeartOutlined } from '@ant-design/icons';
 
 function getRandomTransition() {
     const durations = ['0.5s', '1.5s', '2.5s', '3.5s']; // Add more durations as needed
@@ -65,6 +65,13 @@ const GalleryItem = ({ data, index, setPopup, setPopupData }: GalleryItemProps) 
                     ) : (
                         <Button className="buttonStyle" icon={<EyeOutlined />} /> // Public icon
                     )}
+                </Tooltip>
+
+                <Tooltip placement="topLeft" title="Like">
+                    <Button
+                        className="buttonStyle"
+                        icon={<HeartOutlined />}
+                    />
                 </Tooltip>
             </div>
         </div >
