@@ -17,6 +17,7 @@ import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
 
 import Detail from '@app/create/Detail'
+import openVisNotification from '@app/create/noti'
 
 interface ContentCreateProps {
     jsonData: any;
@@ -42,7 +43,6 @@ function ContentCreate({
     const [dataArray, setDataArray] = useState([]);
     const [popup, setPopup] = useState(false);
     const [popupData, setPopupData] = useState({});
-
 
     const [userConnected, setUserConnected] = useState(false);
 
@@ -247,60 +247,6 @@ function ContentCreate({
         prepare();
     }
 
-    // change visibility of a piece of art
-    const handleVisibility = (data: any) => {
-        const change = async () => {
-            try {
-                // call api to change visibility in database
-                const response = await fetch(`/api/publicGallery/${data._id}`, {
-                    method: 'PATCH'
-                });
-
-                if (!response.ok) {
-                    const message = `An error has occurred: ${response.status}`;
-                    throw new Error(message);
-                }
-
-                const result = await response.json();
-                // Create a new array with the updated item
-                const newDataArray = dataArray.map((item: any) =>
-                    item._id === data._id ? { ...item, shared: result } : item
-                );
-                setDataArray(newDataArray);
-
-                noti['success']({
-                    message: 'Message:',
-                    description:
-                        `Visibility changed.`,
-                    duration: 3,
-                });
-                setChangingVis(false);
-            } catch (error) {
-                noti['error']({
-                    message: 'Message:',
-                    description:
-                        `${error}`,
-                    duration: 3,
-                });
-                setChangingVis(false);
-            }
-        }
-
-        // one piece of art minting at one time
-        if (prepareMinting === data._id) {
-            noti['info']({
-                message: 'Message:',
-                description:
-                    'Can not change visibility when minting.',
-                duration: 4,
-            });
-            return;
-        }
-
-        setChangingVis(true);
-        change();
-    }
-
     return (
         <Content className="hide-scrollbar" style={{
             padding: '0 24px',
@@ -371,9 +317,31 @@ function ContentCreate({
                         >
                             <Tooltip placement="bottomLeft" title={data.shared ? "Make Private" : "Make public"}>
                                 {data.shared ? (
-                                    <Button className="buttonStyle" icon={<EyeInvisibleOutlined />} onClick={() => { handleVisibility(data) }} loading={changingVis} />
+                                    <Button
+                                        className="buttonStyle"
+                                        icon={<EyeInvisibleOutlined />}
+                                        onClick={() => {
+                                            openVisNotification({
+                                                noti, data, changingVis,
+                                                dataArray, setDataArray,
+                                                setChangingVis, prepareMinting
+                                            })
+                                        }}
+                                        loading={changingVis}
+                                    />
                                 ) : (
-                                    <Button className="buttonStyle" icon={<EyeOutlined />} onClick={() => { handleVisibility(data) }} loading={changingVis} /> // Public icon
+                                    <Button
+                                        className="buttonStyle"
+                                        icon={<EyeOutlined />}
+                                        onClick={() => {
+                                            openVisNotification({
+                                                noti, data, changingVis,
+                                                dataArray, setDataArray,
+                                                setChangingVis, prepareMinting
+                                            })
+                                        }}
+                                        loading={changingVis}
+                                    /> // Public icon
                                 )}
                             </Tooltip>
 
