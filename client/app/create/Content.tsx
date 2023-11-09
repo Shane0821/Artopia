@@ -34,6 +34,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
     const [popup, setPopup] = useState(false);
     const [popupData, setPopupData] = useState({});
     const [prepareMinting, setPrepareMinting] = useState('');
+    const [changingVis, setChangingVis] = useState('');
 
     const [userConnected, setUserConnected] = useState(false);
 
@@ -238,6 +239,49 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
         prepare();
     }
 
+    // change visibility of a piece of art
+    const handleVisibility = (data: any) => {
+        const change = async () => {
+            try {
+                // call api to change visibility in database
+                const response = await fetch(`/api/publicGallery/${data._id}`, {
+                    method: 'PATCH'
+                });
+
+                if (!response.ok) {
+                    const message = `An error has occurred: ${response.status}`;
+                    throw new Error(message);
+                }
+
+                const result = await response.json();
+                // Create a new array with the updated item
+                const newDataArray = dataArray.map((item: any) =>
+                    item._id === data._id ? { ...item, shared: result } : item
+                );
+                setDataArray(newDataArray);
+
+                noti['success']({
+                    message: 'Message:',
+                    description:
+                        `Visibility changed.`,
+                    duration: 3,
+                });
+                setChangingVis('')
+            } catch (error) {
+                noti['error']({
+                    message: 'Message:',
+                    description:
+                        `${error}`,
+                    duration: 3,
+                });
+                setChangingVis('')
+            }
+        }
+
+        setChangingVis(data._id)
+        change();
+    }
+
     return (
         <Content className="hide-scrollbar" style={{
             padding: '0 24px',
@@ -307,9 +351,9 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                         >
                             <Tooltip placement="bottomLeft" title={data.shared ? "Make Private" : "Make public"}>
                                 {data.shared ? (
-                                    <Button className="buttonStyle" icon={<EyeInvisibleOutlined />} />
+                                    <Button className="buttonStyle" icon={<EyeInvisibleOutlined />} onClick={() => { handleVisibility(data) }} loading={changingVis != ''} />
                                 ) : (
-                                    <Button className="buttonStyle" icon={<EyeOutlined />} /> // Public icon
+                                    <Button className="buttonStyle" icon={<EyeOutlined />} onClick={() => { handleVisibility(data) }} loading={changingVis != ''} /> // Public icon
                                 )}
                             </Tooltip>
 

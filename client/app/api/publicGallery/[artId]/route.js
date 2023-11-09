@@ -24,7 +24,7 @@ export const PATCH = async (request, { params }) => {
         await art.save();
 
         return new Response(
-            JSON.stringify({}),
+            JSON.stringify(art.shared),
             { status: 200 }
         )
     } catch (error) {
