@@ -7,7 +7,7 @@ import {
 import '@styles/gallery.css'
 import { useInView } from 'react-intersection-observer';
 
-import { EyeOutlined, EyeInvisibleOutlined, HeartOutlined, UserOutlined } from '@ant-design/icons';
+import { EyeOutlined, EyeInvisibleOutlined, HeartOutlined, UserOutlined, SmileOutlined } from '@ant-design/icons';
 
 function truncateMiddle(str: string, frontChars: number, backChars: number, ellipsis = '...') {
     if (str.length <= frontChars + backChars) {
@@ -69,8 +69,8 @@ const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemP
                 className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100"
                 onClick={(e) => e.stopPropagation()}
             >
-                <Tooltip placement="bottomLeft" title={"Make Private"}  >
-                    <Button className="buttonStyle" icon={<EyeInvisibleOutlined />} hidden={!(user && data && user.name === data.address)} />
+                <Tooltip placement="bottomLeft" title={"My Art"}  >
+                    <Button className="buttonStyle" icon={<SmileOutlined />} hidden={!(user && data && user.name === data.address)} />
                 </Tooltip>
 
                 <Tooltip placement="topLeft" title="Like">
