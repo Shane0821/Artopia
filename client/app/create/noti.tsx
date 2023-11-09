@@ -85,7 +85,7 @@ const openVisNotification = ({
     const key = `openVisNotification`;
     const storedValue = localStorage.getItem('__showVisNotification');
 
-    if (storedValue === 'true' || data.shared) {
+    if (storedValue === 'false' || data.shared) {
         handleVisibility({ noti, data, changingVis, dataArray, setDataArray, setChangingVis, prepareMinting });
     } else {
         setChangingVis(true);
@@ -114,9 +114,9 @@ const openVisNotification = ({
         );
 
         noti.warning({
-            message: `Warning ${data.title ? data.title + '.' : '.'}`,
+            message: `Caution ${data.title ? data.title + '.' : '.'}`,
             description:
-                'Notification TitleNotification TitleNotification TitleNotification TitleNotification TitleNotification TitleNotification TitleNotification Title',
+                'By proceeding, your art becomes discoverable by others. Your prompt and generation parameters may be utilized by fellow creators. If you genuinely wish to share, simply press continue',
             btn,
             key,
             placement: 'topRight',
