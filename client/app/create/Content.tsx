@@ -182,9 +182,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
     };
 
     // call smart contract to mint art and prompt
-    const mint = async(user: string, metadataUri: string, imgCid: string, promptCid: string) => {
-        console.log(user, metadataUri, imgCid, promptCid);
-        
+    const mint = async(user: string, metadataCid: string, imgCid: string, promptCid: string) => {
         // mint prompt
         try {
             // check prompt ownership
@@ -193,7 +191,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                 abi: promptABI,
                 functionName: 'getOnwerByCID',
                 chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
-                args: ["cid1"]
+                args: [promptCid]
             })
             if (owner !== '0x0000000000000000000000000000000000000000' && owner !== user) {
                 throw new Error('You can\'t mint this art because you are not the owner of this prompt!');
@@ -206,7 +204,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                     abi: promptABI,
                     functionName: 'awardItem',
                     chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
-                    args: [user, "cid1"]
+                    args: [user, promptCid]
                 })
                 // wait for confirmation
                 const data = await waitForTransaction({
@@ -242,8 +240,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                 abi: imgABI,
                 functionName: 'awardItem',
                 chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
-                args: [user, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
-                             "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp"],
+                args: [user, metadataCid, imgCid],
             })
             // wait for confirmation
             const data = await waitForTransaction({
@@ -256,6 +253,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                         'Successfully minted art!',
                     duration: 3,
                 });
+                // to do: remove art from the list
             } else if (data.status == "error") {
                throw new Error('Failed to mint art!');
             }
@@ -328,9 +326,8 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
         }
 
         setPrepareMinting(data._id);
-        const {meta_data_cid} = await prepare();
-        console.log(meta_data_cid)
-        await mint(session?.user?.name, meta_data_cid, "img", "prompt");
+        const {meta_data_ipfs, art_ipfs, prompt_ipfs} = await prepare();
+        await mint(session?.user?.name, meta_data_ipfs, art_ipfs, prompt_ipfs);
     }
 
     return (
