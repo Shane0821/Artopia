@@ -183,6 +183,10 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
 
     // call smart contract to mint art and prompt
     const mint = async(user: string, metadataCid: string, imgCid: string, promptCid: string) => {
+        if (!user) {
+            // to do: add notification
+            return
+        }
         // mint prompt
         try {
             // check prompt ownership
