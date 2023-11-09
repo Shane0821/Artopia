@@ -41,7 +41,7 @@ const handleVisibility = ({ noti, data, changingVis, dataArray, setDataArray, se
                 message: 'Message:',
                 description:
                     `Visibility changed.`,
-                duration: 3,
+                duration: 1,
             });
             setChangingVis(false);
         } catch (error) {
