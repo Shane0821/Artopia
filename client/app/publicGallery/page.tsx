@@ -126,6 +126,7 @@ function PublicGalery() {
                         index={index}
                         setPopup={setPopup}
                         setPopupData={setPopupData}
+                        user={session?.user}
                     />
                 ))}
             </Masonry>

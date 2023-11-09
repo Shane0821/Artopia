@@ -33,10 +33,11 @@ interface GalleryItemProps {
     data: any,
     index: number,
     setPopup: (popup: boolean) => void,
-    setPopupData: (popupData: any) => void
+    setPopupData: (popupData: any) => void,
+    user: any
 }
 
-const GalleryItem = ({ data, index, setPopup, setPopupData }: GalleryItemProps) => {
+const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemProps) => {
     const [ref, inView] = useInView({
         threshold: 0,
         triggerOnce: true,
@@ -68,12 +69,8 @@ const GalleryItem = ({ data, index, setPopup, setPopupData }: GalleryItemProps) 
                 className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100"
                 onClick={(e) => e.stopPropagation()}
             >
-                <Tooltip placement="bottomLeft" title={data.shared ? "Private" : "Make public"}>
-                    {data.shared ? (
-                        <Button className="buttonStyle" icon={<EyeInvisibleOutlined />} />
-                    ) : (
-                        <Button className="buttonStyle" icon={<EyeOutlined />} /> // Public icon
-                    )}
+                <Tooltip placement="bottomLeft" title={"Make Private"}  >
+                    <Button className="buttonStyle" icon={<EyeInvisibleOutlined />} hidden={!(user && data && user.name === data.address)} />
                 </Tooltip>
 
                 <Tooltip placement="topLeft" title="Like">
