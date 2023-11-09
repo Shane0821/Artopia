@@ -47,7 +47,7 @@ function PublicGalery() {
                         duration: 3,
                     });
 
-                    const response = await fetch(`/api/create/`, {
+                    const response = await fetch(`/api/publicGallery/`, {
                         method: 'GET'
                     });
 
