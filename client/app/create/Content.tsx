@@ -305,7 +305,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                             className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <Tooltip placement="bottomLeft" title={data.shared ? "Private" : "Make public"}>
+                            <Tooltip placement="bottomLeft" title={data.shared ? "Make Private" : "Make public"}>
                                 {data.shared ? (
                                     <Button className="buttonStyle" icon={<EyeInvisibleOutlined />} />
                                 ) : (
