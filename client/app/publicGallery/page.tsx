@@ -72,7 +72,7 @@ function PublicGalery() {
                     noti['success']({
                         message: 'Message:',
                         description:
-                            'Welcome to gallery.',
+                            'Welcome to public gallery.',
                         duration: 3,
                     });
                 } catch (error) {
