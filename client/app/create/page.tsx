@@ -8,9 +8,13 @@ import ContentCreate from '@app/create/Content'
 import { redirect } from 'next/navigation'
 
 import {
-    FormatPainterOutlined
+    FormatPainterOutlined,
+    LoadingOutlined
 } from '@ant-design/icons';
-import { Layout, Space, Button, notification } from 'antd';
+import { Layout, Space, Button, notification, Spin } from 'antd';
+
+
+const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
 import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
@@ -119,7 +123,21 @@ const Create = () => {
                             </Layout>
                         </Content>
                     </Layout >)
-                    : (<>{contextHolder}</>)
+                    : (
+                        <>
+                            <Spin
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    height: '90vh' // This will make the div take up the full viewport height}}
+                                }}
+                                indicator={antIcon}
+                                spinning={(!(isConnected && session?.user)) || fetching}
+                            />
+                        </>
+                    )
             }
         </Space >
     )
