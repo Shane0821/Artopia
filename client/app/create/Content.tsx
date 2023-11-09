@@ -22,9 +22,18 @@ interface ContentCreateProps {
     jsonData: any;
     fetching: boolean;
     setFetching: (fetching: boolean) => void;
+    changingVis: boolean;
+    setChangingVis: (changingVis: boolean) => void;
+    prepareMinting: string;
+    setPrepareMinting: (prepareMinting: string) => void;
 }
 
-function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) {
+function ContentCreate({
+    jsonData,
+    fetching, setFetching,
+    changingVis, setChangingVis,
+    prepareMinting, setPrepareMinting
+}: ContentCreateProps) {
     const [noti, contextHolder] = notification.useNotification();
 
     const { data: session, status } = useSession()
@@ -33,8 +42,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
     const [dataArray, setDataArray] = useState([]);
     const [popup, setPopup] = useState(false);
     const [popupData, setPopupData] = useState({});
-    const [prepareMinting, setPrepareMinting] = useState('');
-    const [changingVis, setChangingVis] = useState('');
+
 
     const [userConnected, setUserConnected] = useState(false);
 
@@ -266,7 +274,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                         `Visibility changed.`,
                     duration: 3,
                 });
-                setChangingVis('')
+                setChangingVis(false);
             } catch (error) {
                 noti['error']({
                     message: 'Message:',
@@ -274,11 +282,22 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                         `${error}`,
                     duration: 3,
                 });
-                setChangingVis('')
+                setChangingVis(false);
             }
         }
 
-        setChangingVis(data._id)
+        // one piece of art minting at one time
+        if (prepareMinting === data._id) {
+            noti['info']({
+                message: 'Message:',
+                description:
+                    'Can not change visibility when minting.',
+                duration: 4,
+            });
+            return;
+        }
+
+        setChangingVis(true);
         change();
     }
 
@@ -337,6 +356,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                             <Tooltip placement="topLeft" title="Delete">
                                 <Button
                                     className="buttonStyle"
+                                    loading={changingVis}
                                     icon={<DeleteOutlined />}
                                     onClick={() => handleDelete(index)}
                                 />
@@ -351,16 +371,16 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                         >
                             <Tooltip placement="bottomLeft" title={data.shared ? "Make Private" : "Make public"}>
                                 {data.shared ? (
-                                    <Button className="buttonStyle" icon={<EyeInvisibleOutlined />} onClick={() => { handleVisibility(data) }} loading={changingVis != ''} />
+                                    <Button className="buttonStyle" icon={<EyeInvisibleOutlined />} onClick={() => { handleVisibility(data) }} loading={changingVis} />
                                 ) : (
-                                    <Button className="buttonStyle" icon={<EyeOutlined />} onClick={() => { handleVisibility(data) }} loading={changingVis != ''} /> // Public icon
+                                    <Button className="buttonStyle" icon={<EyeOutlined />} onClick={() => { handleVisibility(data) }} loading={changingVis} /> // Public icon
                                 )}
                             </Tooltip>
 
                             <Tooltip placement="bottomLeft" title="Mint">
                                 <Button
                                     className="buttonStyle"
-                                    loading={prepareMinting === data._id}
+                                    loading={prepareMinting === data._id || changingVis}
                                     icon={<DeploymentUnitOutlined />}
                                     onClick={() => { handleMint(data, index); }}
                                 />

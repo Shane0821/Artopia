@@ -23,6 +23,8 @@ const Create = () => {
     const [generating, setGenerating] = useState(false);
     const [cooldown, setCooldown] = useState(false);
     const [fetching, setFetching] = useState(false);
+    const [changingVis, setChangingVis] = useState(false);
+    const [prepareMinting, setPrepareMinting] = useState('');
 
     const { data: session, status } = useSession();
     const { address, isConnected } = useAccount();
@@ -90,7 +92,12 @@ const Create = () => {
                                             marginBottom: '15vh',
                                             marginTop: 5
                                         }}
-                                        loading={generating || cooldown || (!(isConnected && session?.user)) || fetching}
+                                        loading={
+                                            generating || cooldown
+                                            || (!(isConnected && session?.user))
+                                            || fetching || changingVis
+                                            || prepareMinting != ''
+                                        }
                                         onClick={handleClick}
                                     >
                                         Generate Image
@@ -99,7 +106,15 @@ const Create = () => {
                                 </div>
 
 
-                                <ContentCreate jsonData={jsonData} setFetching={setFetching} fetching={fetching} />
+                                <ContentCreate
+                                    jsonData={jsonData}
+                                    setFetching={setFetching}
+                                    fetching={fetching}
+                                    changingVis={changingVis}
+                                    setChangingVis={setChangingVis}
+                                    prepareMinting={prepareMinting}
+                                    setPrepareMinting={setPrepareMinting}
+                                />
 
                             </Layout>
                         </Content>
