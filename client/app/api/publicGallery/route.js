@@ -5,15 +5,9 @@ import { getToken } from "next-auth/jwt"
 
 export const GET = async (request) => {
     try {
-        const token = await getToken({ req: request });
-        // Not Signed in
-        if (!token) throw new Error("Unauthorized.");
-        // get address
-        const address = token.sub;
-
         await connectToDB()
 
-        const sharedArt = await Art.find({ address, shared: true });
+        const sharedArt = await Art.find({ shared: true });
 
         return new Response(
             JSON.stringify(sharedArt),
