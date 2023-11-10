@@ -182,6 +182,16 @@ const Detail = ({ popup, setPopup, data }: DetailProps) => {
                     </Row>
                     <Divider />
 
+                    <p className="site-description-item-profile-p">Sampler</p>
+                    <Row>
+                        <Col span={24}>
+                            <div className="site-description-item-profile-wrapper">
+                                {data.scheduler}
+                            </div>
+                        </Col>
+                    </Row>
+                    <Divider />
+
 
                     <p className="site-description-item-profile-p">Created At</p>
                     <Row>

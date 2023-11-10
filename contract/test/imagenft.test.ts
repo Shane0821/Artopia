@@ -14,7 +14,7 @@ describe("ImageNFT Test", function () {
     const myToken = await MyToken.deploy();
     await myToken.waitForDeployment();
 
-    let tx = await myToken.awardItem(myAddress, "ipfs://Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
+    let tx = await myToken.awardItem(myAddress, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
                                                 "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp");
     await tx.wait();
 
@@ -37,7 +37,7 @@ describe("ImageNFT Test", function () {
     const myToken = await MyToken.deploy();
     await myToken.waitForDeployment();
 
-    let tx = await myToken.awardItem(myAddress, "ipfs://Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
+    let tx = await myToken.awardItem(myAddress, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
                                                 "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp");
     await tx.wait();
 
@@ -63,12 +63,12 @@ describe("ImageNFT Test", function () {
     const myToken = await MyToken.deploy();
     await myToken.waitForDeployment();
 
-    let tx = await myToken.awardItem(myAddress, "ipfs://Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
+    let tx = await myToken.awardItem(myAddress, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
                                                 "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp");
     await tx.wait();
 
-    await expect(myToken.awardItem(myAddress, "ipfs://Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
+    await expect(myToken.awardItem(myAddress, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
                                   "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp")).
-          to.be.revertedWith("cid already exists") 
+          to.be.revertedWith("artwork already exists") 
   })
 });

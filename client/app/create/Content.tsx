@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Layout, notification, Spin, Tooltip
+    Layout, notification, Spin, Tooltip, Button
 } from 'antd';
 
 import { LoadingOutlined, DeleteOutlined, DeploymentUnitOutlined, EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
@@ -12,9 +12,12 @@ import Masonry from "react-responsive-masonry"
 
 const { Content } = Layout;
 
-
-import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
+import { useSession } from "next-auth/react"
+
+import { readContract, writeContract, waitForTransaction } from '@wagmi/core'
+import imgABI from '/abi/imagenft.json'
+import promptABI from '/abi/promptnft.json'
 
 import Detail from '@app/create/Detail'
 
@@ -33,6 +36,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
     const [dataArray, setDataArray] = useState([]);
     const [popup, setPopup] = useState(false);
     const [popupData, setPopupData] = useState({});
+    const [prepareMinting, setPrepareMinting] = useState('');
 
     const [userConnected, setUserConnected] = useState(false);
 
@@ -150,7 +154,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                 noti['success']({
                     message: 'Message:',
                     description:
-                        `Art is permanently deleted from artopia.`,
+                        `Art is permanently deleted from your create workbench.`,
                     duration: 3,
                 });
             } catch (error) {
@@ -163,9 +167,172 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
             }
         }
 
+        // if minting art, deletion is not allowed.
+        if (prepareMinting != '') {
+            noti['info']({
+                message: 'Message:',
+                description:
+                    `Deletion is not allowed when minting your art nft.`,
+                duration: 4,
+            });
+            return;
+        }
+
         deleteArt();
     };
 
+    // call smart contract to mint art and prompt
+    const mint = async(user: string, metadataCid: string, imgCid: string, promptCid: string) => {
+        if (!user) {
+            // to do: add notification
+            return
+        }
+        // mint prompt
+        try {
+            // check prompt ownership
+            const owner = await readContract({
+                address: process.env.NEXT_PUBLIC_PROMPT_NFT_CONTRACT,
+                abi: promptABI,
+                functionName: 'getOnwerByCID',
+                chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
+                args: [promptCid]
+            })
+            if (owner !== '0x0000000000000000000000000000000000000000' && owner !== user) {
+                throw new Error('You can\'t mint this art because you are not the owner of this prompt!');
+            }
+
+            // mint prompt when owner is 0x0000
+            if (owner === '0x0000000000000000000000000000000000000000') {
+                const {hash} = await writeContract({
+                    address: process.env.NEXT_PUBLIC_PROMPT_NFT_CONTRACT,
+                    abi: promptABI,
+                    functionName: 'awardItem',
+                    chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
+                    args: [user, promptCid]
+                })
+                // wait for confirmation
+                const data = await waitForTransaction({
+                    hash: hash,
+                })
+                // tokenId is in data.logs[1].data 
+                // or data.logs[0].topics[3]
+                console.log(data)
+                if (data.status === "success") {
+                    noti['success']({
+                        message: 'Message:',
+                        description:
+                            'Successfully minted prompt!',
+                        duration: 3,
+                    });
+                } else if (data.status == "error") {
+                   throw new Error('Failed to mint prompt!');
+                }
+            }
+        } catch (error) {
+            console.log(error)
+            noti['error']({
+                message: 'Message:',
+                description: `${error}`,
+                duration: 3,
+            });
+        }
+        
+        // mint art
+        try {
+            const {hash} = await writeContract({
+                address: process.env.NEXT_PUBLIC_IMG_NFT_CONTRACT,
+                abi: imgABI,
+                functionName: 'awardItem',
+                chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
+                args: [user, metadataCid, imgCid],
+            })
+            // wait for confirmation
+            const data = await waitForTransaction({
+                hash: hash,
+            })
+            if (data.status === "success") {
+                noti['success']({
+                    message: 'Message:',
+                    description:
+                        'Successfully minted art!',
+                    duration: 3,
+                });
+                // to do: remove art from the list
+            } else if (data.status == "error") {
+               throw new Error('Failed to mint art!');
+            }
+        } catch (error) {
+            let desc = `${error}`;
+            if (error?.toString().search("artwork already exists")!=-1)
+                desc = `Failed to mint art! This artwork already exists on the blockchain!`;
+            noti['error']({
+                message: 'Message:',
+                description: desc,
+                duration: 3,
+            });
+        } 
+        setPrepareMinting('');
+    }
+
+    // prepare for minting
+    const handleMint = async(data: any, index: number) => {
+        const prepare = async () => {
+            try {
+                noti['info']({
+                    message: 'Message:',
+                    description:
+                        'Preparing for minting art.',
+                    duration: 3,
+                });
+
+                const response = await fetch("/api/mint", {
+                    method: "POST",
+                    body: JSON.stringify(
+                        { _id: data._id }
+                    )
+                });
+
+                if (!response.ok) {
+                    const message = `An error has occurred: ${response.status}`;
+                    throw new Error(message);
+                }
+
+                const result = await response.json();
+                console.log(result)
+
+                noti['success']({
+                    message: 'Message:',
+                    description:
+                        `Art is prepared to mint`,
+                    duration: 3,
+                });
+                return result
+            } catch (error) {
+                noti['error']({
+                    message: 'Message:',
+                    description:
+                        `${error}`,
+                    duration: 3,
+                });
+                setPrepareMinting('');
+            }
+        }
+
+        // one piece of art minting at one time
+        if (prepareMinting != '') {
+            noti['info']({
+                message: 'Message:',
+                description:
+                    'Another art is minting.',
+                duration: 4,
+            });
+            return;
+        }
+
+        setPrepareMinting(data._id);
+        const {meta_data_ipfs, art_ipfs, prompt_ipfs} = await prepare();
+        await mint(session?.user?.name, meta_data_ipfs, art_ipfs, prompt_ipfs);
+    }
 
     return (
         <Content className="hide-scrollbar" style={{
@@ -220,9 +387,11 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                             onClick={(e) => e.stopPropagation()}
                         >
                             <Tooltip placement="topLeft" title="Delete">
-                                <button className="buttonStyle" onClick={() => handleDelete(index)}>
-                                    <DeleteOutlined /> {/* Delete icon */}
-                                </button>
+                                <Button
+                                    className="buttonStyle"
+                                    icon={<DeleteOutlined />}
+                                    onClick={() => handleDelete(index)}
+                                />
                             </Tooltip>
                         </div>
 
@@ -233,19 +402,20 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                             onClick={(e) => e.stopPropagation()}
                         >
                             <Tooltip placement="bottomLeft" title={data.shared ? "Private" : "Make public"}>
-                                <button className="buttonStyle">
-                                    {data.shared ? (
-                                        <EyeInvisibleOutlined /> // Private
-                                    ) : (
-                                        <EyeOutlined /> // Public icon
-                                    )}
-                                </button>
+                                {data.shared ? (
+                                    <Button className="buttonStyle" icon={<EyeInvisibleOutlined />} />
+                                ) : (
+                                    <Button className="buttonStyle" icon={<EyeOutlined />} /> // Public icon
+                                )}
                             </Tooltip>
 
                             <Tooltip placement="bottomLeft" title="Mint">
-                                <button className="buttonStyle">
-                                    <DeploymentUnitOutlined />{/* Mint icon */}
-                                </button>
+                                <Button
+                                    className="buttonStyle"
+                                    loading={prepareMinting === data._id}
+                                    icon={<DeploymentUnitOutlined />}
+                                    onClick={() => { handleMint(data, index); }}
+                                />
                             </Tooltip>
                         </div>
                     </div>
