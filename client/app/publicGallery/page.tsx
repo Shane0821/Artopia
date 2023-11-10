@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-    Layout, notification, Spin, Space
+    Select, notification, Spin, Space
 } from 'antd';
 
-import { LoadingOutlined } from '@ant-design/icons';
+const { Option } = Select;
+
+import { LoadingOutlined, ClockCircleOutlined, LikeOutlined, EyeOutlined, DashboardOutlined } from '@ant-design/icons';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
@@ -92,6 +94,20 @@ function PublicGalery() {
         fetchData();
     }, []);
 
+    const handleSelectChange = (value: string) => {
+        if (value === 'latest') {
+
+        }
+        else if (value === 'earliest') {
+
+        }
+        else if (value === 'likes') {
+
+        } else if (value === 'views') {
+
+        }
+    }
+
     return (
         <Space
             direction="vertical"
@@ -115,8 +131,37 @@ function PublicGalery() {
                     height: '90vh' // This will make the div take up the full viewport height}}
                 }}
                 indicator={antIcon}
-                spinning={(!(isConnected && session?.user)) || fetching}
+                spinning={fetching}
             />
+
+            {
+                fetching ?
+                    (<></>) :
+                    (
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                marginTop: 5
+                            }}
+                        >
+                            <Select
+                                defaultValue="latest"
+                                style={{
+                                    width: 300,
+                                    marginRight: 5
+                                }}
+                                onChange={handleSelectChange}
+                            >
+                                <Option value="latest"><ClockCircleOutlined /> Latest</Option>
+                                <Option value="earliest"><DashboardOutlined /> Earliest</Option>
+                                <Option value="likes"><LikeOutlined /> Likes</Option>
+                                <Option value="views"><EyeOutlined /> View</Option>
+                            </Select>
+                        </div>
+                    )
+            }
+
 
             <Masonry className="gallery" columnsCount={4}>
                 {dataArray.map((data, index) => (
