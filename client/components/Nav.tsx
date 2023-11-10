@@ -103,7 +103,7 @@ function Nav() {
             </Tooltip>
 
             <Tooltip title="Profile">
-              <Link href='/profile' className='flex gap-2 flex-center'>
+              <Link href={`/profile/${session?.user.name}`} className='flex gap-2 flex-center'>
                 <Image
                   src='/assets/icons/profile-circle.svg'
                   alt='cart'
