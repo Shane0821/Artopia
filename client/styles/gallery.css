@@ -10,6 +10,41 @@
     margin-left: 8px;
 }
 
+.publicPics:hover {
+    filter: opacity(.9);
+    cursor: pointer;
+}
+
+.p-public-gallery {
+    width: 600px;
+    /* Set the width of the <p> element */
+    overflow-wrap: break-word;
+    text-align: center;
+    /* Breaks the word at the end of the line */
+}
+
+.hide-scrollbar {
+    scrollbar-width: none;
+    /* For Firefox */
+    msOverflowStyle: none;
+    /* For Internet Explorer and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* For Chrome, Safari and Opera */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* For Chrome, Safari and Opera */
+}
+
+.hide-scrollbar::before,
+.hide-scrollbar::after {
+    display: none;
+}
+
 .gallery .pics:hover {
     filter: opacity(.9);
 }
