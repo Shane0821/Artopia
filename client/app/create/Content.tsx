@@ -187,6 +187,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
             // to do: add notification
             return
         }
+        
         // mint prompt
         try {
             // check prompt ownership
@@ -235,6 +236,8 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                 description: `${error}`,
                 duration: 3,
             });
+            setPrepareMinting('');
+            return
         }
         
         // mint art
