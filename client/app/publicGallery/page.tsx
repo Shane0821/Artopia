@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-    Select, notification, Spin, Space
+    Select, notification, Spin, Space, Image
 } from 'antd';
 
 const { Option } = Select;
@@ -138,6 +138,45 @@ function PublicGalery() {
         >
             <Detail popup={popup} setPopup={setPopup} data={popupData} />
 
+            <div style={{ position: 'relative', width: '100%', height: '350px', overflow: 'hidden' }}>
+                <img
+                    style={{ position: 'absolute', top: 0, left: 0, filter: 'blur(10px)' }}
+                    width={'100%'}
+                    src="/assets/images/castle.png"
+                />
+
+                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', textShadow: '2px 2px 4px rgba(0,0,0,0.5)', flexDirection: 'column' }}>
+                    <h1 style={{ textAlign: 'center', fontSize: '3em' }}>Public Gallery</h1>
+                    <hr style={{ width: '50%', border: '1px solid white' }} />
+                    <p className="p-public-gallery">Witness a symphony of ideas as individuals share prompts and marvel at the kaleidoscope of images generated in response. From the whimsical to the profound, each piece is a testament to the limitless possibilities when minds unite in artistic expression. </p>
+                </div>
+            </div>
+
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    marginTop: 30,
+                    marginBottom: -10,
+                    opacity: 0.8
+                }}
+            >
+                <Select
+                    defaultValue="latest"
+                    style={{
+                        width: 240,
+                        marginRight: 5
+                    }}
+                    onChange={handleSelectChange}
+                >
+                    <Option value="latest"><ClockCircleOutlined /> Latest</Option>
+                    <Option value="earliest"><DashboardOutlined /> Earliest</Option>
+                    <Option value="likes"><LikeOutlined /> Likes</Option>
+                    <Option value="views"><EyeOutlined /> View</Option>
+                </Select>
+            </div>
+
+
             {contextHolder}
             <Spin
                 style={{
@@ -150,35 +189,6 @@ function PublicGalery() {
                 indicator={antIcon}
                 spinning={fetching}
             />
-
-            {
-                fetching ?
-                    (<></>) :
-                    (
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'flex-end',
-                                marginTop: 5
-                            }}
-                        >
-                            <Select
-                                defaultValue="latest"
-                                style={{
-                                    width: 300,
-                                    marginRight: 5
-                                }}
-                                onChange={handleSelectChange}
-                            >
-                                <Option value="latest"><ClockCircleOutlined /> Latest</Option>
-                                <Option value="earliest"><DashboardOutlined /> Earliest</Option>
-                                <Option value="likes"><LikeOutlined /> Likes</Option>
-                                <Option value="views"><EyeOutlined /> View</Option>
-                            </Select>
-                        </div>
-                    )
-            }
-
 
             <Masonry className="gallery" columnsCount={4}>
                 {dataArray.map((data, index) => (
