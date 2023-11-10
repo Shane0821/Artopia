@@ -96,15 +96,32 @@ function PublicGalery() {
 
     const handleSelectChange = (value: string) => {
         if (value === 'latest') {
-
+            setDataArray(prevArray => {
+                let newArray = [...prevArray];
+                newArray.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                return newArray;
+            })
         }
         else if (value === 'earliest') {
-
+            console.log(value);
+            setDataArray(prevArray => {
+                let newArray = [...prevArray];
+                newArray.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+                return newArray;
+            });
         }
         else if (value === 'likes') {
-
+            setDataArray(prevArray => {
+                let newArray = [...prevArray];
+                newArray.sort((a, b) => b.likes - a.likes);
+                return newArray;
+            });
         } else if (value === 'views') {
-
+            setDataArray(prevArray => {
+                let newArray = [...prevArray];
+                newArray.sort((a, b) => b.views - a.views);
+                return newArray;
+            });
         }
     }
 
