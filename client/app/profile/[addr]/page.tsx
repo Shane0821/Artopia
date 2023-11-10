@@ -13,6 +13,9 @@ function page({ params }: { params: { addr: string } }) {
     const { data: session, status } = useSession()
     const { address, isConnected } = useAccount()
 
+    const [promptURIList, setPromptURIList] = useState<string[]>([])
+    const [artURIList, setArtURIList] = useState<string[]>([])
+
     const tokenURIOfOwnerByIndex = async (usr: string, idx: number, tag: string) => {
         if (tag != "prompt" && tag != "art") return undefined
         // note: need to check if tag is valid (prompt or art)
@@ -38,8 +41,9 @@ function page({ params }: { params: { addr: string } }) {
         return tokenURI
     }
 
-
     useEffect(() => {
+        if (!isConnected) return
+
         const loadPrompt = async(usr: string) => {
             console.log(usr)
 
@@ -51,13 +55,18 @@ function page({ params }: { params: { addr: string } }) {
                 args: [usr]
             })
             const cntPrompt = Number(balance)
-
+            
+            var promptURIList = []
             if (cntPrompt > 0) {
                 for await (const tokenURI of Array.from({ length: cntPrompt }, 
                                                         (_, index) => tokenURIOfOwnerByIndex(usr, index, "prompt"))) {
-                    console.log("prompt:", tokenURI)
+                    if (tokenURI != undefined) {
+                        promptURIList.push('https://ipfs.io/ipfs/' + tokenURI?.split("ipfs://")[1])
+                    }
                 }    
             }
+            console.log("prompt uri list",promptURIList)
+            setPromptURIList(promptURIList)
         }
     
         const loadArt = async(usr: string) => {
@@ -70,12 +79,17 @@ function page({ params }: { params: { addr: string } }) {
             })
             const cntArt = Number(balance)
             
+            var artURIList = []
             if (cntArt > 0) {
                 for await (const tokenURI of Array.from({ length: cntArt }, 
                                                         (_, index) => tokenURIOfOwnerByIndex(usr, index, "art"))) {
-                    console.log("art:", tokenURI)
+                    if (tokenURI != undefined) {
+                        artURIList.push('https://ipfs.io/ipfs/' + tokenURI?.split("ipfs://")[1])
+                    }
                 }    
             }
+            console.log("art uri list", artURIList)
+            setArtURIList(artURIList)
         }  
 
         loadPrompt(params.addr);
