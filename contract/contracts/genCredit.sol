@@ -23,15 +23,21 @@ contract CreditManagement {
     }
 
     function updateCredits() external {
-        require(
-            lastCreditUpdate[msg.sender] < block.timestamp - 1 days,
-            "You have claimed credits for today. Come back tomorrow to get more"
-        );
         uint256 day = block.timestamp / 1 days;
+
+        require(
+            lastCreditUpdate[msg.sender] / 1 days < day,
+            "You have claimed credits for today. Come back tomorrow to get more."
+        );
+
         if (lastCreditUpdate[msg.sender] / 1 days < day) {
             userCredits[msg.sender] = dailyCreditLimit;
             lastCreditUpdate[msg.sender] = day * 1 days;
         }
+    }
+
+    function canUpdateCredit() public view returns (bool) {
+        return lastCreditUpdate[msg.sender] < block.timestamp - 1 days;
     }
 
     function useCredits(uint256 _amount) external {
