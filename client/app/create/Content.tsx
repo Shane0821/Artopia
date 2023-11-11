@@ -191,7 +191,7 @@ function ContentCreate({
     };
 
     // call smart contract to mint art and prompt
-    const mint = async(user: string, metadataCid: string, imgCid: string, promptCid: string) => {
+    const mint = async (user: string, metadataCid: string, imgCid: string, promptCid: string) => {
         if (!user) {
             // to do: add notification
             return
@@ -212,7 +212,7 @@ function ContentCreate({
 
             // mint prompt when owner is 0x0000
             if (owner === '0x0000000000000000000000000000000000000000') {
-                const {hash} = await writeContract({
+                const { hash } = await writeContract({
                     address: process.env.NEXT_PUBLIC_PROMPT_NFT_CONTRACT,
                     abi: promptABI,
                     functionName: 'awardItem',
@@ -234,7 +234,7 @@ function ContentCreate({
                         duration: 3,
                     });
                 } else if (data.status == "error") {
-                   throw new Error('Failed to mint prompt!');
+                    throw new Error('Failed to mint prompt!');
                 }
             }
         } catch (error) {
@@ -245,10 +245,10 @@ function ContentCreate({
                 duration: 3,
             });
         }
-        
+
         // mint art
         try {
-            const {hash} = await writeContract({
+            const { hash } = await writeContract({
                 address: process.env.NEXT_PUBLIC_IMG_NFT_CONTRACT,
                 abi: imgABI,
                 functionName: 'awardItem',
@@ -268,23 +268,23 @@ function ContentCreate({
                 });
                 // to do: remove art from the list
             } else if (data.status == "error") {
-               throw new Error('Failed to mint art!');
+                throw new Error('Failed to mint art!');
             }
         } catch (error) {
             let desc = `${error}`;
-            if (error?.toString().search("artwork already exists")!=-1)
+            if (error?.toString().search("artwork already exists") != -1)
                 desc = `Failed to mint art! This artwork already exists on the blockchain!`;
             noti['error']({
                 message: 'Message:',
                 description: desc,
                 duration: 3,
             });
-        } 
+        }
         setPrepareMinting('');
     }
 
     // prepare for minting
-    const handleMint = async(data: any, index: number) => {
+    const handleMint = async (data: any, index: number) => {
         const prepare = async () => {
             try {
                 noti['info']({
@@ -339,7 +339,7 @@ function ContentCreate({
         }
 
         setPrepareMinting(data._id);
-        const {meta_data_ipfs, art_ipfs, prompt_ipfs} = await prepare();
+        const { meta_data_ipfs, art_ipfs, prompt_ipfs } = await prepare();
         await mint(session?.user?.name, meta_data_ipfs, art_ipfs, prompt_ipfs);
     }
 

@@ -13,6 +13,8 @@ import {
 } from '@ant-design/icons';
 import { Layout, Space, Button, notification, Spin } from 'antd';
 
+import genCredit from '@abi/gencredit.json'
+import { readContract, writeContract, waitForTransaction } from '@wagmi/core'
 
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
@@ -29,6 +31,8 @@ const Create = () => {
     const [fetching, setFetching] = useState(false);
     const [changingVis, setChangingVis] = useState(false);
     const [prepareMinting, setPrepareMinting] = useState('');
+
+    const [canGetCredit, setCanGetCredit] = useState(false);
 
     const { data: session, status } = useSession();
     const { address, isConnected } = useAccount();
@@ -52,6 +56,19 @@ const Create = () => {
     React.useEffect(() => {
         if (!isConnected) {
             redirect('/');
+        }
+
+        if (isConnected) {
+            const fetchData = async () => {
+                const data = await readContract({
+                    address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
+                    abi: genCredit,
+                    functionName: 'canUpdateCredit',
+                });
+                console.log(data);
+            };
+
+            fetchData();
         }
     }, [isConnected]);
 
