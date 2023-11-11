@@ -1260,7 +1260,7 @@ function getRandomWord(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-export const generatePrompts = (minLength = 8, maxLength = 35) => {
+export const generatePrompts = (minLength = 6, maxLength = 35) => {
   var prompt = '';
   var length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
   for (var i = 0; i < length; i++) {
