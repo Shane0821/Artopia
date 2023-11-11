@@ -41,6 +41,10 @@ contract CreditManagement {
         return lastCreditUpdate[msg.sender] / 1 days < day;
     }
 
+    function getCredits() public view returns (uint256) {
+        return userCredits[msg.sender];
+    }
+
     function useCredits(uint256 _amount) external {
         require(userCredits[msg.sender] >= _amount, "Insufficient credits");
         userCredits[msg.sender] -= _amount;
