@@ -11,6 +11,7 @@ import {
 
 import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
+import { generatePrompts } from '@utils/randomPrompt'
 
 const { Sider } = Layout;
 const { Option } = Select;
@@ -47,7 +48,7 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
     const [guidanceScale, setGuidanceScale] = useState(7.5);
     const [seed, setSeed] = useState('');
     const [sampler, setSampler] = useState('dpmsolver++')
-    const [prompt, setPrompt] = useState('');
+    const [prompt, setPrompt] = useState(generatePrompts());
     const [negative_prompt, setNegativePrompt] = useState('Disfigured, cartoon, blurry');
 
     const [noti, contextHolder] = notification.useNotification();
