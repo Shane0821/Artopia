@@ -33,6 +33,7 @@ const Create = () => {
     const [prepareMinting, setPrepareMinting] = useState('');
 
     const [canGetCredit, setCanGetCredit] = useState(false);
+    const [credits, setCredits] = useState(0);
 
     const { data: session, status } = useSession();
     const { address, isConnected } = useAccount();
@@ -66,6 +67,13 @@ const Create = () => {
                     functionName: 'canUpdateCredit',
                 });
                 console.log(data);
+
+                const credits = await readContract({
+                    address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
+                    abi: genCredit,
+                    functionName: 'getCredits',
+                });
+                console.log(Number(credits))
             };
 
             fetchData();
