@@ -109,7 +109,7 @@ contract CreditManagement {
     }
 
     function purchaseCredits() external payable {
-        uint256 minimumEtherRequired = 0.00020 * 1 ether; // Convert to wei for comparison
+        uint256 minimumEtherRequired = 0.00030 * 1 ether; // Convert to wei for comparison
         require(
             msg.value >= minimumEtherRequired,
             "Insufficient ether to purchase credits"

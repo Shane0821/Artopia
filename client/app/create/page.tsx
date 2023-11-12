@@ -15,6 +15,7 @@ import { Layout, Space, Button, notification, Spin, Badge } from 'antd';
 
 import genCreditABI from '@abi/gencredit.json'
 import { readContract, writeContract, waitForTransaction } from '@wagmi/core';
+import { parseGwei } from 'viem'
 
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
@@ -69,7 +70,7 @@ const Create = () => {
                         duration: 3,
                     });
                 } else {
-                    throw new Error('Failed to claim credits. Maybe next time.');
+                    throw new Error('An Error occurs when spending credit.');
                 }
                 setTimeout(() => {
                     setCooldown(false);
@@ -85,11 +86,87 @@ const Create = () => {
             }
         }
 
+        const buyCredits = async () => {
+            try {
+                const { hash } = await writeContract({
+                    address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
+                    abi: genCreditABI,
+                    functionName: 'purchaseCredits',
+                    chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
+                    args: [],
+                    value: parseGwei('300000'),
+                })
+                // wait for confirmation
+                const data = await waitForTransaction({
+                    hash: hash,
+                })
+
+                if (data.status === "success") {
+                    await fetchCreditData();
+                    noti['success']({
+                        message: 'Message:',
+                        description:
+                            'Successfully purchased credits.',
+                        duration: 3,
+                    });
+                } else {
+                    throw new Error('An Error occurs when purchasing credit.');
+                }
+                setCooldown(false);
+            } catch (error) {
+                console.log(error);
+                noti['error']({
+                    message: 'Message:',
+                    description:
+                        'Failed to purchase credit.',
+                    duration: 3,
+                });
+                setCooldown(false);
+            }
+        }
+
         if (credits) {
             setCooldown(true);
             useCredits();
         } else {
+            const key = `openNoCreditNotification`;
+            let _continueButton = false;
 
+            const btn = (
+                <Space>
+                    <Button
+                        type="link"
+                        size="small"
+                        onClick={() => { noti.destroy(key); }}>
+                        No, thanks
+                    </Button>
+                    <Button
+                        type="default"
+                        size="small"
+                        onClick={() => {
+                            _continueButton = true;
+                            noti.destroy(key);
+                        }}>
+                        Yes
+                    </Button>
+                </Space >
+            );
+
+            noti.warning({
+                message: `You don't have enough credits`,
+                description:
+                    'Would you like to buy 100 credits for 0.00030 AXM?',
+                btn,
+                key,
+                placement: 'topRight',
+                onClose: () => {
+                    if (_continueButton) {
+                        setCooldown(true);
+                        buyCredits();
+                    }
+                },
+                duration: 0
+            });
         }
     };
 
@@ -241,6 +318,7 @@ const Create = () => {
                                                         || (!(isConnected && session?.user))
                                                         || fetching || changingVis
                                                         || prepareMinting != ''
+                                                        || gettingCredit
                                                     }
                                                     onClick={handleClick}
                                                 >
