@@ -42,7 +42,7 @@ interface artDataType {
   negative_prompt: string
   model: string,
   steps: number,
-  guidanceScale: number,
+  guidance: number,
   seed: number,
   sampler: string,
   created_at: string
@@ -88,7 +88,7 @@ function page({ params }: { params: { addr: string } }) {
         negative_prompt: "",
         model: "",
         steps: 0,
-        guidanceScale: 0,
+        guidance: 0,
         seed: 0,
         sampler: "",
         created_at: ""
@@ -109,7 +109,7 @@ function page({ params }: { params: { addr: string } }) {
             imgData.steps = attribute.value;
             break;
           case 'GuidanceScale':
-            imgData.guidanceScale = attribute.value;
+            imgData.guidance = attribute.value;
             break;
           case 'Seed':
             imgData.seed = attribute.value;

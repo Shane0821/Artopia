@@ -123,7 +123,7 @@ const Detail = ({ popup, setPopup, data }: DetailProps) => {
                     <Row>
                         <Col span={24}>
                             <div className="site-description-item-profile-wrapper">
-                                {data.scheduler}
+                                {data.sampler}
                             </div>
                         </Col>
                     </Row>
