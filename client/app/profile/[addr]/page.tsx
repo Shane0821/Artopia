@@ -215,7 +215,7 @@ function page({ params }: { params: { addr: string } }) {
   }, []);
 
   return (
-    <section className="w-full flex-center flex-col">
+    <section className="w-full max-w-7xl flex-center flex-col sm:px-16 px-6">
       <Detail popup={popup} setPopup={setPopup} data={popupData} />
 
       <div className='mt-12 text-center'>
@@ -235,7 +235,7 @@ function page({ params }: { params: { addr: string } }) {
         spinning={artFetching}
        />
        <Masonry className="gallery" columnsCount={4}>
-                {[].map((data, index) => (
+                {artList.map((data, index) => (
                     <ArtItem
                         key={index}
                         data={data}
