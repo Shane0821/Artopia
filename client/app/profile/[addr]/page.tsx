@@ -1,6 +1,16 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
+import {
+    Select, notification, Spin, Space, Image
+} from 'antd';
+import { LoadingOutlined, ClockCircleOutlined, LikeOutlined, EyeOutlined, DashboardOutlined } from '@ant-design/icons';
+const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
+
+import '@styles/gallery.css'
+import ArtItem from '@app/profile/ArtItem'
+import Detail from '@app/profile/ArtDetail'
+import Masonry from "react-responsive-masonry"
 
 import { useAccount } from "wagmi"
 import { useSession } from "next-auth/react"
@@ -28,12 +38,14 @@ interface artDataType {
   description: string,
   cid: string,
   promptcid: string,
+  prompt: string,
+  negative_prompt: string
   model: string,
   steps: number,
   guidanceScale: number,
   seed: number,
   sampler: string,
-  createdAt: string
+  created_at: string
 }
 
 function page({ params }: { params: { addr: string } }) {
@@ -42,6 +54,11 @@ function page({ params }: { params: { addr: string } }) {
 
   const [promptURIList, setPromptURIList] = useState<promptDataType[]>([])
   const [artList, setArtList] = useState<artDataType[]>([])
+
+  const [popup, setPopup] = useState(false);
+  const [popupData, setPopupData] = useState({});
+  const [promptFetching, setPromptFetching] = useState(false);
+  const [artFetching, setArtFetching] = useState(false);
 
   const artOfOwnerByIndex = async (usr: string, idx: number) => {
     try {
@@ -67,12 +84,14 @@ function page({ params }: { params: { addr: string } }) {
         description: "",
         cid: "",
         promptcid: "",
+        prompt: "",
+        negative_prompt: "",
         model: "",
         steps: 0,
         guidanceScale: 0,
         seed: 0,
         sampler: "",
-        createdAt: ""
+        created_at: ""
       };
       imgData.name = data.name
       imgData.description = data.description
@@ -99,7 +118,7 @@ function page({ params }: { params: { addr: string } }) {
             imgData.sampler = attribute.value;
             break;
           case 'CreatedAt':
-            imgData.createdAt = attribute.value;
+            imgData.created_at = attribute.value;
             break;
         }
       })
@@ -160,6 +179,7 @@ function page({ params }: { params: { addr: string } }) {
       } catch (error) {
         console.error(error);
       }
+      setPromptFetching(false)
     }
 
     const loadArt = async (usr: string) => {
@@ -183,14 +203,21 @@ function page({ params }: { params: { addr: string } }) {
       } catch (error) {
         console.error(error);
       }
+      setArtFetching(false)
     }
 
-    loadPrompt(params.addr);
-    loadArt(params.addr)
-  }, [isConnected]);
+    setPromptFetching(true)
+    setArtFetching(true)
+    setTimeout(() => {
+        loadPrompt(params.addr)
+        loadArt(params.addr)
+    }, 2000)
+  }, []);
 
   return (
     <section className="w-full flex-center flex-col">
+      <Detail popup={popup} setPopup={setPopup} data={popupData} />
+
       <div className='mt-12 text-center'>
         <h2 className='font-display text-4xl font-extrabold leading-tight text-black sm:text-5xl sm:leading-tight'>
           {"Your "} 
@@ -202,9 +229,22 @@ function page({ params }: { params: { addr: string } }) {
 
       </div>
       {/* list of art */}
-      
-      
-
+      <Spin
+        className="mt-12"
+        indicator={antIcon}
+        spinning={artFetching}
+       />
+       <Masonry className="gallery" columnsCount={4}>
+                {[].map((data, index) => (
+                    <ArtItem
+                        key={index}
+                        data={data}
+                        index={index}
+                        setPopup={setPopup}
+                        setPopupData={setPopupData}
+                    />
+                ))}
+        </Masonry> 
 
       <div className='mt-12 text-center'>
         <h2 className='font-display text-4xl font-extrabold leading-tight text-black sm:text-5xl sm:leading-tight'>
@@ -215,6 +255,11 @@ function page({ params }: { params: { addr: string } }) {
         </h2>
         <p className="mt-5 text-gray-600 sm:text-lg">Spark your imagination and creativity - unleash your potential and passion.</p>
       </div>
+      <Spin
+        className="mt-12"
+        indicator={antIcon}
+        spinning={promptFetching}
+       />
       {/* list of prompts */}
     </section>
   )
