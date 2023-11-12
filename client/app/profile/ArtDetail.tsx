@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Image from '@node_modules/next/image'
+
 import { PlusOutlined } from '@ant-design/icons';
 
 import { Drawer, Input, Button, Typography, Divider, Row, Col, notification } from 'antd';
@@ -55,7 +57,12 @@ const Detail = ({ popup, setPopup, data }: DetailProps) => {
                     },
                 }}
             >
-                {data.cid && <img className="image no-visual-search" src={`https://ipfs.io/ipfs/${data.cid}`} />}
+                {data.cid && <Image width="0" 
+                                    height="0"
+                                    alt={`${data.cid}`}
+                                    sizes='100vw'
+                                    className="image no-visual-search" 
+                                    src={`https://ipfs.io/ipfs/${data.cid}`} />}
                 <Paragraph>
                     <p className="site-description-item-profile-p">Prompt</p>
                     <Row>

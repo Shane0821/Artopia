@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from '@node_modules/next/image'
 
 import {
     Tooltip, Button
@@ -57,11 +58,12 @@ const ArtItem = ({ data, index, setPopup, setPopupData }: ArtItemProps) => {
                 setPopupData(data);
             }}
         >
-            <img
-                className="no-visual-search"
-                style={{ width: '100%' }}
-                src={`https://ipfs.io/ipfs/${data.cid}`}
-            />
+            <Image width="0" 
+                   height="0"
+                   alt={`${data.cid}`}
+                   sizes='100vw'
+                   className="no-visual-search w-full h-auto"
+                   src={`https://ipfs.io/ipfs/${data.cid}`} />
 
             {/* buttons */}
             < div
