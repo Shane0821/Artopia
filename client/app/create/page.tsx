@@ -44,13 +44,50 @@ const Create = () => {
     const handleClick = () => {
         console.log('handleclick', generating)
 
-        if (credits) {
-            setGenerating(true);
+        const useCredits = async () => {
+            try {
+                const { hash } = await writeContract({
+                    address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
+                    abi: genCreditABI,
+                    functionName: 'useCredits',
+                    chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
+                    args: [1]
+                })
+                // wait for confirmation
+                const data = await waitForTransaction({
+                    hash: hash,
+                })
 
-            setCooldown(true);
-            setTimeout(() => {
+                if (data.status === "success") {
+                    setCredits(credits - 1);
+                    setGenerating(true);
+
+                    noti['info']({
+                        message: 'Message:',
+                        description:
+                            'Start generating...',
+                        duration: 3,
+                    });
+                } else {
+                    throw new Error('Failed to claim credits. Maybe next time.');
+                }
+                setTimeout(() => {
+                    setCooldown(false);
+                }, 6000);
+            } catch (error) {
+                noti['error']({
+                    message: 'Message:',
+                    description:
+                        'An Error occurs when spending credit.',
+                    duration: 3,
+                });
                 setCooldown(false);
-            }, 6000);
+            }
+        }
+
+        if (credits) {
+            setCooldown(true);
+            useCredits();
         } else {
 
         }
