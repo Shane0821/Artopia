@@ -60,6 +60,30 @@ const Create = () => {
         setGenerating(false);
     };
 
+    const fetchCreditData = async () => {
+        try {
+            const data = await readContract({
+                address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
+                account: address,
+                abi: genCreditABI,
+                functionName: 'canUpdateCredit',
+            });
+            setCanGetCredit(Boolean(data));
+
+            const _credits = await readContract({
+                address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
+                account: address,
+                abi: genCreditABI,
+                functionName: 'getCredits',
+            });
+            setCredits(Number(_credits));
+
+            console.log(data, _credits, address)
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     // fetch credits and check if can get daily credits
     React.useEffect(() => {
         if (!isConnected) {
@@ -67,31 +91,7 @@ const Create = () => {
         }
 
         if (isConnected && session?.user) {
-            const fetchData = async () => {
-                try {
-                    const data = await readContract({
-                        address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
-                        account: address,
-                        abi: genCreditABI,
-                        functionName: 'canUpdateCredit',
-                    });
-                    setCanGetCredit(Boolean(data));
-
-                    const _credits = await readContract({
-                        address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
-                        account: address,
-                        abi: genCreditABI,
-                        functionName: 'getCredits',
-                    });
-                    setCredits(Number(_credits));
-
-                    console.log(data, _credits, address)
-                } catch (error) {
-                    console.error(error);
-                }
-            };
-
-            fetchData();
+            fetchCreditData();
         }
     }, [isConnected, session?.user]);
 
@@ -112,23 +112,43 @@ const Create = () => {
                     hash: hash,
                 })
 
-                console.log(data);
-
+                if (data.status === "success") {
+                    noti['success']({
+                        message: 'Message:',
+                        description:
+                            'Successfully claimed credits! Enjoy!',
+                        duration: 3,
+                    });
+                    await fetchCreditData();
+                } else {
+                    throw new Error('Failed to claim credits. Maybe next time.');
+                }
+                setGettingCredit(false);
             } catch (error) {
-                console.error(error);
+                console.log(error)
+                noti['error']({
+                    message: 'Message:',
+                    description:
+                        `Failed to claim credits`,
+                    duration: 3,
+                });
+                setGettingCredit(false);
             }
         };
+        setGettingCredit(true);
         getCred();
     }
 
     return (
         <Space direction="vertical" style={{ width: '100%' }} className="sm:px-16 px-6 max-w-7xl" >
+            {contextHolder}
             {
+
                 (isConnected && session?.user) ?
                     (
                         <>
                             {
-                                (true) && (
+                                (canGetCredit) && (
                                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px', marginBottom: '8px' }}>
                                         <p style={{ marginRight: '15px' }}>You can claim your credits for this month ~ 😊</p>
                                         <Button

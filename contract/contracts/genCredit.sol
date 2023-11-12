@@ -94,8 +94,8 @@ contract CreditManagement {
     }
 
     function canUpdateCredit() public view returns (bool) {
-        uint256 day = block.timestamp / 1 days;
-        return lastCreditUpdate[msg.sender] / 1 days < day;
+        uint256 month = block.timestamp / 30 days;
+        return lastCreditUpdate[msg.sender] / 30 days < month;
     }
 
     function getCredits() public view returns (uint256) {
