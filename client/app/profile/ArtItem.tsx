@@ -29,14 +29,14 @@ function getRandomTransition() {
     return `${duration} ${timingFunction}`;
 }
 
-interface GalleryItemProps {
+interface ArtItemProps {
     data: any,
     index: number,
     setPopup: (popup: boolean) => void,
     setPopupData: (popupData: any) => void,
 }
 
-const GalleryItem = ({ data, index, setPopup, setPopupData }: GalleryItemProps) => {
+const ArtItem = ({ data, index, setPopup, setPopupData }: ArtItemProps) => {
     const [ref, inView] = useInView({
         threshold: 0,
         triggerOnce: true,
@@ -52,14 +52,15 @@ const GalleryItem = ({ data, index, setPopup, setPopupData }: GalleryItemProps) 
             }}
             key={index}
             onClick={() => {
+                console.log(data)
                 setPopup(true);
                 setPopupData(data);
             }}
         >
-            < img
+            <img
                 className="no-visual-search"
                 style={{ width: '100%' }}
-                src={`${data.base64}`}
+                src={`https://ipfs.io/ipfs/${data.cid}`}
             />
 
             {/* buttons */}
@@ -75,40 +76,9 @@ const GalleryItem = ({ data, index, setPopup, setPopupData }: GalleryItemProps) 
                     />
                 </Tooltip>
             </div>
-
-            <div
-                className="absolute bottom-0 left-0 w-full p-2 flex items-center justify-between opacity-0 group-hover:opacity-100"
-                style={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                    color: '#f8f8f8',
-                    padding: '6px 10px', // Smaller padding will reduce the bar height
-                    fontSize: '0.85rem'
-                }}
-                onClick={(e) => e.stopPropagation()}
-            >
-                {/* Left-aligned items: avatar and address */}
-                <div className="flex items-center">
-                    <UserOutlined style={{ marginRight: 10 }} />
-                    <Tooltip placement="topLeft" color='rgba(0, 0, 0, 0.6)'>
-                        {truncateMiddle(data.address, 7, 7)}
-                    </Tooltip>
-                </div>
-
-                {/* Right-aligned items: views and likes */}
-                <div className="flex items-center">
-                    <div className="flex items-center mr-4">
-                        <span className="mr-2">{data.views}</span> {/* Views count */}
-                        <EyeOutlined />
-                    </div>
-                    <div className="flex items-center">
-                        <span className="mr-2">{data.likes}</span> {/* Likes count */}
-                        <HeartOutlined />
-                    </div>
-                </div>
-            </div>
         </div >
 
     );
 };
 
-export default GalleryItem;
+export default ArtItem;
