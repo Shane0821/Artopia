@@ -8,9 +8,13 @@ import ContentCreate from '@app/create/Content'
 import { redirect } from 'next/navigation'
 
 import {
-    FormatPainterOutlined
+    FormatPainterOutlined,
+    LoadingOutlined
 } from '@ant-design/icons';
-import { Layout, Space, Button, notification } from 'antd';
+import { Layout, Space, Button, notification, Spin } from 'antd';
+
+
+const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
 import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
@@ -23,6 +27,8 @@ const Create = () => {
     const [generating, setGenerating] = useState(false);
     const [cooldown, setCooldown] = useState(false);
     const [fetching, setFetching] = useState(false);
+    const [changingVis, setChangingVis] = useState(false);
+    const [prepareMinting, setPrepareMinting] = useState('');
 
     const { data: session, status } = useSession();
     const { address, isConnected } = useAccount();
@@ -90,7 +96,12 @@ const Create = () => {
                                             marginBottom: '15vh',
                                             marginTop: 5
                                         }}
-                                        loading={generating || cooldown || (!(isConnected && session?.user)) || fetching}
+                                        loading={
+                                            generating || cooldown
+                                            || (!(isConnected && session?.user))
+                                            || fetching || changingVis
+                                            || prepareMinting != ''
+                                        }
                                         onClick={handleClick}
                                     >
                                         Generate Image
@@ -99,12 +110,34 @@ const Create = () => {
                                 </div>
 
 
-                                <ContentCreate jsonData={jsonData} setFetching={setFetching} fetching={fetching} />
+                                <ContentCreate
+                                    jsonData={jsonData}
+                                    setFetching={setFetching}
+                                    fetching={fetching}
+                                    changingVis={changingVis}
+                                    setChangingVis={setChangingVis}
+                                    prepareMinting={prepareMinting}
+                                    setPrepareMinting={setPrepareMinting}
+                                />
 
                             </Layout>
                         </Content>
                     </Layout >)
-                    : (<>{contextHolder}</>)
+                    : (
+                        <>
+                            <Spin
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    height: '90vh' // This will make the div take up the full viewport height}}
+                                }}
+                                indicator={antIcon}
+                                spinning={(!(isConnected && session?.user)) || fetching}
+                            />
+                        </>
+                    )
             }
         </Space >
     )

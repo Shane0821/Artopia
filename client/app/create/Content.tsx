@@ -20,14 +20,24 @@ import imgABI from '/abi/imagenft.json'
 import promptABI from '/abi/promptnft.json'
 
 import Detail from '@app/create/Detail'
+import openVisNotification from '@app/create/noti'
 
 interface ContentCreateProps {
     jsonData: any;
     fetching: boolean;
     setFetching: (fetching: boolean) => void;
+    changingVis: boolean;
+    setChangingVis: (changingVis: boolean) => void;
+    prepareMinting: string;
+    setPrepareMinting: (prepareMinting: string) => void;
 }
 
-function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) {
+function ContentCreate({
+    jsonData,
+    fetching, setFetching,
+    changingVis, setChangingVis,
+    prepareMinting, setPrepareMinting
+}: ContentCreateProps) {
     const [noti, contextHolder] = notification.useNotification();
 
     const { data: session, status } = useSession()
@@ -36,7 +46,6 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
     const [dataArray, setDataArray] = useState([]);
     const [popup, setPopup] = useState(false);
     const [popupData, setPopupData] = useState({});
-    const [prepareMinting, setPrepareMinting] = useState('');
 
     const [userConnected, setUserConnected] = useState(false);
 
@@ -392,6 +401,7 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                             <Tooltip placement="topLeft" title="Delete">
                                 <Button
                                     className="buttonStyle"
+                                    loading={changingVis}
                                     icon={<DeleteOutlined />}
                                     onClick={() => handleDelete(index)}
                                 />
@@ -404,18 +414,40 @@ function ContentCreate({ jsonData, fetching, setFetching }: ContentCreateProps) 
                             className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <Tooltip placement="bottomLeft" title={data.shared ? "Private" : "Make public"}>
+                            <Tooltip placement="bottomLeft" title={data.shared ? "Make Private" : "Make public"}>
                                 {data.shared ? (
-                                    <Button className="buttonStyle" icon={<EyeInvisibleOutlined />} />
+                                    <Button
+                                        className="buttonStyle"
+                                        icon={<EyeInvisibleOutlined />}
+                                        onClick={() => {
+                                            openVisNotification({
+                                                noti, data, changingVis,
+                                                dataArray, setDataArray,
+                                                setChangingVis, prepareMinting
+                                            })
+                                        }}
+                                        loading={changingVis}
+                                    />
                                 ) : (
-                                    <Button className="buttonStyle" icon={<EyeOutlined />} /> // Public icon
+                                    <Button
+                                        className="buttonStyle"
+                                        icon={<EyeOutlined />}
+                                        onClick={() => {
+                                            openVisNotification({
+                                                noti, data, changingVis,
+                                                dataArray, setDataArray,
+                                                setChangingVis, prepareMinting
+                                            })
+                                        }}
+                                        loading={changingVis}
+                                    /> // Public icon
                                 )}
                             </Tooltip>
 
                             <Tooltip placement="bottomLeft" title="Mint">
                                 <Button
                                     className="buttonStyle"
-                                    loading={prepareMinting === data._id}
+                                    loading={prepareMinting === data._id || changingVis}
                                     icon={<DeploymentUnitOutlined />}
                                     onClick={() => { handleMint(data, index); }}
                                 />
