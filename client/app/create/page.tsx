@@ -13,9 +13,8 @@ import {
 } from '@ant-design/icons';
 import { Layout, Space, Button, notification, Spin, Badge } from 'antd';
 
-import genCredit from '@abi/gencredit.json'
+import genCreditABI from '@abi/gencredit.json'
 import { readContract, writeContract, waitForTransaction } from '@wagmi/core';
-import { ethers } from 'ethers';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
@@ -67,15 +66,13 @@ const Create = () => {
             redirect('/');
         }
 
-        console.log(isConnected, session?.user)
-
         if (isConnected && session?.user) {
             const fetchData = async () => {
                 try {
                     const data = await readContract({
                         address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
                         account: address,
-                        abi: genCredit,
+                        abi: genCreditABI,
                         functionName: 'canUpdateCredit',
                     });
                     setCanGetCredit(Boolean(data));
@@ -83,10 +80,12 @@ const Create = () => {
                     const _credits = await readContract({
                         address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
                         account: address,
-                        abi: genCredit,
+                        abi: genCreditABI,
                         functionName: 'getCredits',
                     });
                     setCredits(Number(_credits));
+
+                    console.log(data, _credits, address)
                 } catch (error) {
                     console.error(error);
                 }
@@ -101,78 +100,19 @@ const Create = () => {
             if (!session?.user || !address) return;
 
             try {
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const { hash } = await writeContract({
+                    address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
+                    abi: genCreditABI,
+                    functionName: 'updateCredits',
+                    chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
+                    args: []
+                })
+                // wait for confirmation
+                const data = await waitForTransaction({
+                    hash: hash,
+                })
 
-                const relayerWallet = new ethers.Wallet(
-                    process.env.NEXT_PUBLIC_RELAYER_PK || '',
-                    provider
-                );
-
-                // Contract interaction
-                const contract = new ethers.Contract(
-                    process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT || '',
-                    genCredit,
-                    provider
-                );
-
-                // Gas estimation
-                const gasPrice = await provider.getGasPrice();
-                const gasLimit = await contract.estimateGas.updateCredits(); // Adjust the method name and parameters
-                const nonce = await provider.getTransactionCount(address);
-                console.log(nonce)
-
-                const iface = new ethers.utils.Interface(genCredit);
-                const encodedFunction = iface.encodeFunctionData("updateCredits", []);
-
-                // Transaction object
-                const transaction = {
-                    to: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
-                    data: encodedFunction,
-                    gasPrice: gasPrice,
-                    gasLimit: gasLimit,
-                    nonce: nonce
-                };
-
-                // Sign and send transaction
-                const signedTransaction = await relayerWallet.signTransaction(transaction);
-                const transactionResponse = await provider.sendTransaction(signedTransaction);
-
-                // Wait for the transaction to be mined
-                const receipt = await provider.waitForTransaction(transactionResponse.hash);
-
-                console.log(receipt);
-
-
-                // const signer = provider.getSigner();
-
-                // const nonce = await provider.getTransactionCount(address);
-
-                // // Collect the necessary information
-                // const updateCreditsRequest = {
-                //     user: address,
-                //     nonce: nonce
-                // };
-
-                // // Sign the message
-                // const messageHash = ethers.utils.solidityKeccak256(
-                //     ['address', 'uint256'],
-                //     [updateCreditsRequest.user, updateCreditsRequest.nonce]
-                // );
-
-                // const signedMessage = await signer.signMessage(ethers.utils.arrayify(messageHash));
-
-                // console.log(updateCreditsRequest)
-                // console.log(signedMessage)
-                // console.log(messageHash)
-
-
-                // // Send the meta-transaction to the smart contract
-                // const contract = new ethers.Contract(
-                //     process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT || '',
-                //     genCredit,
-                //     signer
-                // );
-                // await contract.updateCreditsMeta(updateCreditsRequest, signedMessage);
+                console.log(data);
 
             } catch (error) {
                 console.error(error);
@@ -190,7 +130,7 @@ const Create = () => {
                             {
                                 (true) && (
                                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px', marginBottom: '8px' }}>
-                                        <p style={{ marginRight: '15px' }}>You can claim your credits today~ 😊</p>
+                                        <p style={{ marginRight: '15px' }}>You can claim your credits for this month ~ 😊</p>
                                         <Button
                                             style={{ backgroundColor: 'green', color: 'white' }}
                                             onClick={getCredits}
@@ -230,7 +170,7 @@ const Create = () => {
                                                 />
                                             </div>
 
-                                            <Badge count={credits} offset={[-4, 8]} showZero={true} title="credits">
+                                            <Badge count={credits} offset={[-4, 8]} showZero={true} title="credits" overflowCount={999}>
                                                 <Button
                                                     style={{
                                                         width: 300,

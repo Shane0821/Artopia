@@ -4,6 +4,7 @@ pragma solidity ^0.8.20;
 contract CreditManagement {
     address public owner;
 
+    uint256 public monthlyCreditLimit = 100;
     uint256 public dailyCreditLimit = 5;
     uint256 public creditsPerPayment = 100;
 
@@ -30,14 +31,14 @@ contract CreditManagement {
 
     function updateCredits() external {
         // Execute the logic to update credits
-        uint256 day = block.timestamp / 1 days;
+        uint256 month = block.timestamp / 30 days;
         require(
-            lastCreditUpdate[msg.sender] / 1 days < day,
-            "You've claimed your credits today. Come back tomorrow."
+            lastCreditUpdate[msg.sender] / 30 days < month,
+            "You've claimed your credits this month. Come back next month."
         );
-        if (lastCreditUpdate[msg.sender] / 1 days < day) {
-            userCredits[msg.sender] += dailyCreditLimit;
-            lastCreditUpdate[msg.sender] = day * 1 days;
+        if (lastCreditUpdate[msg.sender] / 30 days < month) {
+            userCredits[msg.sender] += monthlyCreditLimit;
+            lastCreditUpdate[msg.sender] = month * 30 days;
         }
     }
 
