@@ -102,36 +102,73 @@ const Create = () => {
 
             try {
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const signer = provider.getSigner();
 
-                const nonce = await provider.getTransactionCount(address);
-
-                // Collect the necessary information
-                const updateCreditsRequest = {
-                    user: address,
-                    nonce: nonce
-                };
-
-                // Sign the message
-                const messageHash = ethers.utils.solidityKeccak256(
-                    ['address', 'uint256'],
-                    [updateCreditsRequest.user, updateCreditsRequest.nonce]
+                const relayerWallet = new ethers.Wallet(
+                    process.env.RELAYER_PK || '',
+                    provider
                 );
 
-                const signedMessage = await signer.signMessage(ethers.utils.arrayify(messageHash));
-
-                console.log(updateCreditsRequest)
-                console.log(signedMessage)
-                console.log(messageHash)
-
-
-                // Send the meta-transaction to the smart contract
+                // Contract interaction
                 const contract = new ethers.Contract(
                     process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT || '',
                     genCredit,
-                    signer
+                    provider
                 );
-                await contract.updateCreditsMeta(updateCreditsRequest, signedMessage);
+
+                // Gas estimation
+                const gasPrice = await provider.getGasPrice();
+                const gasLimit = await contract.estimateGas.yourMethodName(); // Adjust the method name and parameters
+                const nonce = await provider.getTransactionCount(address);
+
+                const iface = new ethers.utils.Interface(genCredit);
+                const encodedFunction = iface.encodeFunctionData("updateCredits", []);
+
+                // Transaction object
+                const transaction = {
+                    to: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
+                    data: encodedFunction,
+                    gasPrice: gasPrice,
+                    gasLimit: gasLimit,
+                    nonce: nonce
+                };
+
+                // Sign and send transaction
+                const signedTransaction = await relayerWallet.signTransaction(transaction);
+                const transactionResponse = await provider.sendTransaction(signedTransaction);
+                const transactionHash = transactionResponse.hash;
+                console.log(transactionResponse)
+
+
+                // const signer = provider.getSigner();
+
+                // const nonce = await provider.getTransactionCount(address);
+
+                // // Collect the necessary information
+                // const updateCreditsRequest = {
+                //     user: address,
+                //     nonce: nonce
+                // };
+
+                // // Sign the message
+                // const messageHash = ethers.utils.solidityKeccak256(
+                //     ['address', 'uint256'],
+                //     [updateCreditsRequest.user, updateCreditsRequest.nonce]
+                // );
+
+                // const signedMessage = await signer.signMessage(ethers.utils.arrayify(messageHash));
+
+                // console.log(updateCreditsRequest)
+                // console.log(signedMessage)
+                // console.log(messageHash)
+
+
+                // // Send the meta-transaction to the smart contract
+                // const contract = new ethers.Contract(
+                //     process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT || '',
+                //     genCredit,
+                //     signer
+                // );
+                // await contract.updateCreditsMeta(updateCreditsRequest, signedMessage);
 
             } catch (error) {
                 console.error(error);
