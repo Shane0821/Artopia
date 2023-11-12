@@ -14,7 +14,8 @@ import {
 import { Layout, Space, Button, notification, Spin, Badge } from 'antd';
 
 import genCredit from '@abi/gencredit.json'
-import { readContract, writeContract, waitForTransaction } from '@wagmi/core'
+import { readContract, writeContract, waitForTransaction } from '@wagmi/core';
+import { ethers } from 'ethers';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
@@ -33,6 +34,7 @@ const Create = () => {
     const [prepareMinting, setPrepareMinting] = useState('');
 
     const [canGetCredit, setCanGetCredit] = useState(false);
+    const [gettingCredit, setGettingCredit] = useState(false);
     const [credits, setCredits] = useState(0);
 
     const { data: session, status } = useSession();
@@ -95,7 +97,47 @@ const Create = () => {
     }, [isConnected, session?.user]);
 
     const getCredits = () => {
+        const getCred = async () => {
+            if (!session?.user || !address) return;
 
+            try {
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const signer = provider.getSigner();
+
+                const nonce = await provider.getTransactionCount(address);
+
+                // Collect the necessary information
+                const updateCreditsRequest = {
+                    user: address,
+                    nonce: nonce
+                };
+
+                // Sign the message
+                const messageHash = ethers.utils.solidityKeccak256(
+                    ['address', 'uint256'],
+                    [updateCreditsRequest.user, updateCreditsRequest.nonce]
+                );
+
+                const signedMessage = await signer.signMessage(ethers.utils.arrayify(messageHash));
+
+                console.log(updateCreditsRequest)
+                console.log(signedMessage)
+                console.log(messageHash)
+
+
+                // Send the meta-transaction to the smart contract
+                const contract = new ethers.Contract(
+                    process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT || '',
+                    genCredit,
+                    signer
+                );
+                await contract.updateCreditsMeta(updateCreditsRequest, signedMessage);
+
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getCred();
     }
 
     return (
@@ -111,6 +153,7 @@ const Create = () => {
                                         <Button
                                             style={{ backgroundColor: 'green', color: 'white' }}
                                             onClick={getCredits}
+                                            loading={gettingCredit}
                                         >
                                             Claim
                                         </Button>
