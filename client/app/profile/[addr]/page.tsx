@@ -9,6 +9,14 @@ import { readContract } from '@wagmi/core'
 import imgABI from '@abi/imagenft.json'
 import promptABI from '@abi/promptnft.json'
 
+import { 
+    getPromptCountByUser,
+    getPromptTokenIdOfUserByIndex,
+    getTokenURIOfPromptByTokenId,
+    getArtCountByUser,
+    getArtTokenIdOfUserByIndex,
+    getTokenURIOfArtByTokenId
+} from '@utils/contract'
 
 interface promptDataType {
     prompt: string,
@@ -38,23 +46,10 @@ function page({ params }: { params: { addr: string } }) {
     const artOfOwnerByIndex = async (usr: string, idx: number) => {
         try {
             // get token id
-            const tokenId: BigInt = await readContract({
-                address: process.env.NEXT_PUBLIC_IMG_NFT_CONTRACT,
-                abi: imgABI,
-                functionName: 'tokenOfOwnerByIndex',
-                chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
-                args: [usr, idx]
-            })
-            const promptId = Number(tokenId)
+            const artId = await getArtTokenIdOfUserByIndex(usr, idx)
 
             // get metadata uri
-            const tokenURI: string = await readContract({
-                address: process.env.NEXT_PUBLIC_IMG_NFT_CONTRACT,
-                abi: imgABI,
-                functionName: 'tokenURI',
-                chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
-                args: [promptId]
-            })
+            const tokenURI: string = await getTokenURIOfArtByTokenId(artId)
             const metaURI = 'https://ipfs.io/ipfs/' + tokenURI.split("ipfs://")[1]
 
             // get info from metadata
@@ -118,25 +113,12 @@ function page({ params }: { params: { addr: string } }) {
     const promptOfOwnerByIndex = async (usr: string, idx: number) => {
         try {
             // get token id
-            const tokenId: BigInt = await readContract({
-                address: process.env.NEXT_PUBLIC_PROMPT_NFT_CONTRACT,
-                abi: promptABI,
-                functionName: 'tokenOfOwnerByIndex',
-                chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
-                args: [usr, idx]
-            })
-            const promptId = Number(tokenId)
+            const promptId = await getPromptTokenIdOfUserByIndex(usr, idx)
 
             // get metadata uri
-            const tokenURI: string = await readContract({
-                address: process.env.NEXT_PUBLIC_PROMPT_NFT_CONTRACT,
-                abi: promptABI,
-                functionName: 'tokenURI',
-                chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
-                args: [promptId]
-            })
+            const tokenURI: string = await getTokenURIOfPromptByTokenId(promptId)
             const metaURI = 'https://ipfs.io/ipfs/' + tokenURI.split("ipfs://")[1]
-
+            
             // get prompt from metadata
             const response = await fetch(metaURI, {
                 method: 'GET'
@@ -146,6 +128,7 @@ function page({ params }: { params: { addr: string } }) {
                 throw new Error(message);
             }
             const data = await response.json();
+
             return data.textData
         } catch (error) {
             console.error(error);
@@ -160,14 +143,7 @@ function page({ params }: { params: { addr: string } }) {
             if (!usr) return
             try {
                 // get prompt nft count
-                const balance: BigInt = await readContract({
-                    address: process.env.NEXT_PUBLIC_PROMPT_NFT_CONTRACT,
-                    abi: promptABI,
-                    functionName: 'balanceOf',
-                    chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
-                    args: [usr]
-                })
-                const cntPrompt = Number(balance)
+                const cntPrompt = await getPromptCountByUser(usr)
 
                 // fetch all
                 var promptURIList: promptDataType[] = []
@@ -190,14 +166,7 @@ function page({ params }: { params: { addr: string } }) {
             if (!usr) return
             try {
                 // get art nft count
-                const balance: BigInt = await readContract({
-                    address: process.env.NEXT_PUBLIC_IMG_NFT_CONTRACT,
-                    abi: imgABI,
-                    functionName: 'balanceOf',
-                    chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
-                    args: [usr]
-                })
-                const cntArt = Number(balance)
+                const cntArt = await getArtCountByUser(usr)
 
                 // fetch all
                 var artList = []
