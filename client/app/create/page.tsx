@@ -59,10 +59,13 @@ const Create = () => {
         setGenerating(false);
     };
 
+    // fetch credits and check if can get daily credits
     React.useEffect(() => {
         if (!isConnected) {
             redirect('/');
         }
+
+        console.log(isConnected, session?.user)
 
         if (isConnected && session?.user) {
             const fetchData = async () => {
@@ -73,6 +76,7 @@ const Create = () => {
                         functionName: 'canUpdateCredit',
                     });
                     setCanGetCredit(Boolean(data));
+                    // console.log(canGetCredit);
 
                     const credits = await readContract({
                         address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
@@ -80,7 +84,7 @@ const Create = () => {
                         functionName: 'getCredits',
                     });
                     setCredits(Number(credits));
-                    console.log(Number(credits));
+                    // console.log(Number(credits));
                 } catch (error) {
                     console.error(error);
                 }
@@ -88,79 +92,100 @@ const Create = () => {
 
             fetchData();
         }
-    }, [isConnected]);
+    }, [isConnected, session?.user]);
+
+    const getCredits = () => {
+
+    }
 
     return (
         <Space direction="vertical" style={{ width: '100%' }} className="sm:px-16 px-6 max-w-7xl" >
             {
                 (isConnected && session?.user) ?
-                    (<Layout>
-                        <Content style={{ padding: '0 0px' }}>
-                            <Layout style={{ padding: '24px 0', background: "white", height: '100vh' }}>
-                                <div
-                                    style={{
-                                        height: '100vh',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        justifyContent: 'space-between'
-                                    }}
-                                >
-                                    <div className="hide-scrollbar" style={{
-                                        height: '73vh',
-                                        overflowY: 'auto',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        borderBottom: '1px solid rgba(128, 128, 128, 0.1)',
-                                    }}>
-                                        Generate
-                                        {/* Left Part */}
-                                        <SidebarCreate
-                                            generating={generating}
-                                            resetGenerating={resetGenerating}
-                                            setJsonData={setJsonData}
-                                        />
-                                    </div>
-
-                                    <Badge count={credits} offset={[-4, 8]} showZero={true} title="credits">
+                    (
+                        <>
+                            {
+                                (canGetCredit) && (
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px', marginBottom: '8px' }}>
+                                        <p style={{ marginRight: '15px' }}>You can claim your credits today~ 😊</p>
                                         <Button
-                                            style={{
-                                                width: 300,
-                                                height: 55,
-                                                backgroundColor: "white",
-                                                marginBottom: '15vh',
-                                                marginTop: 5
-                                            }}
-                                            loading={
-                                                generating || cooldown
-                                                || (!(isConnected && session?.user))
-                                                || fetching || changingVis
-                                                || prepareMinting != ''
-                                            }
-                                            onClick={handleClick}
+                                            style={{ backgroundColor: 'green', color: 'white' }}
+                                            onClick={getCredits}
                                         >
-                                            Generate Image
-                                            <FormatPainterOutlined />
+                                            Claim
                                         </Button>
-                                    </Badge>
+                                    </div>
+                                )
+                            }
+                            <Layout>
+                                <Content style={{ padding: '0 0px' }}>
+                                    <Layout style={{ padding: '24px 0', background: "white", height: '100vh' }}>
+                                        <div
+                                            style={{
+                                                height: '100vh',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'center',
+                                                justifyContent: 'space-between'
+                                            }}
+                                        >
+                                            <div className="hide-scrollbar" style={{
+                                                height: '73vh',
+                                                overflowY: 'auto',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'center',
+                                                borderBottom: '1px solid rgba(128, 128, 128, 0.1)',
+                                            }}>
+                                                Generate
+                                                {/* Left Part */}
+                                                <SidebarCreate
+                                                    generating={generating}
+                                                    resetGenerating={resetGenerating}
+                                                    setJsonData={setJsonData}
+                                                />
+                                            </div>
 
-                                </div>
+                                            <Badge count={credits} offset={[-4, 8]} showZero={true} title="credits">
+                                                <Button
+                                                    style={{
+                                                        width: 300,
+                                                        height: 55,
+                                                        backgroundColor: "white",
+                                                        marginBottom: '15vh',
+                                                        marginTop: 5
+                                                    }}
+                                                    loading={
+                                                        generating || cooldown
+                                                        || (!(isConnected && session?.user))
+                                                        || fetching || changingVis
+                                                        || prepareMinting != ''
+                                                    }
+                                                    onClick={handleClick}
+                                                >
+                                                    Generate Image
+                                                    <FormatPainterOutlined />
+                                                </Button>
+                                            </Badge>
+
+                                        </div>
 
 
-                                <ContentCreate
-                                    jsonData={jsonData}
-                                    setFetching={setFetching}
-                                    fetching={fetching}
-                                    changingVis={changingVis}
-                                    setChangingVis={setChangingVis}
-                                    prepareMinting={prepareMinting}
-                                    setPrepareMinting={setPrepareMinting}
-                                />
+                                        <ContentCreate
+                                            jsonData={jsonData}
+                                            setFetching={setFetching}
+                                            fetching={fetching}
+                                            changingVis={changingVis}
+                                            setChangingVis={setChangingVis}
+                                            prepareMinting={prepareMinting}
+                                            setPrepareMinting={setPrepareMinting}
+                                        />
 
-                            </Layout>
-                        </Content>
-                    </Layout >)
+                                    </Layout>
+                                </Content>
+                            </Layout >
+                        </>
+                    )
                     : (
                         <>
                             <Spin
