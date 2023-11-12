@@ -7,8 +7,14 @@ contract CreditManagement {
     uint256 public dailyCreditLimit = 5;
     uint256 public creditsPerPayment = 100;
 
+    struct UpdateCreditsRequest {
+        address user;
+        uint256 nonce; // Use a nonce to prevent replay attacks
+    }
+
     mapping(address => uint256) public userCredits;
     mapping(address => uint256) public lastCreditUpdate;
+    mapping(address => mapping(uint256 => bool)) public nonceUsed;
 
     event CreditsPurchased(address indexed user, uint256 creditsPurchased);
     event CreditsUsed(address indexed user, uint256 creditsUsed);
@@ -22,18 +28,55 @@ contract CreditManagement {
         owner = msg.sender;
     }
 
-    function updateCredits() external {
-        uint256 day = block.timestamp / 1 days;
-
-        require(
-            lastCreditUpdate[msg.sender] / 1 days < day,
-            "You have claimed credits for today. Come back tomorrow to get more."
+    function updateCreditsMeta(
+        UpdateCreditsRequest memory request,
+        bytes memory signature
+    ) external {
+        // Verify the signature
+        bytes32 messageHash = keccak256(
+            abi.encodePacked(request.user, request.nonce)
         );
+        address signer = recoverSigner(messageHash, signature);
+        require(signer == msg.sender, "Invalid signature");
 
-        if (lastCreditUpdate[msg.sender] / 1 days < day) {
-            userCredits[msg.sender] = dailyCreditLimit;
-            lastCreditUpdate[msg.sender] = day * 1 days;
+        // Ensure the nonce is not used before
+        require(!nonceUsed[request.user][request.nonce], "Nonce already used");
+        nonceUsed[request.user][request.nonce] = true;
+
+        // Execute the logic to update credits
+        uint256 day = block.timestamp / 1 days;
+        require(
+            lastCreditUpdate[request.user] / 1 days < day,
+            "You've claimed your credits today. Come back tomorrow."
+        );
+        if (lastCreditUpdate[request.user] / 1 days < day) {
+            userCredits[request.user] = dailyCreditLimit;
+            lastCreditUpdate[request.user] = day * 1 days;
         }
+    }
+
+    function recoverSigner(
+        bytes32 messageHash,
+        bytes memory signature
+    ) internal pure returns (address) {
+        bytes32 r;
+        bytes32 s;
+        uint8 v;
+
+        // Extract r, s, v from the signature
+        assembly {
+            r := mload(add(signature, 0x20))
+            s := mload(add(signature, 0x40))
+            v := byte(0, mload(add(signature, 0x60)))
+        }
+
+        // Handle Ethereum's weird v value
+        if (v < 27) {
+            v += 27;
+        }
+
+        // Return the signer's address
+        return ecrecover(messageHash, v, r, s);
     }
 
     function canUpdateCredit() public view returns (bool) {
