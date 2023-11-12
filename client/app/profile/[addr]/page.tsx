@@ -191,10 +191,10 @@ function page({ params }: { params: { addr: string } }) {
         // fetch all
         var artList = []
         if (cntArt > 0) {
-          for await (const ipfsURI of Array.from({ length: cntArt },
+          for await (const art of Array.from({ length: cntArt },
             (_, index) => artOfOwnerByIndex(usr, index))) {
-            if (ipfsURI != undefined) {
-              artList.push(ipfsURI)
+            if (art != undefined) {
+              artList.push(art)
             }
           }
         }
