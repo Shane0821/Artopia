@@ -52,7 +52,7 @@ function page({ params }: { params: { addr: string } }) {
   const { data: session, status } = useSession()
   const { address, isConnected } = useAccount()
 
-  const [promptURIList, setPromptURIList] = useState<promptDataType[]>([])
+  const [promptList, setPromptList] = useState<promptDataType[]>([])
   const [artList, setArtList] = useState<artDataType[]>([])
 
   const [popup, setPopup] = useState(false);
@@ -165,17 +165,17 @@ function page({ params }: { params: { addr: string } }) {
         const cntPrompt = await getPromptCountByUser(usr)
 
         // fetch all
-        var promptURIList: promptDataType[] = []
+        var promptList: promptDataType[] = []
         if (cntPrompt > 0) {
           for await (const prompt of Array.from({ length: cntPrompt },
             (_, index) => promptOfOwnerByIndex(usr, index))) {
             if (prompt != undefined) {
-              promptURIList.push(prompt)
+              promptList.push(prompt)
             }
           }
         }
-        console.log("prompt list", promptURIList)
-        setPromptURIList(promptURIList.reverse())
+        console.log("prompt list", promptList)
+        setPromptList(promptList.reverse())
       } catch (error) {
         console.error(error);
       }
@@ -254,12 +254,18 @@ function page({ params }: { params: { addr: string } }) {
         </h2>
         <p className="mt-4 text-gray-600 sm:text-lg">Spark your imagination and creativity - unleash your potential and passion.</p>
       </div>
+      
+      {/* list of prompts */}
       <Spin
         className="mt-12"
         indicator={antIcon}
         spinning={promptFetching}
        />
-      {/* list of prompts */}
+      <Masonry columnsCount={4} gutter="0.5rem">
+        {promptList.map((data, index) => (
+            <></>
+        ))}
+      </Masonry> 
     </section>
   )
 }
