@@ -190,15 +190,27 @@ function page({ params }: { params: { addr: string } }) {
     }, [isConnected]);
 
     return (
-        <div>
-            <div>
-                prompt
+        <section className="w-full flex-center flex-col">
+            <div className='mt-12 text-center'>
+                <h2 className='font-display text-4xl font-extrabold leading-tight text-black sm:text-5xl sm:leading-tight'>
+                    {"Your "} 
+                    <span className="bg-gradient-to-r from-red-600 to-amber-600 bg-clip-text text-transparent">
+                        {"Art"}
+                    </span>
+                </h2>
+                <p className="mt-5 text-gray-600 sm:text-lg">Express, inspire, connect - a collection of creative talents.</p>
             </div>
 
-            <div>
-                art
+            <div className='mt-12 text-center'>
+                <h2 className='font-display text-4xl font-extrabold leading-tight text-black sm:text-5xl sm:leading-tight'>
+                    {"Your "} 
+                    <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+                        {"Prompts"}
+                    </span>
+                </h2>
+                <p className="mt-5 text-gray-600 sm:text-lg">Spark your imagination and creativity - unleash your potential and passion.</p>
             </div>
-        </div>
+        </section>
     )
 }
 
