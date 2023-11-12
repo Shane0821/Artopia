@@ -28,6 +28,19 @@ contract CreditManagement {
         owner = msg.sender;
     }
 
+    function updateCredits() external {
+        // Execute the logic to update credits
+        uint256 day = block.timestamp / 1 days;
+        require(
+            lastCreditUpdate[msg.sender] / 1 days < day,
+            "You've claimed your credits today. Come back tomorrow."
+        );
+        if (lastCreditUpdate[msg.sender] / 1 days < day) {
+            userCredits[msg.sender] = dailyCreditLimit;
+            lastCreditUpdate[msg.sender] = day * 1 days;
+        }
+    }
+
     function updateCreditsMeta(
         UpdateCreditsRequest memory request,
         bytes memory signature
