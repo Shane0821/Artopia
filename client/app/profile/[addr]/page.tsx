@@ -218,23 +218,22 @@ function page({ params }: { params: { addr: string } }) {
     <section className="w-full max-w-7xl flex-center flex-col sm:px-16 px-6">
       <Detail popup={popup} setPopup={setPopup} data={popupData} />
 
-      <div className='mt-12 text-center'>
+      <div className='mt-12 mb-6 text-center'>
         <h2 className='font-display text-4xl font-extrabold leading-tight text-black sm:text-5xl sm:leading-tight'>
           {"Your "} 
           <span className="bg-gradient-to-r from-red-600 to-amber-600 bg-clip-text text-transparent">
             {"Art"}
           </span>
         </h2>
-        <p className="mt-5 text-gray-600 sm:text-lg">Express, inspire, connect - a collection of creative talents.</p>
+        <p className="mt-4 text-gray-600 sm:text-lg">Express, inspire, connect - a collection of creative talents.</p>
 
       </div>
       {/* list of art */}
-      <Spin
-        className="mt-12"
+      <Spin className="mt-12"
         indicator={antIcon}
         spinning={artFetching}
        />
-       <Masonry className="gallery" columnsCount={4}>
+       <Masonry className="gallery" columnsCount={4} gutter="0.5rem">
                 {artList.map((data, index) => (
                     <ArtItem
                         key={index}
@@ -246,14 +245,14 @@ function page({ params }: { params: { addr: string } }) {
                 ))}
         </Masonry> 
 
-      <div className='mt-12 text-center'>
+      <div className='mt-12 mb-6 text-center'>
         <h2 className='font-display text-4xl font-extrabold leading-tight text-black sm:text-5xl sm:leading-tight'>
           {"Your "} 
           <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
             {"Prompts"}
           </span>
         </h2>
-        <p className="mt-5 text-gray-600 sm:text-lg">Spark your imagination and creativity - unleash your potential and passion.</p>
+        <p className="mt-4 text-gray-600 sm:text-lg">Spark your imagination and creativity - unleash your potential and passion.</p>
       </div>
       <Spin
         className="mt-12"
