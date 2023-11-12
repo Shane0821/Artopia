@@ -87,8 +87,6 @@ const Create = () => {
                         functionName: 'getCredits',
                     });
                     setCredits(Number(_credits));
-
-                    console.log(data, _credits, process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT);
                 } catch (error) {
                     console.error(error);
                 }
@@ -138,8 +136,11 @@ const Create = () => {
                 // Sign and send transaction
                 const signedTransaction = await relayerWallet.signTransaction(transaction);
                 const transactionResponse = await provider.sendTransaction(signedTransaction);
-                const transactionHash = transactionResponse.hash;
-                console.log(transactionResponse)
+
+                // Wait for the transaction to be mined
+                const receipt = await provider.waitForTransaction(transactionResponse.hash);
+
+                console.log(receipt);
 
 
                 // const signer = provider.getSigner();
@@ -187,7 +188,7 @@ const Create = () => {
                     (
                         <>
                             {
-                                (canGetCredit) && (
+                                (true) && (
                                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px', marginBottom: '8px' }}>
                                         <p style={{ marginRight: '15px' }}>You can claim your credits today~ 😊</p>
                                         <Button
