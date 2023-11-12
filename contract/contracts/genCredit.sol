@@ -36,7 +36,7 @@ contract CreditManagement {
             "You've claimed your credits today. Come back tomorrow."
         );
         if (lastCreditUpdate[msg.sender] / 1 days < day) {
-            userCredits[msg.sender] = dailyCreditLimit;
+            userCredits[msg.sender] += dailyCreditLimit;
             lastCreditUpdate[msg.sender] = day * 1 days;
         }
     }
@@ -63,7 +63,7 @@ contract CreditManagement {
             "You've claimed your credits today. Come back tomorrow."
         );
         if (lastCreditUpdate[request.user] / 1 days < day) {
-            userCredits[request.user] = dailyCreditLimit;
+            userCredits[request.user] += dailyCreditLimit;
             lastCreditUpdate[request.user] = day * 1 days;
         }
     }

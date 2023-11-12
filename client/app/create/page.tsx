@@ -74,19 +74,21 @@ const Create = () => {
                 try {
                     const data = await readContract({
                         address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
+                        account: address,
                         abi: genCredit,
                         functionName: 'canUpdateCredit',
                     });
                     setCanGetCredit(Boolean(data));
-                    // console.log(canGetCredit);
 
-                    const credits = await readContract({
+                    const _credits = await readContract({
                         address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
+                        account: address,
                         abi: genCredit,
                         functionName: 'getCredits',
                     });
-                    setCredits(Number(credits));
-                    // console.log(Number(credits));
+                    setCredits(Number(_credits));
+
+                    console.log(data, _credits, process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT);
                 } catch (error) {
                     console.error(error);
                 }
@@ -104,7 +106,7 @@ const Create = () => {
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
                 const relayerWallet = new ethers.Wallet(
-                    process.env.RELAYER_PK || '',
+                    process.env.NEXT_PUBLIC_RELAYER_PK || '',
                     provider
                 );
 
@@ -117,8 +119,9 @@ const Create = () => {
 
                 // Gas estimation
                 const gasPrice = await provider.getGasPrice();
-                const gasLimit = await contract.estimateGas.yourMethodName(); // Adjust the method name and parameters
+                const gasLimit = await contract.estimateGas.updateCredits(); // Adjust the method name and parameters
                 const nonce = await provider.getTransactionCount(address);
+                console.log(nonce)
 
                 const iface = new ethers.utils.Interface(genCredit);
                 const encodedFunction = iface.encodeFunctionData("updateCredits", []);
