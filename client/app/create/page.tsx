@@ -11,7 +11,7 @@ import {
     FormatPainterOutlined,
     LoadingOutlined
 } from '@ant-design/icons';
-import { Layout, Space, Button, notification, Spin } from 'antd';
+import { Layout, Space, Button, notification, Spin, Badge } from 'antd';
 
 import genCredit from '@abi/gencredit.json'
 import { readContract, writeContract, waitForTransaction } from '@wagmi/core'
@@ -42,12 +42,17 @@ const Create = () => {
 
     const handleClick = () => {
         console.log('handleclick', generating)
-        setGenerating(true);
 
-        setCooldown(true);
-        setTimeout(() => {
-            setCooldown(false);
-        }, 6000);
+        if (credits) {
+            setGenerating(true);
+
+            setCooldown(true);
+            setTimeout(() => {
+                setCooldown(false);
+            }, 6000);
+        } else {
+
+        }
     };
 
     const resetGenerating = () => {
@@ -59,21 +64,26 @@ const Create = () => {
             redirect('/');
         }
 
-        if (isConnected) {
+        if (isConnected && session?.user) {
             const fetchData = async () => {
-                const data = await readContract({
-                    address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
-                    abi: genCredit,
-                    functionName: 'canUpdateCredit',
-                });
-                console.log(data);
+                try {
+                    const data = await readContract({
+                        address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
+                        abi: genCredit,
+                        functionName: 'canUpdateCredit',
+                    });
+                    setCanGetCredit(Boolean(data));
 
-                const credits = await readContract({
-                    address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
-                    abi: genCredit,
-                    functionName: 'getCredits',
-                });
-                console.log(Number(credits))
+                    const credits = await readContract({
+                        address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
+                        abi: genCredit,
+                        functionName: 'getCredits',
+                    });
+                    setCredits(Number(credits));
+                    console.log(Number(credits));
+                } catch (error) {
+                    console.error(error);
+                }
             };
 
             fetchData();
@@ -113,25 +123,28 @@ const Create = () => {
                                         />
                                     </div>
 
-                                    <Button
-                                        style={{
-                                            width: 300,
-                                            height: 55,
-                                            backgroundColor: "white",
-                                            marginBottom: '15vh',
-                                            marginTop: 5
-                                        }}
-                                        loading={
-                                            generating || cooldown
-                                            || (!(isConnected && session?.user))
-                                            || fetching || changingVis
-                                            || prepareMinting != ''
-                                        }
-                                        onClick={handleClick}
-                                    >
-                                        Generate Image
-                                        <FormatPainterOutlined />
-                                    </Button>
+                                    <Badge count={credits} offset={[-4, 8]} showZero={true} title="credits">
+                                        <Button
+                                            style={{
+                                                width: 300,
+                                                height: 55,
+                                                backgroundColor: "white",
+                                                marginBottom: '15vh',
+                                                marginTop: 5
+                                            }}
+                                            loading={
+                                                generating || cooldown
+                                                || (!(isConnected && session?.user))
+                                                || fetching || changingVis
+                                                || prepareMinting != ''
+                                            }
+                                            onClick={handleClick}
+                                        >
+                                            Generate Image
+                                            <FormatPainterOutlined />
+                                        </Button>
+                                    </Badge>
+
                                 </div>
 
 
