@@ -53,7 +53,6 @@ const ArtItem = ({ data, index, setPopup, setPopupData }: ArtItemProps) => {
             }}
             key={index}
             onClick={() => {
-                console.log(data)
                 setPopup(true);
                 setPopupData(data);
             }}
