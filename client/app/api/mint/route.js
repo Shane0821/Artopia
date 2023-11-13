@@ -66,7 +66,7 @@ async function uploadMetaDataToPinata(artIpfs, promptIpfs, art) {
     let metaData = {
         name: art.title || "",
         description: art.title || "",
-        image: artIpfs,
+        image: 'ipfs://' + artIpfs,
         attributes: [
             {
                 trait_type: "Model",
@@ -74,7 +74,7 @@ async function uploadMetaDataToPinata(artIpfs, promptIpfs, art) {
             },
             {
                 trait_type: "Prompt",
-                value: promptIpfs
+                value: 'ipfs://' + promptIpfs
             },
             {
                 trait_type: "Steps",

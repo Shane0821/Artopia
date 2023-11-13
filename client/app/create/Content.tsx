@@ -196,6 +196,7 @@ function ContentCreate({
             // to do: add notification
             return
         }
+        
         // mint prompt
         try {
             // check prompt ownership
@@ -244,6 +245,8 @@ function ContentCreate({
                 description: `${error}`,
                 duration: 3,
             });
+            setPrepareMinting('');
+            return
         }
 
         // mint art
