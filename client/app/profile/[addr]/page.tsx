@@ -10,6 +10,7 @@ const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 import '@styles/gallery.css'
 import ArtItem from '@app/profile/ArtItem'
 import Detail from '@app/profile/ArtDetail'
+import PromptCard from '@app/profile/PromptCard'
 import Masonry from "react-responsive-masonry"
 
 import { useAccount } from "wagmi"
@@ -261,9 +262,9 @@ function page({ params }: { params: { addr: string } }) {
         indicator={antIcon}
         spinning={promptFetching}
        />
-      <Masonry columnsCount={4} gutter="0.5rem">
+      <Masonry columnsCount={3} gutter="1rem" className="mb-6">
         {promptList.map((data, index) => (
-            <></>
+            <PromptCard data={data} index={index} key={index}/>
         ))}
       </Masonry> 
     </section>
