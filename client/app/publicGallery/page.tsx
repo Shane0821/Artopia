@@ -12,14 +12,14 @@ import { LoadingOutlined, ClockCircleOutlined, LikeOutlined, EyeOutlined, Dashbo
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
 import '@styles/gallery.css'
-import GalleryItem from '@app/publicGallery/GalleryItem'
+import GalleryItem from '@components/publicGallery/GalleryItem'
 
 import Masonry from "react-responsive-masonry"
 
 import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
 
-import Detail from '@app/publicGallery/GalleryDetail'
+import Detail from '@components/publicGallery/GalleryDetail'
 
 function PublicGalery() {
     const [noti, contextHolder] = notification.useNotification();
