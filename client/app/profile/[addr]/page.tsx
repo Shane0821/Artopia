@@ -8,9 +8,9 @@ import { LoadingOutlined, ClockCircleOutlined, LikeOutlined, EyeOutlined, Dashbo
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
 import '@styles/gallery.css'
-import ArtItem from '@app/profile/ArtItem'
-import Detail from '@app/profile/ArtDetail'
-import PromptCard from '@app/profile/PromptCard'
+import ArtItem from '@components/profile/ArtItem'
+import Detail from '@components/profile/ArtDetail'
+import PromptCard from '@components/profile/PromptCard'
 import Masonry from "react-responsive-masonry"
 
 import { useAccount } from "wagmi"
