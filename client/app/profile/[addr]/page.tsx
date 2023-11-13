@@ -30,6 +30,7 @@ import {
 } from '@utils/contract'
 
 interface promptDataType {
+  cid: string
   prompt: string,
   negative_prompt: string
 }
@@ -148,7 +149,7 @@ function page({ params }: { params: { addr: string } }) {
         throw new Error(message);
       }
       const data = await response.json();
-
+      data.textData.cid = tokenURI.split("ipfs://")[1]
       return data.textData
     } catch (error) {
       console.error(error);
