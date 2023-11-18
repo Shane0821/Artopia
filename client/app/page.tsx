@@ -1,4 +1,4 @@
-import Image from '@node_modules/next/image'
+import { useEffect } from 'react'
 
 const Home = () => {
   const bl = ['pumpkin-little-girl-1.png', 'pumpkin-little-girl-3.png', 'witch-2.png',
@@ -77,13 +77,13 @@ const Home = () => {
         </p>
       </div>
       <div className="home_img_container">
-        <Image width={200} height={200} alt='left' src={getImg('left')} />
-        <Image width={200} height={200} alt='center' src={getImg('center')} />
-        <Image width={200} height={200} alt='top left' src={getImg('ul')} />
-        <Image width={200} height={200} alt='bottom left' src={getImg('bl')} />
-        <Image width={200} height={200} alt='top right' src={getImg('ur')} />
-        <Image width={200} height={200} alt='bottom right' src={getImg('br')} />
-        <Image width={200} height={200} alt='right' src={getImg('right')} />
+        <img alt='left' src={getImg('left')} />
+        <img alt='center' src={getImg('center')} />
+        <img alt='top left' src={getImg('ul')} />
+        <img alt='bottom left' src={getImg('bl')} />
+        <img alt='top right' src={getImg('ur')} />
+        <img alt='bottom right' src={getImg('br')} />
+        <img alt='right' src={getImg('right')} />
       </div>
     </section>
   )
