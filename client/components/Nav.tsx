@@ -54,15 +54,17 @@ function Nav() {
           <p className='logo_text'>Artopia</p>
         </Link>
 
-        <Dropdown menu={{ items }} placement="bottomLeft">
+        {/* <Dropdown menu={{ items }} placement="bottomLeft">
           <div className='flex flex-center text-gray-500 hover:text-black'>
             <Link href='/collection' className='nav_link'>
               Collection
             </Link>
             <DownOutlined style={{ fontSize: '0.7rem' }} />
           </div>
-        </Dropdown>
-        
+        </Dropdown> */}
+
+        <Link href='/collections' className='nav_link'>Collecttions</Link>
+        <Link href='/publicGallery' className='nav_link'>Gallery</Link>
         <Link href='/prompts' className='nav_link'>Prompts</Link>
       </div>
 
