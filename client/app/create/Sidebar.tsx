@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import {
     Layout, Select, Slider, Input,
-    Collapse, Divider, Image, Space, notification
+    Collapse, Divider, Image, Space, notification,
+    Button
 } from 'antd';
 import {
     UpOutlined, DownOutlined, HighlightOutlined,
     FullscreenOutlined, UnorderedListOutlined,
-    PieChartOutlined, SketchOutlined
+    PieChartOutlined, SketchOutlined, SyncOutlined
 } from '@ant-design/icons';
 
 import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
+import { generatePrompts } from '@utils/randomPrompt'
 
 const { Sider } = Layout;
 const { Option } = Select;
@@ -258,15 +260,26 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
                 >
                     <div style={{ marginBottom: '10px' }}>
                         Prompt
-                        <Input.TextArea
-                            placeholder="Describe something you'd like to see generated. Experiment with different words and styles... "
-                            style={{ marginTop: '10px', marginBottom: '20px' }}
-                            autoSize={{ minRows: 4 }}
-                            value={prompt}
-                            onChange={(e) => setPrompt(e.target.value)}
-                        />
+                        <div style={{ marginTop: '10px' }}>
+                            <Input.TextArea
+                                placeholder="Describe something you'd like to see generated. Experiment with different words and styles... "
+                                autoSize={{ minRows: 4 }}
+                                value={prompt}
+                                onChange={(e) => setPrompt(e.target.value)}
+                            />
+                        </div>
+                        <Button
+                            type="default"
+                            style={{ float: 'right', marginBottom: '20px', marginTop: '2px' }}
+                            onClick={() => setPrompt(generatePrompts())}
+                            icon={<SyncOutlined />}
+                            title={'Random'}
+                            size='small'
+                        >
+                        </Button>
                     </div>
-                    <div>
+
+                    <div style={{ marginTop: '30px' }}>
                         Negative prompt
                         <Input.TextArea
                             placeholder="Enter negative prompt: Disfigured, cartoon, blurry, ..."

@@ -17,19 +17,19 @@ describe("PromptNFT Test", function () {
     let tx = await myToken.awardItem(myAddress, "moon mountain");
     await tx.wait();
 
-    let tokenOwner = await myToken.ownerOf(0);
+    let tokenOwner = await myToken.ownerOf(1);
     expect(tokenOwner).to.equal(myAddress);
 
-    let tokenURI = await myToken.tokenURI(0);
+    let tokenURI = await myToken.tokenURI(1);
     expect(tokenURI).to.equal("ipfs://moon mountain");
 
     tx = await myToken.awardItem(myAddress, "moon mountain water");
     await tx.wait();
 
-    tokenOwner = await myToken.ownerOf(1);
+    tokenOwner = await myToken.ownerOf(2);
     expect(tokenOwner).to.equal(myAddress);
 
-    tokenURI = await myToken.tokenURI(1);
+    tokenURI = await myToken.tokenURI(2);
     expect(tokenURI).to.equal("ipfs://moon mountain water");
   });
 
@@ -48,14 +48,18 @@ describe("PromptNFT Test", function () {
     tx = await myToken.awardItem(myAddress, "moon mountain water");
     await tx.wait();
 
-    tx = await myToken.transferFrom(myAddress, otherAddress, 0);
+    tx = await myToken.transferFrom(myAddress, otherAddress, 1);
     tx.wait()
     
-    let tokenOwner = await myToken.ownerOf(0);
+    let tokenOwner = await myToken.ownerOf(1);
     expect(tokenOwner).to.equal(otherAddress);
 
-    tokenOwner = await myToken.ownerOf(1);
+    tokenOwner = await myToken.ownerOf(2);
     expect(tokenOwner).to.equal(myAddress);
+
+    tokenOwner = await myToken.getOnwerByCID("moon mountain");
+    expect(tokenOwner).to.equal(otherAddress);
+
   })
 
   it("double mint test", async function () {
