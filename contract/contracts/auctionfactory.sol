@@ -12,9 +12,14 @@ contract AuctionFactory {
         imgContractAddress = t;
     }
 
-    function createAuction(uint duration, uint256 tokenId) public {
+    function createAuction(uint duration, uint256 tokenId) public returns (uint){
         Auction newAuction = new Auction(duration, payable(msg.sender), tokenId, imgContractAddress);
         auctions.push(address(newAuction));
+        return auctions.length - 1;
+    }
+
+    function getAuctionByIndex(uint index) public view returns (address) {
+        return auctions[index];
     }
 
     function allAuctions() public view returns (address[] memory) {
