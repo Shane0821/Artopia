@@ -234,7 +234,7 @@ function page({ params }: { params: { addr: string } }) {
 
       <div className='mt-12 mb-6 text-center'>
         <h2 className='font-display text-4xl font-extrabold leading-tight text-black sm:text-5xl sm:leading-tight'>
-          {"Your "}
+          {session?.user?.name === params.addr ? "Your " : `User's `}
           <span className="bg-gradient-to-r from-red-600 to-amber-600 bg-clip-text text-transparent">
             {"Art"}
           </span>
@@ -262,7 +262,7 @@ function page({ params }: { params: { addr: string } }) {
       ) : !artFetching && (
         <div className="text-center my-6 flex flex-center gap-3">
           <h1 className='font-display text-xl font-bold text-gray-500 sm:text-3xl'>
-            No artwork yet ?
+          {session?.user?.name === params.addr ? "No artwork yet ?" : `No artwork yet`}
           </h1>
           <img
             src='/assets/icons/point-right.svg'
@@ -271,15 +271,15 @@ function page({ params }: { params: { addr: string } }) {
             height={45}
             className='object-contain opacity-75'
           />
-          <a href="/create"
+          <a href={session?.user?.name === params.addr ? "/create" : "/"}
             className='outline_btn'
-          >Create</a>
+          >{session?.user?.name === params.addr ? "Create" : "Explore Others"}</a>
         </div>
       )}
 
       <div className='mt-12 mb-6 text-center'>
         <h2 className='font-display text-4xl font-extrabold leading-tight text-black sm:text-5xl sm:leading-tight'>
-          {"Your "}
+          {session?.user?.name === params.addr ? "Your " : `User's `}
           <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
             {"Prompts"}
           </span>
@@ -299,10 +299,10 @@ function page({ params }: { params: { addr: string } }) {
             <PromptCard data={data} index={index} key={index} />
           ))}
         </Masonry>
-      ) : !promptFetching && (
+      ) : !promptFetching &&(
         <div className="text-center my-6 flex-center gap-3">
           <h1 className='font-display text-xl font-bold text-gray-500 sm:text-3xl'>
-            No prompt yet ?
+            {session?.user?.name === params.addr ? "No prompt yet ?" : `No prompt yet`}
           </h1>
           <img
             src='/assets/icons/point-right.svg'
@@ -311,9 +311,9 @@ function page({ params }: { params: { addr: string } }) {
             height={45}
             className='object-contain opacity-75'
           />
-          <a href="/create"
+          <a href={session?.user?.name === params.addr ? "/create" : "/"}
             className='black_btn'
-          >Create</a>
+          >{session?.user?.name === params.addr ? "Create" : "Explore Others"}</a>
         </div>
       )}
     </section>
