@@ -13,28 +13,35 @@ contract ImageNFT is ERC721URIStorage, ERC721Enumerable {
 
     PromptNFT promptContract;
 
-    mapping(string => uint8) cids;
+    mapping(string => uint256) cids;
 
     constructor(address addr) ERC721("ImageNFT", "INFT") {
         promptContract = PromptNFT(addr);
     }
 
+    function getTokenIdByCID(string memory cid) public view returns (uint256) {
+        return cids[cid]; // return token id
+    }
+
     function awardItem(address user, string memory metadatacid, string memory cid, string memory promptcid)
         public returns (uint256) {
-        require(cids[cid] != 1, "artwork already exists");
-
         // check ownership of prompt
         address owner = promptContract.getOnwerByCID(promptcid);
         require(owner == user, "you are not the owner of the prompt");
 
-        // mark cid as used and mint
-        cids[cid] = 1;
+        // check ownership of artwork
+        require(cids[cid] == 0, "artwork already exists");
 
+       // increament to make sure that every element in cids > 0
+        _tokenIds.increment();
+
+        // mark cid as used and mint
         uint256 newItemId = _tokenIds.current();
+        cids[cid] = newItemId;
+
         _mint(user, newItemId);
         _setTokenURI(newItemId, metadatacid);
 
-        _tokenIds.increment();
         return newItemId;
     }
 

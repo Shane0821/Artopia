@@ -3,8 +3,8 @@ pragma solidity ^0.8.20;
 
 import './imagenft.sol';
 
-contract ImageAuction {
-    ImageNFT public nftContract;
+contract Auction {
+    ImageNFT public imgContract;
 
     // Parameters of the auction. Times are either
     // absolute unix timestamps (seconds since 1970-01-01)
@@ -50,11 +50,11 @@ contract ImageAuction {
     /// beneficiary address `beneficiaryAddress`.
     constructor(uint biddingTime, address payable beneficiaryAddress,
                 uint256 _tokenId, address contractAddress) {
-        auctionEndTime = block.timestamp + biddingTime;
+        auctionEndTime = block.timestamp + biddingTime; // second
         beneficiary = beneficiaryAddress;
         organizer = payable(msg.sender);
         tokenId = _tokenId;
-        nftContract = ImageNFT(contractAddress);
+        imgContract = ImageNFT(contractAddress);
     }
 
     /// Bid on the auction with the value sent
@@ -142,9 +142,10 @@ contract ImageAuction {
         emit AuctionEnded(highestBidder, highestBid);
 
         // 3. Interaction
-        beneficiary.transfer(highestBid * 975 / 1000);
-        nftContract.transferFrom(beneficiary, highestBidder, tokenId);
+        uint beneficiaryTransfer = highestBid * 975 / 1000;
+        beneficiary.transfer(beneficiaryTransfer);
+        imgContract.transferFrom(beneficiary, highestBidder, tokenId);
 
-        organizer.transfer(highestBid * 25 / 1000);
+        organizer.transfer(highestBid - beneficiaryTransfer);
     }
-}
+}   
