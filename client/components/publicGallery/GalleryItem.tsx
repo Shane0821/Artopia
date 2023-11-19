@@ -44,11 +44,12 @@ const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemP
     });
 
     const [like, setLike] = useState(false);
+    const [view, setView] = useState(false);
     const [likes, setLikes] = useState(0);
     const [views, setViews] = useState(0);
 
     const checkViewLike = () => {
-        setLikes(0), setViews(0), setLike(false);
+        setLikes(0), setViews(0), setLike(false), setView(false);
         if (data.action && data.action.length > 0) {
             setLikes(data.action[0].likes);
             setViews(data.action[0].views);
@@ -58,6 +59,11 @@ const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemP
                     setLike(true);
                 }
             }
+            for (let address of data.action[0].viewedBy) {
+                if (user && user.name === address) {
+                    setView(true);
+                }
+            }
         }
     }
 
@@ -65,13 +71,13 @@ const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemP
         checkViewLike();
     }, [data]);
 
-    const handleLike = () => {
-        const postLike = async () => {
+    const handleViewLike = (type: string) => {
+        const postViewLike = async () => {
             try {
                 const response = await fetch(`/api/publicGallery/${data._id}`, {
                     method: "POST",
                     body: JSON.stringify({
-                        type: 'like'
+                        type: type
                     })
                 });
 
@@ -81,19 +87,24 @@ const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemP
                     setLikes(result.likes);
                     setViews(result.views);
 
-                    setLike(true);
+                    if (type === 'like') setLike(true);
+                    if (type === 'view') setView(true);
                 } else {
-                    setLike(false);
+                    if (type === 'like') setLike(false);
+                    if (type === 'view') setView(false);
                 }
             } catch (error) {
                 // console.log(error);
-                setLike(false);
+                if (type === 'like') setLike(false);
+                if (type === 'view') setView(false);
             }
         }
-        if (!user || like) return;
+        if (type === 'like' && (!user || like)) return;
+        if (type === 'view' && (!user || view)) return;
 
-        setLike(true);
-        postLike();
+        if (type === 'like') setLike(true);
+        if (type === 'view') setView(true);
+        postViewLike();
     }
 
     return (
@@ -108,6 +119,7 @@ const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemP
             onClick={() => {
                 setPopup(true);
                 setPopupData(data);
+                handleViewLike('view')
             }}
         >
             < img
@@ -131,7 +143,7 @@ const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemP
                         className="buttonStyle"
                         icon={<HeartOutlined />}
                         danger={like}
-                        onClick={() => { handleLike() }}
+                        onClick={() => { handleViewLike('like') }}
                     />
                 </Tooltip>
             </div>
@@ -157,11 +169,11 @@ const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemP
                 {/* Right-aligned items: views and likes */}
                 <div className="flex items-center">
                     <div className="flex items-center mr-4">
-                        <span className="mr-2">{likes}</span> {/* Views count */}
+                        <span className="mr-2">{views}</span> {/* Views count */}
                         <EyeOutlined />
                     </div>
                     <div className="flex items-center">
-                        <span className="mr-2">{views}</span> {/* Likes count */}
+                        <span className="mr-2">{likes}</span> {/* Likes count */}
                         <HeartOutlined />
                     </div>
                 </div>
