@@ -1,6 +1,8 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
+import { redirect } from 'next/navigation'
+
 import {
   Select, notification, Spin, Space
 } from 'antd';
@@ -158,10 +160,19 @@ function page({ params }: { params: { addr: string } }) {
   }
 
   useEffect(() => {
+    if (!isConnected) {
+      redirect('/');
+    }
+  }, [isConnected, session?.user]);
+
+  useEffect(() => {
     if (!isConnected) return
 
     const loadPrompt = async (usr: string) => {
-      if (!usr) return
+      if (!usr) {
+        setPromptFetching(false)
+        return
+      } 
       try {
         // get prompt nft count
         const cntPrompt = await getPromptCountByUser(usr)
@@ -186,7 +197,6 @@ function page({ params }: { params: { addr: string } }) {
 
     const loadArt = async (usr: string) => {
       if (!usr) {
-        setPromptFetching(false)
         setArtFetching(false)
         return
       }
