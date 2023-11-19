@@ -1,10 +1,12 @@
-import { readContract } from '@wagmi/core'
+import { readContract, writeContract, waitForTransaction } from '@wagmi/core'
 
 import imgABI from '@abi/imagenft.json'
 import promptABI from '@abi/promptnft.json'
+import auctionfactoryABI from '@abi/auctionfactory.json'
 
 const promptContractAddr = process.env.NEXT_PUBLIC_PROMPT_NFT_CONTRACT
 const artContractAddr = process.env.NEXT_PUBLIC_IMG_NFT_CONTRACT
+const auctionFactoryAddr = process.env.NEXT_PUBLIC_AUCTION_FACTORY_CONTRACT
 const chainId: number = Number(process.env.NEXT_PUBLIC_CHAIN_ID)
 
 // prompt
@@ -96,6 +98,28 @@ export const getTokenURIOfArtByTokenId = async(tokenId: number) => {
             args: [tokenId]
         })
         return tokenURI
+    } catch (error) {
+        throw error // should be handled by caller
+    }
+}
+
+// auction
+export const createAuction = async(duration: number, tokenId: number) => {
+    try {
+        const { hash } = await writeContract({
+            address: auctionFactoryAddr,
+            abi: auctionfactoryABI,
+            functionName: 'createAuction',
+            chainId: chainId,
+            args: [duration, tokenId]
+        })
+
+        const data = await waitForTransaction({
+            hash: hash,
+        })
+
+        // return auction index in data
+        console.log(data)
     } catch (error) {
         throw error // should be handled by caller
     }
