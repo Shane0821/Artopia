@@ -42,9 +42,6 @@ interface ArtItemProps {
 const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) => {
     const { data: session, status } = useSession()
 
-    const price = 0
-    const inauction = false
-
     const [ref, inView] = useInView({
         threshold: 0,
         triggerOnce: true,
