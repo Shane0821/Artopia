@@ -97,7 +97,7 @@ function page({ params }: { params: { addr: string } }) {
       };
       imgData.name = data.name
       imgData.description = data.description
-      imgData.cid = data.image.split("ipfs://")[0] // should be 1
+      imgData.cid = data.image.split("ipfs://")[1] ? data.image.split("ipfs://")[1] : data.image.split("ipfs://")[0] // should be 1
 
       data.attributes?.forEach((attribute: any) => {
         switch (attribute.trait_type) {
@@ -105,7 +105,7 @@ function page({ params }: { params: { addr: string } }) {
             imgData.model = attribute.value;
             break;
           case 'Prompt':
-            imgData.promptcid = attribute.value.split("ipfs://")[0]; // // should be 1
+            imgData.promptcid = attribute.value.split("ipfs://")[1] ? data.image.split("ipfs://")[1] : data.image.split("ipfs://")[0]; // // should be 1
             break;
           case 'Steps':
             imgData.steps = attribute.value;
