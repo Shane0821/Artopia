@@ -25,7 +25,7 @@ contract ImageNFT is ERC721URIStorage, ERC721Enumerable {
 
         // check ownership of prompt
         address owner = promptContract.getOnwerByCID(promptcid);
-        require(owner == user || owner == address(0), "you are not the owner of the prompt");
+        require(owner == user, "you are not the owner of the prompt");
 
         // mark cid as used and mint
         cids[cid] = 1;
