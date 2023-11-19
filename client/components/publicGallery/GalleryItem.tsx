@@ -44,20 +44,25 @@ const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemP
     });
 
     const [like, setLike] = useState(false);
+    const [likes, setLikes] = useState(0);
+    const [views, setViews] = useState(0);
 
-    const checkLike = () => {
+    const checkViewLike = () => {
+        setLikes(0), setViews(0), setLike(false);
         if (data.action && data.action.length > 0) {
+            setLikes(data.action[0].likes);
+            setViews(data.action[0].views);
+
             for (let address of data.action[0].likedBy) {
                 if (user && user.name === address) {
-                    return true;
+                    setLike(true);
                 }
             }
         }
-        return false;
     }
 
     useEffect(() => {
-        setLike(checkLike());
+        checkViewLike();
     }, [data]);
 
     const handleLike = () => {
@@ -72,14 +77,22 @@ const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemP
 
                 if (response.ok) {
                     const result = await response.json();
+
+                    setLikes(result.likes);
+                    setViews(result.views);
+
                     setLike(true);
+                } else {
+                    setLike(false);
                 }
             } catch (error) {
                 // console.log(error);
+                setLike(false);
             }
         }
-        if (checkLike() || !user || like) return;
+        if (!user || like) return;
 
+        setLike(true);
         postLike();
     }
 
@@ -144,11 +157,11 @@ const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemP
                 {/* Right-aligned items: views and likes */}
                 <div className="flex items-center">
                     <div className="flex items-center mr-4">
-                        <span className="mr-2">{data.views}</span> {/* Views count */}
+                        <span className="mr-2">{likes}</span> {/* Views count */}
                         <EyeOutlined />
                     </div>
                     <div className="flex items-center">
-                        <span className="mr-2">{data.likes}</span> {/* Likes count */}
+                        <span className="mr-2">{views}</span> {/* Likes count */}
                         <HeartOutlined />
                     </div>
                 </div>
