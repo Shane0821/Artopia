@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-    Select, notification, Spin, Space, Image
+  Select, notification, Spin, Space
 } from 'antd';
 import { LoadingOutlined, ClockCircleOutlined, LikeOutlined, EyeOutlined, DashboardOutlined } from '@ant-design/icons';
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
@@ -20,7 +20,7 @@ import { readContract } from '@wagmi/core'
 import imgABI from '@abi/imagenft.json'
 import promptABI from '@abi/promptnft.json'
 
-import { 
+import {
   getPromptCountByUser,
   getPromptTokenIdOfUserByIndex,
   getTokenURIOfPromptByTokenId,
@@ -59,8 +59,8 @@ function page({ params }: { params: { addr: string } }) {
 
   const [popup, setPopup] = useState(false);
   const [popupData, setPopupData] = useState({});
-  const [promptFetching, setPromptFetching] = useState(false);
-  const [artFetching, setArtFetching] = useState(false);
+  const [promptFetching, setPromptFetching] = useState(true);
+  const [artFetching, setArtFetching] = useState(true);
 
   const artOfOwnerByIndex = async (usr: string, idx: number) => {
     try {
@@ -139,7 +139,7 @@ function page({ params }: { params: { addr: string } }) {
       // get metadata uri
       const tokenURI: string = await getTokenURIOfPromptByTokenId(promptId)
       const metaURI = 'https://ipfs.io/ipfs/' + tokenURI.split("ipfs://")[1]
-      
+
       // get prompt from metadata
       const response = await fetch(metaURI, {
         method: 'GET'
@@ -185,7 +185,11 @@ function page({ params }: { params: { addr: string } }) {
     }
 
     const loadArt = async (usr: string) => {
-      if (!usr) return
+      if (!usr) {
+        setPromptFetching(false)
+        setArtFetching(false)
+        return
+      }
       try {
         // get art nft count
         const cntArt = await getArtCountByUser(usr)
@@ -200,7 +204,7 @@ function page({ params }: { params: { addr: string } }) {
             }
           }
         }
-        console.log("art uri list", artList)
+        console.log("art list", artList)
         setArtList(artList.reverse())
       } catch (error) {
         console.error(error);
@@ -208,11 +212,9 @@ function page({ params }: { params: { addr: string } }) {
       setArtFetching(false)
     }
 
-    setPromptFetching(true)
-    setArtFetching(true)
     setTimeout(() => {
-        loadPrompt(params.addr)
-        loadArt(params.addr)
+      loadPrompt(params.addr)
+      loadArt(params.addr)
     }, 2000)
   }, []);
 
@@ -222,7 +224,7 @@ function page({ params }: { params: { addr: string } }) {
 
       <div className='mt-12 mb-6 text-center'>
         <h2 className='font-display text-4xl font-extrabold leading-tight text-black sm:text-5xl sm:leading-tight'>
-          {"Your "} 
+          {"Your "}
           <span className="bg-gradient-to-r from-red-600 to-amber-600 bg-clip-text text-transparent">
             {"Art"}
           </span>
@@ -234,40 +236,76 @@ function page({ params }: { params: { addr: string } }) {
       <Spin className="mt-12"
         indicator={antIcon}
         spinning={artFetching}
-       />
-       <Masonry className="gallery" columnsCount={4} gutter="0.5rem">
-                {artList.map((data, index) => (
-                    <ArtItem
-                        key={index}
-                        data={data}
-                        index={index}
-                        setPopup={setPopup}
-                        setPopupData={setPopupData}
-                    />
-                ))}
-        </Masonry> 
+      />
+      {artList.length > 0 ? (
+        <Masonry className="gallery" columnsCount={4} gutter="0.5rem">
+          {artList.map((data, index) => (
+            <ArtItem
+              key={index}
+              data={data}
+              index={index}
+              setPopup={setPopup}
+              setPopupData={setPopupData}
+            />
+          ))}
+        </Masonry>
+      ) : !artFetching && (
+        <div className="text-center my-6 flex flex-center gap-3">
+          <h1 className='font-display text-xl font-bold text-gray-500 sm:text-3xl'>
+            No artwork yet ?
+          </h1>
+          <img
+            src='/assets/icons/point-right.svg'
+            alt='right'
+            width={45}
+            height={45}
+            className='object-contain opacity-75'
+          />
+          <a href="/create"
+            className='outline_btn'
+          >Create</a>
+        </div>
+      )}
 
       <div className='mt-12 mb-6 text-center'>
         <h2 className='font-display text-4xl font-extrabold leading-tight text-black sm:text-5xl sm:leading-tight'>
-          {"Your "} 
+          {"Your "}
           <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
             {"Prompts"}
           </span>
         </h2>
         <p className="mt-4 text-gray-600 sm:text-lg">Spark your imagination and creativity - unleash your potential and passion.</p>
       </div>
-      
+
       {/* list of prompts */}
       <Spin
         className="mt-12"
         indicator={antIcon}
         spinning={promptFetching}
-       />
-      <Masonry columnsCount={3} gutter="1rem" className="mb-6">
-        {promptList.map((data, index) => (
-            <PromptCard data={data} index={index} key={index}/>
-        ))}
-      </Masonry> 
+      />
+      {promptList.length > 0 ? (
+        <Masonry columnsCount={3} gutter="1rem" className="mb-6">
+          {promptList.map((data, index) => (
+            <PromptCard data={data} index={index} key={index} />
+          ))}
+        </Masonry>
+      ) : !promptFetching && (
+        <div className="text-center my-6 flex-center gap-3">
+          <h1 className='font-display text-xl font-bold text-gray-500 sm:text-3xl'>
+            No prompt yet ?
+          </h1>
+          <img
+            src='/assets/icons/point-right.svg'
+            alt='right'
+            width={45}
+            height={45}
+            className='object-contain opacity-75'
+          />
+          <a href="/create"
+            className='black_btn'
+          >Create</a>
+        </div>
+      )}
     </section>
   )
 }
