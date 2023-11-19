@@ -49,7 +49,9 @@ interface artDataType {
   guidance: number,
   seed: number,
   sampler: string,
-  created_at: string
+  created_at: string,
+  width: number,
+  height: number
 }
 
 function page({ params }: { params: { addr: string } }) {
@@ -95,7 +97,9 @@ function page({ params }: { params: { addr: string } }) {
         guidance: 0,
         seed: 0,
         sampler: "",
-        created_at: ""
+        created_at: "",
+        width: 0,
+        height: 0
       };
       imgData.name = data.name
       imgData.description = data.description
@@ -123,6 +127,12 @@ function page({ params }: { params: { addr: string } }) {
             break;
           case 'CreatedAt':
             imgData.created_at = attribute.value;
+            break;
+          case 'Height':
+            imgData.height = attribute.value;
+            break;
+          case 'Width':
+            imgData.width = attribute.value;
             break;
         }
       })

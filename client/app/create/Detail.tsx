@@ -51,7 +51,7 @@ const Detail = ({ popup, setPopup, data }: DetailProps) => {
 
                 data.title = title;
 
-                // then call api to delte it in database
+                // then call api to update it in database
                 const response = await fetch(`/api/create/${artId}`, {
                     method: 'PATCH',
                     body: JSON.stringify({
