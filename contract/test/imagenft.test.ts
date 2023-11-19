@@ -23,10 +23,10 @@ describe("ImageNFT Test", function () {
                                                 "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp", "Qmd1dKRagAjAkpFhh4GQJgjnPNrRf1grAFo3ZmPDmqJ9zz");
     await tx.wait();
 
-    let tokenOwner = await myToken.ownerOf(0);
+    let tokenOwner = await myToken.ownerOf(1);
     expect(tokenOwner).to.equal(myAddress);
 
-    let tokenURI = await myToken.tokenURI(0);
+    let tokenURI = await myToken.tokenURI(1);
     expect(tokenURI).to.equal("ipfs://Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ");
   });
 
@@ -51,13 +51,13 @@ describe("ImageNFT Test", function () {
                                                 "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp", "Qmd1dKRagAjAkpFhh4GQJgjnPNrRf1grAFo3ZmPDmqJ9zz");
     await tx.wait();
 
-    tx = await myToken.transferFrom(myAddress, otherAddress, 0);
+    tx = await myToken.transferFrom(myAddress, otherAddress, 1);
     tx.wait()
     
-    let tokenOwner = await myToken.ownerOf(0);
+    let tokenOwner = await myToken.ownerOf(1);
     expect(tokenOwner).to.equal(otherAddress);
 
-    let tokenURI = await myToken.tokenURI(0);
+    let tokenURI = await myToken.tokenURI(1);
     expect(tokenURI).to.equal("ipfs://Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ");
   })
 
