@@ -107,7 +107,7 @@ function page({ params }: { params: { addr: string } }) {
             imgData.model = attribute.value;
             break;
           case 'Prompt':
-            imgData.promptcid = attribute.value.split("ipfs://")[1] ? data.image.split("ipfs://")[1] : data.image.split("ipfs://")[0]; // // should be 1
+            imgData.promptcid = attribute.value.split("ipfs://")[1] ? attribute.value.split("ipfs://")[1] : attribute.value.split("ipfs://")[0]; // // should be 1
             break;
           case 'Steps':
             imgData.steps = attribute.value;
@@ -126,6 +126,23 @@ function page({ params }: { params: { addr: string } }) {
             break;
         }
       })
+
+      {
+        // fetch prompt by cid
+        const promptURI = 'https://ipfs.io/ipfs/' + imgData.promptcid
+        console.log(promptURI)
+        const response = await fetch(promptURI, {
+          method: 'GET'
+        })
+        if (!response.ok) {
+          const message = `An error has occurred: ${response.status}`;
+          throw new Error(message);
+        }
+        const data = await response.json();
+        imgData.prompt = data.textData.prompt
+        imgData.negative_prompt = data.textData.negative_prompt
+      }
+
       return imgData
     } catch (error) {
       console.error(error);
@@ -172,7 +189,7 @@ function page({ params }: { params: { addr: string } }) {
       if (!usr) {
         setPromptFetching(false)
         return
-      } 
+      }
       try {
         // get prompt nft count
         const cntPrompt = await getPromptCountByUser(usr)
@@ -262,7 +279,7 @@ function page({ params }: { params: { addr: string } }) {
       ) : !artFetching && (
         <div className="text-center my-6 flex flex-center gap-3">
           <h1 className='font-display text-xl font-bold text-gray-500 sm:text-3xl'>
-          {session?.user?.name === params.addr ? "No artwork yet ?" : `No artwork yet`}
+            {session?.user?.name === params.addr ? "No artwork yet ?" : `No artwork yet`}
           </h1>
           <img
             src='/assets/icons/point-right.svg'
@@ -299,7 +316,7 @@ function page({ params }: { params: { addr: string } }) {
             <PromptCard data={data} index={index} key={index} />
           ))}
         </Masonry>
-      ) : !promptFetching &&(
+      ) : !promptFetching && (
         <div className="text-center my-6 flex-center gap-3">
           <h1 className='font-display text-xl font-bold text-gray-500 sm:text-3xl'>
             {session?.user?.name === params.addr ? "No prompt yet ?" : `No prompt yet`}
