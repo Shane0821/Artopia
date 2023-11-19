@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-    Select, notification, Spin, Space, Image
+  Select, notification, Spin, Space, Image
 } from 'antd';
 import { LoadingOutlined, ClockCircleOutlined, LikeOutlined, EyeOutlined, DashboardOutlined } from '@ant-design/icons';
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
@@ -20,7 +20,7 @@ import { readContract } from '@wagmi/core'
 import imgABI from '@abi/imagenft.json'
 import promptABI from '@abi/promptnft.json'
 
-import { 
+import {
   getPromptCountByUser,
   getPromptTokenIdOfUserByIndex,
   getTokenURIOfPromptByTokenId,
@@ -47,7 +47,9 @@ interface artDataType {
   guidance: number,
   seed: number,
   sampler: string,
-  created_at: string
+  created_at: string,
+  width: number,
+  height: number
 }
 
 function page({ params }: { params: { addr: string } }) {
@@ -93,7 +95,9 @@ function page({ params }: { params: { addr: string } }) {
         guidance: 0,
         seed: 0,
         sampler: "",
-        created_at: ""
+        created_at: "",
+        width: 0,
+        height: 0
       };
       imgData.name = data.name
       imgData.description = data.description
@@ -122,6 +126,12 @@ function page({ params }: { params: { addr: string } }) {
           case 'CreatedAt':
             imgData.created_at = attribute.value;
             break;
+          case 'Height':
+            imgData.height = attribute.value;
+            break;
+          case 'Width':
+            imgData.width = attribute.value;
+            break;
         }
       })
       return imgData
@@ -139,7 +149,7 @@ function page({ params }: { params: { addr: string } }) {
       // get metadata uri
       const tokenURI: string = await getTokenURIOfPromptByTokenId(promptId)
       const metaURI = 'https://ipfs.io/ipfs/' + tokenURI.split("ipfs://")[1]
-      
+
       // get prompt from metadata
       const response = await fetch(metaURI, {
         method: 'GET'
@@ -211,8 +221,8 @@ function page({ params }: { params: { addr: string } }) {
     setPromptFetching(true)
     setArtFetching(true)
     setTimeout(() => {
-        loadPrompt(params.addr)
-        loadArt(params.addr)
+      loadPrompt(params.addr)
+      loadArt(params.addr)
     }, 2000)
   }, []);
 
@@ -222,7 +232,7 @@ function page({ params }: { params: { addr: string } }) {
 
       <div className='mt-12 mb-6 text-center'>
         <h2 className='font-display text-4xl font-extrabold leading-tight text-black sm:text-5xl sm:leading-tight'>
-          {"Your "} 
+          {"Your "}
           <span className="bg-gradient-to-r from-red-600 to-amber-600 bg-clip-text text-transparent">
             {"Art"}
           </span>
@@ -234,40 +244,40 @@ function page({ params }: { params: { addr: string } }) {
       <Spin className="mt-12"
         indicator={antIcon}
         spinning={artFetching}
-       />
-       <Masonry className="gallery" columnsCount={4} gutter="0.5rem">
-                {artList.map((data, index) => (
-                    <ArtItem
-                        key={index}
-                        data={data}
-                        index={index}
-                        setPopup={setPopup}
-                        setPopupData={setPopupData}
-                    />
-                ))}
-        </Masonry> 
+      />
+      <Masonry className="gallery" columnsCount={4} gutter="0.5rem">
+        {artList.map((data, index) => (
+          <ArtItem
+            key={index}
+            data={data}
+            index={index}
+            setPopup={setPopup}
+            setPopupData={setPopupData}
+          />
+        ))}
+      </Masonry>
 
       <div className='mt-12 mb-6 text-center'>
         <h2 className='font-display text-4xl font-extrabold leading-tight text-black sm:text-5xl sm:leading-tight'>
-          {"Your "} 
+          {"Your "}
           <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
             {"Prompts"}
           </span>
         </h2>
         <p className="mt-4 text-gray-600 sm:text-lg">Spark your imagination and creativity - unleash your potential and passion.</p>
       </div>
-      
+
       {/* list of prompts */}
       <Spin
         className="mt-12"
         indicator={antIcon}
         spinning={promptFetching}
-       />
+      />
       <Masonry columnsCount={3} gutter="1rem" className="mb-6">
         {promptList.map((data, index) => (
-            <PromptCard data={data} index={index} key={index}/>
+          <PromptCard data={data} index={index} key={index} />
         ))}
-      </Masonry> 
+      </Masonry>
     </section>
   )
 }
