@@ -74,7 +74,7 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                 className="absolute top-0 right-0 p-1 opacity-0 group-hover:opacity-100"
                 onClick={(e) => e.stopPropagation()}
             >
-                <Tooltip placement="topLeft" title="Go to transaction">
+                <Tooltip placement="topLeft" title="Go to auction">
                     <Button
                         className="buttonStyle"
                         icon={<KeyOutlined />}
@@ -86,12 +86,12 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                         icon={<TransactionOutlined />}
                     />
                 </Tooltip>
-                <Tooltip placement="topLeft" title="Sell at fixed price">
+                {/* <Tooltip placement="topLeft" title="Sell at fixed price">
                     <Button
                         className="buttonStyle"
                         icon={<AccountBookOutlined />}
                     />
-                </Tooltip>
+                </Tooltip> */}
             </div>
 
             <div
