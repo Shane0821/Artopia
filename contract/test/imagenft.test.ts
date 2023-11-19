@@ -11,11 +11,13 @@ describe("ImageNFT Test", function () {
     // const otherAddress = "0x63A231bDEE0558489F881C50B5d4D2D5e0E07e23";
  
     const MyToken = await ethers.getContractFactory("ImageNFT");
-    const myToken = await MyToken.deploy();
+    const prompt = await ethers.getContractFactory("PromptNFT");
+    const addr = await prompt.deploy()
+    const myToken = await MyToken.deploy(addr);
     await myToken.waitForDeployment();
 
     let tx = await myToken.awardItem(myAddress, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
-                                                "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp");
+                                                "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp", "Qmd1dKRagAjAkpFhh4GQJgjnPNrRf1grAFo3ZmPDmqJ9zz");
     await tx.wait();
 
     let tokenOwner = await myToken.ownerOf(0);
@@ -34,11 +36,13 @@ describe("ImageNFT Test", function () {
     // const otherAddress = "0x63A231bDEE0558489F881C50B5d4D2D5e0E07e23";
  
     const MyToken = await ethers.getContractFactory("ImageNFT");
-    const myToken = await MyToken.deploy();
+    const prompt = await ethers.getContractFactory("PromptNFT");
+    const addr = await prompt.deploy()
+    const myToken = await MyToken.deploy(addr);
     await myToken.waitForDeployment();
 
     let tx = await myToken.awardItem(myAddress, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
-                                                "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp");
+                                                "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp", "Qmd1dKRagAjAkpFhh4GQJgjnPNrRf1grAFo3ZmPDmqJ9zz");
     await tx.wait();
 
     tx = await myToken.transferFrom(myAddress, otherAddress, 0);
@@ -60,15 +64,17 @@ describe("ImageNFT Test", function () {
     // const otherAddress = "0x63A231bDEE0558489F881C50B5d4D2D5e0E07e23";
  
     const MyToken = await ethers.getContractFactory("ImageNFT");
-    const myToken = await MyToken.deploy();
+    const prompt = await ethers.getContractFactory("PromptNFT");
+    const addr = await prompt.deploy()
+    const myToken = await MyToken.deploy(addr);
     await myToken.waitForDeployment();
 
     let tx = await myToken.awardItem(myAddress, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
-                                                "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp");
+                                                "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp", "Qmd1dKRagAjAkpFhh4GQJgjnPNrRf1grAFo3ZmPDmqJ9zz");
     await tx.wait();
 
     await expect(myToken.awardItem(myAddress, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
-                                  "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp")).
+                                  "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp", "Qmd1dKRagAjAkpFhh4GQJgjnPNrRf1grAFo3ZmPDmqJ9zz")).
           to.be.revertedWith("artwork already exists") 
   })
 });
