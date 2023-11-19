@@ -5,19 +5,29 @@ import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "./promptnft.sol";
 
 contract ImageNFT is ERC721URIStorage, ERC721Enumerable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
+    PromptNFT promptContract;
+
     mapping(string => uint8) cids;
 
-    constructor() ERC721("ImageNFT", "INFT") {}
+    constructor(address addr) ERC721("ImageNFT", "INFT") {
+        promptContract = PromptNFT(addr);
+    }
 
-    function awardItem(address user, string memory metadatacid, string memory cid)
+    function awardItem(address user, string memory metadatacid, string memory cid, string memory promptcid)
         public returns (uint256) {
         require(cids[cid] != 1, "artwork already exists");
 
+        // check ownership of prompt
+        address owner = promptContract.getOnwerByCID(promptcid);
+        require(owner == user || owner == address(0), "you are not the owner of the prompt");
+
+        // mark cid as used and mint
         cids[cid] = 1;
 
         uint256 newItemId = _tokenIds.current();
