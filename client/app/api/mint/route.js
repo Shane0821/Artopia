@@ -95,6 +95,14 @@ async function uploadMetaDataToPinata(artIpfs, promptIpfs, art) {
             {
                 trait_type: "CreatedAt",
                 value: art.created_at
+            },
+            {
+                trait_type: "Height",
+                value: art.height
+            },
+            {
+                trait_type: "Width",
+                value: art.width
             }
         ]
     };
