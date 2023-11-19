@@ -256,7 +256,7 @@ function ContentCreate({
                 abi: imgABI,
                 functionName: 'awardItem',
                 chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
-                args: [user, metadataCid, imgCid],
+                args: [user, metadataCid, imgCid, promptCid],
             })
             // wait for confirmation
             const data = await waitForTransaction({
