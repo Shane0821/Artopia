@@ -7,6 +7,7 @@ import {
 
 import '@styles/gallery.css'
 import { useInView } from 'react-intersection-observer';
+import { useSession } from "next-auth/react"
 
 import { EyeOutlined, EyeInvisibleOutlined, HeartOutlined, UserOutlined, SmileOutlined } from '@ant-design/icons';
 
@@ -33,11 +34,14 @@ function getRandomTransition() {
 interface ArtItemProps {
     data: any,
     index: number,
+    owner: string,
     setPopup: (popup: boolean) => void,
     setPopupData: (popupData: any) => void,
 }
 
-const ArtItem = ({ data, index, setPopup, setPopupData }: ArtItemProps) => {
+const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) => {
+    const { data: session, status } = useSession()
+
     const [ref, inView] = useInView({
         threshold: 0,
         triggerOnce: true,

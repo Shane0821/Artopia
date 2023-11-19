@@ -270,6 +270,7 @@ function page({ params }: { params: { addr: string } }) {
             <ArtItem
               key={index}
               data={data}
+              owner={params.addr}
               index={index}
               setPopup={setPopup}
               setPopupData={setPopupData}
