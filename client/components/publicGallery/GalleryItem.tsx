@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
     Tooltip, Button
@@ -43,13 +43,53 @@ const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemP
         triggerOnce: true,
     });
 
+    const [like, setLike] = useState(false);
+
+    const checkLike = () => {
+        if (data.action && data.action.length > 0) {
+            for (let address of data.action[0].likedBy) {
+                if (user && user.name === address) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    useEffect(() => {
+        setLike(checkLike());
+    }, [data]);
+
+    const handleLike = () => {
+        const postLike = async () => {
+            try {
+                const response = await fetch(`/api/publicGallery/${data._id}`, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        type: 'like'
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    setLike(true);
+                }
+            } catch (error) {
+                // console.log(error);
+            }
+        }
+        if (checkLike() || !user || like) return;
+
+        postLike();
+    }
+
     return (
         <div
             ref={ref}
             className={`publicPics relative group`}
             style={{
                 opacity: (inView ? 1 : 0),
-                transition: `opacity ${getRandomTransition()}`
+                transition: `opacity ${getRandomTransition()} `
             }}
             key={index}
             onClick={() => {
@@ -60,7 +100,7 @@ const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemP
             < img
                 className="no-visual-search"
                 style={{ width: '100%' }}
-                src={`${data.base64}`}
+                src={`${data.base64} `}
             />
 
             {/* buttons */}
@@ -77,6 +117,8 @@ const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemP
                     <Button
                         className="buttonStyle"
                         icon={<HeartOutlined />}
+                        danger={like}
+                        onClick={() => { handleLike() }}
                     />
                 </Tooltip>
             </div>

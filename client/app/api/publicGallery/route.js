@@ -1,4 +1,5 @@
 import Art from "@models/Art";
+
 import { connectToDB } from "@utils/database";
 
 import { getToken } from "next-auth/jwt"
@@ -11,16 +12,23 @@ export const GET = async (request) => {
         const userAddress = token?.address
 
         const sharedArtWithActions = await Art.aggregate([
-            { $match: { shared: true } },
             {
-                $lookup: {
-                    from: 'Action', // replace with your Action collection name
-                    localField: '_id',
-                    foreignField: 'artId',
-                    as: 'actionData'
+                $lookup:
+                {
+                    from: "actions", // assuming 'actions' is the collection name for Action model
+                    localField: "_id", // field from the Art collection
+                    foreignField: "artId", // field from the Action collection
+                    as: "action"
+                }
+
+            },
+            {
+                $match: {
+                    shared: true
                 }
             }
-        ]);
+        ])
+
 
         return new Response(
             JSON.stringify(sharedArtWithActions),

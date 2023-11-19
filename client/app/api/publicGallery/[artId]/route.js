@@ -3,6 +3,7 @@ import { getToken } from "next-auth/jwt"
 import Art from "@models/Art";
 import Action from "@models/Action";
 import { connectToDB } from "@utils/database";
+import mongoose from 'mongoose'
 
 export const PATCH = async (request, { params }) => {
     try {
@@ -47,18 +48,20 @@ export const POST = async (request, { params }) => {
         const _id = params.artId;
 
         await connectToDB()
-        const action = await Action.findOne({ artId: _id });
+        let action = await Action.findOne({ artId: _id });
 
         if (!action) {
             const newAction = new Action({
-                artId: _id,
+                artId: new mongoose.Types.ObjectId(_id)
             });
             await newAction.save();
+            action = newAction
         }
 
-        if (request.body.type === 'like') {
+        const data = await request.json()
+        if (data.type === 'like') {
             await action.like(address);
-        } else if (request.body.type === 'view') {
+        } else if (data.type === 'view') {
             await action.view(address);
         } else {
             throw new Error('Invalid action type.');
