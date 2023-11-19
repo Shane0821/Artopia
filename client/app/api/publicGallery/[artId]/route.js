@@ -1,6 +1,7 @@
 import { getToken } from "next-auth/jwt"
 
 import Art from "@models/Art";
+import Action from "@models/Action";
 import { connectToDB } from "@utils/database";
 
 export const PATCH = async (request, { params }) => {
@@ -36,10 +37,6 @@ export const PATCH = async (request, { params }) => {
     }
 }
 
-
-
-import Action from "@models/Action";
-
 export const POST = async (request, { params }) => {
     try {
         const token = await getToken({ req: request });
@@ -47,19 +44,22 @@ export const POST = async (request, { params }) => {
         if (!token) throw new Error("Unauthorized.");
         // get address
         const address = token.sub;
-        const _id = params.actionId;
+        const _id = params.artId;
 
         await connectToDB()
-        const action = await Action.findOne({ _id });
+        const action = await Action.findOne({ artId: _id });
 
-        if (!action) throw new Error('Action not found.');
+        if (!action) {
+            const newAction = new Action({
+                artId: _id,
+            });
+            await newAction.save();
+        }
 
         if (request.body.type === 'like') {
             await action.like(address);
         } else if (request.body.type === 'view') {
             await action.view(address);
-        } else if (request.body.type === 'unview') {
-            await action.unview(address);
         } else {
             throw new Error('Invalid action type.');
         }
@@ -71,7 +71,7 @@ export const POST = async (request, { params }) => {
     } catch (error) {
         console.log(error)
         return new Response(JSON.stringify({
-            message: 'Failed to update action.',
+            message: 'Failed to like.',
             error: error
         }), { status: 500 });
     }
