@@ -16,7 +16,10 @@ describe("ImageNFT Test", function () {
     const myToken = await MyToken.deploy(addr);
     await myToken.waitForDeployment();
 
-    let tx = await myToken.awardItem(myAddress, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
+    let tx = await(addr.awardItem(myAddress, "Qmd1dKRagAjAkpFhh4GQJgjnPNrRf1grAFo3ZmPDmqJ9zz"))
+    await tx.wait();
+
+    tx = await myToken.awardItem(myAddress, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
                                                 "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp", "Qmd1dKRagAjAkpFhh4GQJgjnPNrRf1grAFo3ZmPDmqJ9zz");
     await tx.wait();
 
@@ -41,7 +44,10 @@ describe("ImageNFT Test", function () {
     const myToken = await MyToken.deploy(addr);
     await myToken.waitForDeployment();
 
-    let tx = await myToken.awardItem(myAddress, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
+    let tx = await(addr.awardItem(myAddress, "Qmd1dKRagAjAkpFhh4GQJgjnPNrRf1grAFo3ZmPDmqJ9zz"))
+    await tx.wait();
+
+    tx = await myToken.awardItem(myAddress, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
                                                 "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp", "Qmd1dKRagAjAkpFhh4GQJgjnPNrRf1grAFo3ZmPDmqJ9zz");
     await tx.wait();
 
@@ -69,7 +75,10 @@ describe("ImageNFT Test", function () {
     const myToken = await MyToken.deploy(addr);
     await myToken.waitForDeployment();
 
-    let tx = await myToken.awardItem(myAddress, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
+    let tx = await(addr.awardItem(myAddress, "Qmd1dKRagAjAkpFhh4GQJgjnPNrRf1grAFo3ZmPDmqJ9zz"))
+    await tx.wait();
+
+    tx = await myToken.awardItem(myAddress, "Qmb9vsjexQs4uVMN8MSv7jvoNogixh2kuAc66KbQHDgsKQ", 
                                                 "QmeTkzeeitCNrKN4WpTtYu9W85XUZnknk37EQjSnpdFPxp", "Qmd1dKRagAjAkpFhh4GQJgjnPNrRf1grAFo3ZmPDmqJ9zz");
     await tx.wait();
 
