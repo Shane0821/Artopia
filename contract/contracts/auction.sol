@@ -63,11 +63,8 @@ contract Auction {
     }
 
     /// get time remaining
-    function getRemainingTime() public view returns (uint) {
-        return
-            auctionEndTime >= block.timestamp
-                ? auctionEndTime - block.timestamp
-                : 0;
+    function getEndTime() public view returns (uint) {
+        return auctionEndTime;
     }
 
     /// get highest bidder
@@ -100,6 +97,10 @@ contract Auction {
         return pendingReturns[addr];
     }
 
+    function canEnd() public view returns (bool) {
+        return block.timestamp >= auctionEndTime;
+    }
+
     /// Bid on the auction with the value sent
     /// together with this transaction.
     /// The value will only be refunded if the
@@ -113,7 +114,7 @@ contract Auction {
 
         // Revert the call if the bidding
         // period is over.
-        if (block.timestamp > auctionEndTime) revert AuctionAlreadyEnded();
+        if (block.timestamp >= auctionEndTime) revert AuctionAlreadyEnded();
 
         // If the bid is not higher, send the
         // Ether back (the revert statement
