@@ -15,7 +15,7 @@ export const DELETE = async (request, { params }) => {
         // console.log(address, _id)
 
         await connectToDB()
-        await Art.deleteOne({ _id, address });
+        await Art.deleteOne({ id: _id, address: address, minted: false });
 
         return new Response(
             JSON.stringify({}),
@@ -24,7 +24,7 @@ export const DELETE = async (request, { params }) => {
     } catch (error) {
         console.log(error)
         return new Response(JSON.stringify({
-            message: 'Failed to create delete art.',
+            message: 'Failed to delete art.',
             error: error
         }), { status: 500 });
     }
