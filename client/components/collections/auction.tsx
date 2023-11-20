@@ -21,7 +21,7 @@ import { useAccount } from "wagmi"
 
 import Detail from '@components/publicGallery/GalleryDetail'
 
-function Auction(shown: any) {
+function Auction() {
     const [noti, contextHolder] = notification.useNotification();
 
     const { data: session, status } = useSession()
@@ -88,23 +88,17 @@ function Auction(shown: any) {
                 return newArray;
             });
         }
-        else if (value === 'likes') {
+        else if (value === 'price') {
             setDataArray(prevArray => {
                 let newArray = [...prevArray];
-                newArray.sort((a, b) => b.likes - a.likes);
-                return newArray;
-            });
-        } else if (value === 'views') {
-            setDataArray(prevArray => {
-                let newArray = [...prevArray];
-                newArray.sort((a, b) => b.views - a.views);
+                newArray.sort((a, b) => b.price - a.price);
                 return newArray;
             });
         }
     }
 
     return (
-        <div hidden={!shown}>
+        <div>
             <Detail popup={popup} setPopup={setPopup} data={popupData} />
 
             <div
@@ -126,8 +120,7 @@ function Auction(shown: any) {
                 >
                     <Option value="latest"><ClockCircleOutlined /> Latest</Option>
                     <Option value="earliest"><DashboardOutlined /> Earliest</Option>
-                    <Option value="likes"><LikeOutlined /> Likes</Option>
-                    <Option value="views"><EyeOutlined /> View</Option>
+                    <Option value="price"><LikeOutlined /> Price</Option>
                 </Select>
             </div>
 

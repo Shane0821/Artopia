@@ -19,7 +19,7 @@ const CollectionCarousel = ({ setCurrentSlide }: Props) => {
             <div style={{ height: '350px' }}>
                 <div style={{ position: 'relative', width: '100%', height: '350px', overflow: 'hidden' }}>
                     <img
-                        style={{ position: 'absolute', top: 0, left: 0, filter: 'blur(8px)' }}
+                        style={{ position: 'absolute', top: 0, left: 0, filter: 'blur(20px)' }}
                         width={'100%'}
                         src="/assets/images/homepage/left/museum-1.png"
                     />
@@ -35,7 +35,7 @@ const CollectionCarousel = ({ setCurrentSlide }: Props) => {
             <div style={{ height: '350px' }}>
                 <div style={{ position: 'relative', width: '100%', height: '350px', overflow: 'hidden' }}>
                     <img
-                        style={{ position: 'absolute', top: 0, left: 0, filter: 'blur(8px)' }}
+                        style={{ position: 'absolute', top: 0, left: 0, filter: 'blur(20px)' }}
                         width={'100%'}
                         src="/assets/images/homepage/ur/star-hall-1.png"
                     />
@@ -51,7 +51,7 @@ const CollectionCarousel = ({ setCurrentSlide }: Props) => {
             <div style={{ height: '350px' }}>
                 <div style={{ position: 'relative', width: '100%', height: '350px', overflow: 'hidden' }}>
                     <img
-                        style={{ position: 'absolute', top: 0, left: 0, filter: 'blur(8px)' }}
+                        style={{ position: 'absolute', top: 0, left: 0, filter: 'blur(20px)' }}
                         width={'100%'}
                         src="/assets/images/homepage/bl/witch-2.png"
                     />
