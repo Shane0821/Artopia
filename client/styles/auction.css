@@ -1,0 +1,8 @@
+.auction_pic {
+    margin-right: 15px;
+}
+
+.auction_pic:hover {
+    cursor: pointer;
+    filter: opacity(.9);
+}

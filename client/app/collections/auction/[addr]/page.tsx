@@ -2,14 +2,20 @@
 
 import React, { useState, useEffect } from 'react';
 
-import { Layout, Space, Button, notification, Spin, Badge } from 'antd';
+import { Divider, Space, Button, Statistic, notification, Spin, Badge } from 'antd';
+const { Countdown } = Statistic;
 
 import { LoadingOutlined, ClockCircleOutlined, LikeOutlined, EyeOutlined, DashboardOutlined } from '@ant-design/icons';
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
+import Detail from '@components/profile/ArtDetail'
+import '@styles/auction.css'
+
 function Bid() {
     const [fetching, setFetching] = useState(false);
     const [nftData, setNftData] = useState({});
+
+    const [popup, setPopup] = useState(false);
 
     // fetch art
     useEffect(() => {
@@ -76,34 +82,54 @@ function Bid() {
                     !fetching
                     &&
                     <div className="w-full flex">
+                        <Detail popup={popup} setPopup={setPopup} data={nftData} />
+
                         <div
                             className="w-1/3"
                             style={{
-                                height: '85vh',
-                                display: 'flex', // Add this line
-                                flexDirection: 'column', // Add this line
-                                justifyContent: 'center', // Add this line
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center'
                             }}
                         >
                             <img
-                                className="rounded"
+                                className="rounded auction_pic"
                                 src={nftData.base64}
                                 alt="Nft"
+                                onClick={() => { setPopup(true); }}
                             />
                         </div>
 
-                        <div className="w-2/3 p-4">
-                            <h2 className="text-xl font-bold mb-2">Art Title</h2>
-                            <p className="text-gray-700">Detailed info about the art...</p>
-                            <div className="mt-4 flex justify-end">
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
-                                    Button 1
-                                </button>
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                    Button 2
-                                </button>
+                        <div style={{ borderLeft: '1px solid lightgray', height: '80vh' }}></div>
+
+                        <div className="w-2/3 p-4 flex flex-col justify-center items-center" style={{ height: '85vh' }}>
+                            <Divider />
+
+                            <Countdown
+                                title="Sale Ends In:"
+                                value={Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30}
+                                format="HH:mm:ss"
+                            />
+
+                            <Divider />
+                            <hr className="mt-4" />
+
+                            <div className="mt-4">
+                                <h2>Current Highest Price: 10 AXM</h2>
                             </div>
+
+                            <Divider />
+                            <hr className="mt-4" />
+
+                            <div className="mt-4 flex justify-center">
+                                <Button className="mr-2">Bid</Button>
+                                <Button className="mr-2">Withdraw</Button>
+                                <Button className="mr-2">Close</Button>
+                            </div>
+
+                            <Divider />
                         </div>
+
 
                     </div>
                 }
