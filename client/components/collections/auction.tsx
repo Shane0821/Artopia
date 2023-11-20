@@ -12,14 +12,12 @@ import { LoadingOutlined, ClockCircleOutlined, LikeOutlined, EyeOutlined, Dashbo
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
 import '@styles/gallery.css'
-import GalleryItem from '@components/publicGallery/GalleryItem'
+import AuctionItem from '@components/collections/auctionItem'
 
 import Masonry from "react-responsive-masonry"
 
 import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
-
-import Detail from '@components/publicGallery/GalleryDetail'
 
 function Auction() {
     const [noti, contextHolder] = notification.useNotification();
@@ -28,8 +26,6 @@ function Auction() {
     const { address, isConnected } = useAccount()
 
     const [dataArray, setDataArray] = useState([]);
-    const [popup, setPopup] = useState(false);
-    const [popupData, setPopupData] = useState({});
     const [fetching, setFetching] = useState(false);
 
     // fetch art
@@ -99,8 +95,6 @@ function Auction() {
 
     return (
         <div>
-            <Detail popup={popup} setPopup={setPopup} data={popupData} />
-
             <div
                 style={{
                     display: 'flex',
@@ -140,12 +134,10 @@ function Auction() {
 
             <Masonry className="gallery" columnsCount={4}>
                 {dataArray.map((data, index) => (
-                    <GalleryItem
+                    <AuctionItem
                         key={index}
                         data={data}
                         index={index}
-                        setPopup={setPopup}
-                        setPopupData={setPopupData}
                         user={session?.user}
                     />
                 ))}
