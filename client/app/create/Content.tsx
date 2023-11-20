@@ -334,6 +334,8 @@ function ContentCreate({
             }
         }
 
+        if (data.minted) return;
+
         // one piece of art minting at one time
         if (prepareMinting != '') {
             noti['info']({
@@ -385,7 +387,7 @@ function ContentCreate({
                         className="pics relative group"
                         key={index}
                         onClick={() => {
-                            console.log('click')
+                            if (data.completed !== undefined && data.completed === false) return;
                             setPopup(true);
                             setPopupData(data);
                         }}
@@ -398,7 +400,7 @@ function ContentCreate({
 
                         {/* buttons */}
                         <div
-                            hidden={!data.completed}
+                            hidden={!data.completed || data.minted}
                             className="absolute bottom-0 right-0 p-2 opacity-0 group-hover:opacity-100"
                             onClick={(e) => e.stopPropagation()}
                         >
@@ -448,11 +450,12 @@ function ContentCreate({
                                 )}
                             </Tooltip>
 
-                            <Tooltip placement="bottomLeft" title="Mint">
+                            <Tooltip placement="bottomLeft" title={data.minted ? "Minted" : "Mint"}>
                                 <Button
                                     className="buttonStyle"
                                     loading={prepareMinting === data._id || changingVis}
                                     icon={<DeploymentUnitOutlined />}
+                                    danger={data.minted}
                                     onClick={() => { handleMint(data, index); }}
                                 />
                             </Tooltip>
