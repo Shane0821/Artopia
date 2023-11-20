@@ -269,11 +269,16 @@ function ContentCreate({
                         'Successfully minted art!',
                     duration: 3,
                 });
-                // set art minted
-                await fetch(`/api/mint/${artId}`, {
-                    method: 'PATCH',
-                });
 
+                // delete art after minting
+                await fetch(`/api/create/${artId}`, {
+                    method: 'DELETE'
+                });
+                setDataArray((prevArray) => {
+                    return prevArray.filter((element) => {
+                        return element._id !== artId;
+                    });
+                });
             } else if (data.status == "error") {
                 throw new Error('Failed to mint art!');
             }
@@ -333,8 +338,6 @@ function ContentCreate({
                 setPrepareMinting('');
             }
         }
-
-        if (data.minted) return;
 
         // one piece of art minting at one time
         if (prepareMinting != '') {
@@ -400,7 +403,7 @@ function ContentCreate({
 
                         {/* buttons */}
                         <div
-                            hidden={!data.completed || data.minted}
+                            hidden={!data.completed}
                             className="absolute bottom-0 right-0 p-2 opacity-0 group-hover:opacity-100"
                             onClick={(e) => e.stopPropagation()}
                         >
@@ -450,12 +453,11 @@ function ContentCreate({
                                 )}
                             </Tooltip>
 
-                            <Tooltip placement="bottomLeft" title={data.minted ? "Minted" : "Mint"}>
+                            <Tooltip placement="bottomLeft" title={"Mint"}>
                                 <Button
                                     className="buttonStyle"
                                     loading={prepareMinting === data._id || changingVis}
                                     icon={<DeploymentUnitOutlined />}
-                                    danger={data.minted}
                                     onClick={() => { handleMint(data, index); }}
                                 />
                             </Tooltip>

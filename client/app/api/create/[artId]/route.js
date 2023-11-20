@@ -15,7 +15,7 @@ export const DELETE = async (request, { params }) => {
         // console.log(address, _id)
 
         await connectToDB()
-        await Art.deleteOne({ id: _id, address: address, minted: false });
+        await Art.deleteOne({ _id, address });
 
         return new Response(
             JSON.stringify({}),
