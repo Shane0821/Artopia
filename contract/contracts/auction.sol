@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.20;
 
-import './imagenft.sol';
+import "./imagenft.sol";
 
 contract Auction {
     ImageNFT public imgContract;
@@ -48,13 +48,57 @@ contract Auction {
     /// Create a simple auction with `biddingTime`
     /// seconds bidding time on behalf of the
     /// beneficiary address `beneficiaryAddress`.
-    constructor(uint biddingTime, address payable beneficiaryAddress,
-                uint256 _tokenId, address contractAddress) {
+    constructor(
+        uint biddingTime,
+        address payable beneficiaryAddress,
+        uint256 _tokenId,
+        address payable _organizer,
+        address contractAddress
+    ) {
         auctionEndTime = block.timestamp + biddingTime; // second
         beneficiary = beneficiaryAddress;
-        organizer = payable(msg.sender);
+        organizer = _organizer;
         tokenId = _tokenId;
         imgContract = ImageNFT(contractAddress);
+    }
+
+    /// get time remaining
+    function getEndTime() public view returns (uint) {
+        return auctionEndTime;
+    }
+
+    /// get highest bidder
+    function getHighestBidder() public view returns (address) {
+        return highestBidder;
+    }
+
+    /// get highest bid
+    function getHighestBid() public view returns (uint) {
+        return highestBid;
+    }
+
+    /// get beneficiary
+    function getBeneficiary() public view returns (address) {
+        return beneficiary;
+    }
+
+    /// get token id
+    function getTokenId() public view returns (uint256) {
+        return tokenId;
+    }
+
+    /// is ended
+    function isEnded() public view returns (bool) {
+        return ended;
+    }
+
+    /// pendingReturns by address
+    function getPendingReturns(address addr) public view returns (uint) {
+        return pendingReturns[addr];
+    }
+
+    function canEnd() public view returns (bool) {
+        return block.timestamp >= auctionEndTime;
     }
 
     /// Bid on the auction with the value sent
@@ -70,16 +114,14 @@ contract Auction {
 
         // Revert the call if the bidding
         // period is over.
-        if (block.timestamp > auctionEndTime)
-            revert AuctionAlreadyEnded();
+        if (block.timestamp >= auctionEndTime) revert AuctionAlreadyEnded();
 
         // If the bid is not higher, send the
         // Ether back (the revert statement
         // will revert all changes in this
         // function execution including
         // it having received the Ether).
-        if (msg.value <= highestBid)
-            revert BidNotHighEnough(highestBid);
+        if (msg.value <= highestBid) revert BidNotHighEnough(highestBid);
 
         if (highestBid != 0) {
             // Sending back the Ether by simply using
@@ -132,20 +174,19 @@ contract Auction {
         // external contracts.
 
         // 1. Conditions
-        if (block.timestamp < auctionEndTime)
-            revert AuctionNotYetEnded();
-        if (ended)
-            revert AuctionEndAlreadyCalled();
+        if (block.timestamp < auctionEndTime) revert AuctionNotYetEnded();
+        if (ended) revert AuctionEndAlreadyCalled();
 
         // 2. Effects
+        if (highestBidder != address(0)) {
+            // 3. Interaction
+            imgContract.transferFrom(beneficiary, highestBidder, tokenId);
+            uint beneficiaryTransfer = (highestBid * 975) / 1000; // overflow?
+            beneficiary.transfer(beneficiaryTransfer);
+            organizer.transfer(highestBid - beneficiaryTransfer);
+        }
+
         ended = true;
         emit AuctionEnded(highestBidder, highestBid);
-
-        // 3. Interaction
-        uint beneficiaryTransfer = highestBid * 975 / 1000;
-        beneficiary.transfer(beneficiaryTransfer);
-        imgContract.transferFrom(beneficiary, highestBidder, tokenId);
-
-        organizer.transfer(highestBid - beneficiaryTransfer);
     }
-}   
+}
