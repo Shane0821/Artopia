@@ -21,7 +21,8 @@ const ArtSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    shared: { type: Boolean, default: false }
+    shared: { type: Boolean, default: false },
+    minted: { type: Boolean, default: false }
 });
 
 
