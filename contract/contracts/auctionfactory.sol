@@ -8,7 +8,7 @@ contract AuctionFactory {
     address imgContractAddress;
     mapping(uint256 => address) public tokenIdToAuction;
 
-    event AuctionCreated(address auctionAddress);
+    event AuctionCreated(address indexed auctionAddress);
 
     constructor(address t) {
         organizer = payable(msg.sender);
@@ -24,9 +24,8 @@ contract AuctionFactory {
         
         Auction newAuction = new Auction(duration, payable(msg.sender), tokenId, payable(organizer), imgContractAddress);
 
-        emit AuctionCreated(address(newAuction));
-        
         address addr = address(newAuction);
+        emit AuctionCreated(addr);
         auctions.push(addr);
         tokenIdToAuction[tokenId] = addr;
         return addr;
