@@ -12,14 +12,14 @@ import { LoadingOutlined, ClockCircleOutlined, LikeOutlined, EyeOutlined, Dashbo
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
 import '@styles/gallery.css'
-import AuctionItem from '@components/collections/auctionItem'
+import AuctionCollectionItem from '@components/collections/auctionCollectionItem'
 
 import Masonry from "react-responsive-masonry"
 
 import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
 
-function Auction() {
+function AuctionCollection() {
     const [noti, contextHolder] = notification.useNotification();
 
     const { data: session, status } = useSession()
@@ -134,7 +134,7 @@ function Auction() {
 
             <Masonry className="gallery" columnsCount={4}>
                 {dataArray.map((data, index) => (
-                    <AuctionItem
+                    <AuctionCollectionItem
                         key={index}
                         data={data}
                         index={index}
@@ -146,4 +146,4 @@ function Auction() {
     );
 }
 
-export default Auction;
+export default AuctionCollection;

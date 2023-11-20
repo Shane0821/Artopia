@@ -29,13 +29,13 @@ function getRandomTransition() {
     return `${duration} ${timingFunction}`;
 }
 
-interface AuctionItemProps {
+interface Props {
     data: any,
     index: number,
     user: any
 }
 
-const AuctionItem = ({ data, index, user }: AuctionItemProps) => {
+const AuctionCollectionItem = ({ data, index, user }: Props) => {
     const [ref, inView] = useInView({
         threshold: 0,
         triggerOnce: true,
@@ -118,4 +118,4 @@ const AuctionItem = ({ data, index, user }: AuctionItemProps) => {
     );
 };
 
-export default AuctionItem;
+export default AuctionCollectionItem;

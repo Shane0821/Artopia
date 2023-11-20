@@ -5,9 +5,9 @@ import { Space } from 'antd';
 
 import '@styles/gallery.css'
 import CollectionCarousel from '@components/collections/carousel'
-import AuctionCollection from '@components/collections/auctionCollection'
+import Auction from '@components/collections/auctionCollection'
 
-function Collections() {
+function Bid() {
     const [currentSlide, setCurrentSlide] = useState(0);
 
     return (
@@ -22,9 +22,9 @@ function Collections() {
             className="sm:px-16 px-6 max-w-7xl"
         >
             <CollectionCarousel setCurrentSlide={setCurrentSlide} />
-            {currentSlide === 0 && <AuctionCollection />}
+            {currentSlide === 0 && <Auction />}
         </Space >
     );
 }
 
-export default Collections;
+export default Bid;
