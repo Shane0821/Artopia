@@ -32,12 +32,14 @@ import {
 } from '@utils/contract'
 
 interface promptDataType {
+  tokenId: number,
   cid: string
   prompt: string,
   negative_prompt: string
 }
 
 interface artDataType {
+  tokenId: number,
   name: string,
   description: string,
   cid: string,
@@ -86,6 +88,7 @@ function page({ params }: { params: { addr: string } }) {
       const data = await response.json();
 
       let imgData: artDataType = {
+        tokenId: artId,
         name: "",
         description: "",
         cid: "",
@@ -179,6 +182,7 @@ function page({ params }: { params: { addr: string } }) {
       }
       const data = await response.json();
       data.textData.cid = tokenURI.split("ipfs://")[1]
+      data.textData.tokenId = promptId
       return data.textData
     } catch (error) {
       console.error(error);
