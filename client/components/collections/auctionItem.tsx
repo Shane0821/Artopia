@@ -7,7 +7,7 @@ import {
 import '@styles/gallery.css'
 import { useInView } from 'react-intersection-observer';
 
-import { EyeOutlined, HeartOutlined, UserOutlined, SmileOutlined } from '@ant-design/icons';
+import { TransactionOutlined, DollarOutlined, SmileOutlined } from '@ant-design/icons';
 
 function truncateMiddle(str: string, frontChars: number, backChars: number, ellipsis = '...') {
     if (str.length <= frontChars + backChars) {
@@ -59,20 +59,36 @@ const AuctionItem = ({ data, index, user }: AuctionItemProps) => {
             />
 
             {/* buttons */}
+            <div
+                className="absolute bottom-6 right-0 p-2 opacity-0 group-hover:opacity-100"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                }}
+            >
+                <Tooltip placement="topLeft" title="Bid">
+                    <Button
+                        className="buttonStyle"
+                        icon={<TransactionOutlined />}
+                        danger={true}
+                    />
+                </Tooltip>
+            </div>
+
+
             < div
                 hidden={!data.completed}
                 className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100"
                 onClick={(e) => e.stopPropagation()}
             >
-                <Tooltip placement="bottomLeft" title={"My Art"}  >
-                    <Button className="buttonStyle" icon={<SmileOutlined />} hidden={!(user && data && user.name === data.address)} />
-                </Tooltip>
-
-                <Tooltip placement="topLeft" title="Like">
+                <Tooltip placement="bottomLeft" title={"My NFT"}  >
                     <Button
                         className="buttonStyle"
-                        icon={<HeartOutlined />}
-                        onClick={() => { }}
+                        icon={<SmileOutlined />}
+                        hidden={!(user && data && user.name === data.address)}
                     />
                 </Tooltip>
             </div>
@@ -89,20 +105,12 @@ const AuctionItem = ({ data, index, user }: AuctionItemProps) => {
             >
                 {/* Left-aligned items: avatar and address */}
                 <div className="flex items-center">
-                    <UserOutlined style={{ marginRight: 10 }} />
-                    <Tooltip placement="topLeft" color='rgba(0, 0, 0, 0.6)'>
-                        {truncateMiddle(data.address, 7, 7)}
-                    </Tooltip>
+                    <DollarOutlined style={{ marginRight: 10 }} />
+                    {"Current price"}
                 </div>
 
-                {/* Right-aligned items: views and likes */}
                 <div className="flex items-center">
-                    <div className="flex items-center mr-4">
-                        <EyeOutlined />
-                    </div>
-                    <div className="flex items-center">
-                        <HeartOutlined />
-                    </div>
+                    {"20 AXM"}
                 </div>
             </div>
         </div >
