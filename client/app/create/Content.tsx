@@ -191,12 +191,12 @@ function ContentCreate({
     };
 
     // call smart contract to mint art and prompt
-    const mint = async (user: string, metadataCid: string, imgCid: string, promptCid: string) => {
+    const mint = async (user: string, metadataCid: string, imgCid: string, promptCid: string, artId: string) => {
         if (!user) {
             // to do: add notification
             return
         }
-        
+
         // mint prompt
         try {
             // check prompt ownership
@@ -269,7 +269,11 @@ function ContentCreate({
                         'Successfully minted art!',
                     duration: 3,
                 });
-                // to do: remove art from the list
+                // set art minted
+                await fetch(`/api/mint/${artId}`, {
+                    method: 'PATCH',
+                });
+
             } else if (data.status == "error") {
                 throw new Error('Failed to mint art!');
             }
@@ -343,7 +347,7 @@ function ContentCreate({
 
         setPrepareMinting(data._id);
         const { meta_data_ipfs, art_ipfs, prompt_ipfs } = await prepare();
-        await mint(session?.user?.name, meta_data_ipfs, art_ipfs, prompt_ipfs);
+        await mint(session?.user?.name, meta_data_ipfs, art_ipfs, prompt_ipfs, data._id);
     }
 
     return (
