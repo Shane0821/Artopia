@@ -218,7 +218,7 @@ function page({ params }: { params: { addr: string } }) {
             }
           }
         }
-        console.log("prompt list", promptList)
+        // console.log("prompt list", promptList)
         setPromptList(promptList.reverse())
       } catch (error) {
         console.error(error);
@@ -245,7 +245,7 @@ function page({ params }: { params: { addr: string } }) {
             }
           }
         }
-        console.log("art list", artList)
+        // console.log("art list", artList)
         setArtList(artList.reverse())
       } catch (error) {
         console.error(error);
