@@ -11,6 +11,7 @@ interface Props {
 const CollectionCarousel = ({ setCurrentSlide }: Props) => {
     const onChange = (_currentSlide: number) => {
         setCurrentSlide(_currentSlide);
+        console.log(_currentSlide)
     };
 
     return (
