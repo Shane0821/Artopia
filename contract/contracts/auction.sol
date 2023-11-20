@@ -57,6 +57,41 @@ contract Auction {
         imgContract = ImageNFT(contractAddress);
     }
 
+    /// get endtime of auction
+    function getEndTime() public view returns (uint) {
+        return auctionEndTime;
+    }
+
+    /// get highest bidder
+    function getHighestBidder() public view returns (address) {
+        return highestBidder;
+    }
+
+    /// get highest bid
+    function getHighestBid() public view returns (uint) {
+        return highestBid;
+    }
+
+    /// get beneficiary
+    function getBeneficiary() public view returns (address) {
+        return beneficiary;
+    }
+
+    /// get token id
+    function getTokenId() public view returns (uint256) {
+        return tokenId;
+    }
+
+    /// is ended
+    function isEnded() public view returns (bool) {
+        return ended;
+    }
+
+    /// pendingReturns by address
+    function getPendingReturns(address addr) public view returns (uint) {
+        return pendingReturns[addr];
+    }
+
     /// Bid on the auction with the value sent
     /// together with this transaction.
     /// The value will only be refunded if the
@@ -142,7 +177,7 @@ contract Auction {
         emit AuctionEnded(highestBidder, highestBid);
 
         // 3. Interaction
-        uint beneficiaryTransfer = highestBid * 975 / 1000;
+        uint beneficiaryTransfer = highestBid * 975 / 1000; // overflow?
         beneficiary.transfer(beneficiaryTransfer);
         imgContract.transferFrom(beneficiary, highestBidder, tokenId);
 

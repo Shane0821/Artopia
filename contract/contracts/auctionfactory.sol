@@ -6,16 +6,23 @@ contract AuctionFactory {
     address[] public auctions;
     address payable public organizer;
     address imgContractAddress;
+    mapping(uint256 => address) public tokenIdToAuction;
 
     constructor(address t) {
         organizer = payable(msg.sender);
         imgContractAddress = t;
     }
 
-    function createAuction(uint duration, uint256 tokenId) public returns (uint){
+    function createAuction(uint duration, uint256 tokenId) public returns (address){
         Auction newAuction = new Auction(duration, payable(msg.sender), tokenId, imgContractAddress);
-        auctions.push(address(newAuction));
-        return auctions.length - 1;
+        address addr = address(newAuction);
+        auctions.push(addr);
+        tokenIdToAuction[tokenId] = addr;
+        return addr;
+    }
+
+    function getAunctionByTokenId(uint256 tokenId) public view returns (address) {
+        return tokenIdToAuction[tokenId];
     }
 
     function getAuctionByIndex(uint index) public view returns (address) {
