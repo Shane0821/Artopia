@@ -177,9 +177,6 @@ contract Auction {
         if (ended) revert AuctionEndAlreadyCalled();
 
         // 2. Effects
-        ended = true;
-        emit AuctionEnded(highestBidder, highestBid);
-
         if (highestBidder != address(0)) {
             // 3. Interaction
             uint beneficiaryTransfer = (highestBid * 975) / 1000; // overflow?
@@ -188,5 +185,8 @@ contract Auction {
 
             organizer.transfer(highestBid - beneficiaryTransfer);
         }
+
+        ended = true;
+        emit AuctionEnded(highestBidder, highestBid);
     }
 }
