@@ -8,13 +8,20 @@ contract AuctionFactory {
     address imgContractAddress;
     mapping(uint256 => address) public tokenIdToAuction;
 
+    event AuctionCreated(address auctionAddress, address owner, uint256 tokenId);
+
     constructor(address t) {
         organizer = payable(msg.sender);
         imgContractAddress = t;
-    }
+    }    
 
     function createAuction(uint duration, uint256 tokenId) public returns (address){
+        require(tokenIdToAuction[tokenId] == address(0), "this token is already in an auction");
+        
         Auction newAuction = new Auction(duration, payable(msg.sender), tokenId, imgContractAddress);
+
+        emit AuctionCreated(address(newAuction), msg.sender, tokenId);
+        
         address addr = address(newAuction);
         auctions.push(addr);
         tokenIdToAuction[tokenId] = addr;
