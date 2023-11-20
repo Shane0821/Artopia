@@ -3,7 +3,7 @@ import Image from '@node_modules/next/image'
 import { useState, useEffect } from 'react';
 
 import {
-    Tooltip, Button
+    Tooltip, Button, notification
 } from 'antd';
 
 import '@styles/gallery.css'
@@ -43,6 +43,7 @@ interface ArtItemProps {
 }
 
 const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) => {
+    const [noti, contextHolder] = notification.useNotification();
     const { data: session, status } = useSession()
     const [auction, setAuction] = useState("0x0000000000000000000000000000000000000000")
     const [loading, setLoading] = useState(true)
@@ -58,8 +59,21 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
             const auctionaddr: string = await createAuction(300, data.tokenId)
             setAuction(auctionaddr)
             setCurrentPrice(0)
+
+            noti['success']({
+                message: 'Message:',
+                description:
+                    'Successfully added to auction!',
+                duration: 3,
+            });
         } catch (error) {
             console.log(error)
+            noti['error']({
+                message: 'Message:',
+                description:
+                    'Failed to add to auction!',
+                duration: 3,
+            });
         }
     }
 
@@ -96,6 +110,7 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                 setPopupData(data);
             }}
         >
+            {contextHolder}
             <Image width="0"
                 height="0"
                 alt={`${data.cid}`}
@@ -110,12 +125,13 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                 onClick={(e) => e.stopPropagation()}
             >
                 <Tooltip placement="topLeft" title="Go to auction">
-                    <Button
-                        hidden={auction === "0x0000000000000000000000000000000000000000"}
-                        className="buttonStyle"
-                        icon={<KeyOutlined />}
-                        href={`/auction/${auction}`}
-                    />
+                    <a href={`/auction/${auction}`} className="item-center justify-center">
+                        <Button
+                            hidden={auction === "0x0000000000000000000000000000000000000000"}
+                            className="buttonStyle"
+                            icon={<KeyOutlined />}
+                        />
+                    </a>
                 </Tooltip>
                 <Tooltip placement="topLeft" title="Add to auction">
                     <Button
