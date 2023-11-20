@@ -74,6 +74,7 @@ const AuctionCollectionItem = ({ data, index, user }: Props) => {
                         className="buttonStyle"
                         icon={<TransactionOutlined />}
                         danger={true}
+                        href={`/collections/auction/${data._id}`}
                     />
                 </Tooltip>
             </div>
