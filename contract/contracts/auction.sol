@@ -180,10 +180,9 @@ contract Auction {
         // 2. Effects
         if (highestBidder != address(0)) {
             // 3. Interaction
+            imgContract.transferFrom(beneficiary, highestBidder, tokenId);
             uint beneficiaryTransfer = (highestBid * 975) / 1000; // overflow?
             beneficiary.transfer(beneficiaryTransfer);
-            imgContract.transferFrom(beneficiary, highestBidder, tokenId);
-
             organizer.transfer(highestBid - beneficiaryTransfer);
         }
 
