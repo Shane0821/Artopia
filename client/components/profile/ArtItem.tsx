@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from '@node_modules/next/image'
+import { useState, useEffect } from 'react';
 
 import {
     Tooltip, Button
@@ -10,6 +11,8 @@ import { useInView } from 'react-intersection-observer';
 import { useSession } from "next-auth/react"
 
 import { TransactionOutlined, AccountBookOutlined, KeyOutlined } from '@ant-design/icons';
+
+import { createAuction, getAunctionByTokenId, isEnded} from '@utils/contract'
 
 function truncateMiddle(str: string, frontChars: number, backChars: number, ellipsis = '...') {
     if (str.length <= frontChars + backChars) {
@@ -41,11 +44,39 @@ interface ArtItemProps {
 
 const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) => {
     const { data: session, status } = useSession()
+    const [auction, setAuction] = useState("0x0000000000000000000000000000000000000000")
+    const [loading, setLoading] = useState(true)
 
     const [ref, inView] = useInView({
         threshold: 0,
         triggerOnce: true,
     });
+
+    const addToAuction = async () => {
+        try {
+            const auctionaddr: string = await createAuction(300, data.tokenId)
+            setAuction(auctionaddr)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        const getAuction = async () => {
+            try {
+                const addr = await getAunctionByTokenId(data.tokenId)
+                // console.log(addr)
+                const ended: boolean = await isEnded(addr)
+                // console.log("ended", ended)
+                if (!ended) 
+                    setAuction(addr)
+            } catch (error) {
+                console.log(error)
+            }
+            setLoading(false)
+        }
+        getAuction()
+    }, [])
 
     return (
         <div
@@ -70,20 +101,23 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
 
             {/* buttons */}
             < div
-                hidden={owner !== session?.user?.name}
+                hidden={owner !== session?.user?.name || loading}
                 className="absolute top-0 right-0 p-1 opacity-0 group-hover:opacity-100"
                 onClick={(e) => e.stopPropagation()}
             >
                 <Tooltip placement="topLeft" title="Go to auction">
                     <Button
+                        hidden={auction === "0x0000000000000000000000000000000000000000"}
                         className="buttonStyle"
                         icon={<KeyOutlined />}
                     />
                 </Tooltip>
                 <Tooltip placement="topLeft" title="Add to auction">
                     <Button
+                        hidden={auction !== "0x0000000000000000000000000000000000000000"}
                         className="buttonStyle"
                         icon={<TransactionOutlined />}
+                        onClick={addToAuction}
                     />
                 </Tooltip>
                 {/* <Tooltip placement="topLeft" title="Sell at fixed price">
