@@ -16,7 +16,11 @@ contract AuctionFactory {
     }    
 
     function createAuction(uint duration, uint256 tokenId) public returns (address){
-        require(tokenIdToAuction[tokenId] == address(0), "this token is already in an auction");
+        address auction = tokenIdToAuction[tokenId];
+
+        // check if the token is already in an auction
+        if (auction != address(0)) 
+            require(Auction(auction).isEnded(), "this token is already in an auction");
         
         Auction newAuction = new Auction(duration, payable(msg.sender), tokenId, imgContractAddress);
 
