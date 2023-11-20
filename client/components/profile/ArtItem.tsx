@@ -12,7 +12,7 @@ import { useSession } from "next-auth/react"
 
 import { TransactionOutlined, AccountBookOutlined, KeyOutlined } from '@ant-design/icons';
 
-import { createAuction, getAunctionByTokenId, isEnded} from '@utils/contract'
+import { createAuction, getAunctionByTokenId, isEnded, getHightestBid } from '@utils/contract'
 
 function truncateMiddle(str: string, frontChars: number, backChars: number, ellipsis = '...') {
     if (str.length <= frontChars + backChars) {
@@ -46,6 +46,7 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
     const { data: session, status } = useSession()
     const [auction, setAuction] = useState("0x0000000000000000000000000000000000000000")
     const [loading, setLoading] = useState(true)
+    const [currentPrice, setCurrentPrice] = useState(0)
 
     const [ref, inView] = useInView({
         threshold: 0,
@@ -56,6 +57,7 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
         try {
             const auctionaddr: string = await createAuction(300, data.tokenId)
             setAuction(auctionaddr)
+            setCurrentPrice(0)
         } catch (error) {
             console.log(error)
         }
@@ -68,8 +70,10 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                 // console.log(addr)
                 const ended: boolean = await isEnded(addr)
                 // console.log("ended", ended)
-                if (!ended) 
+                if (!ended)
                     setAuction(addr)
+                const hightestBid = await getHightestBid(addr)
+                setCurrentPrice(hightestBid)
             } catch (error) {
                 console.log(error)
             }
@@ -110,6 +114,7 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                         hidden={auction === "0x0000000000000000000000000000000000000000"}
                         className="buttonStyle"
                         icon={<KeyOutlined />}
+                        href={`/auction/${auction}`}
                     />
                 </Tooltip>
                 <Tooltip placement="topLeft" title="Add to auction">
@@ -128,21 +133,25 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                 </Tooltip> */}
             </div>
 
-            <div
-                className="absolute bottom-0 left-0 w-full p-2 flex items-center justify-between opacity-0 group-hover:opacity-100"
-                style={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                    color: '#f8f8f8',
-                    padding: '6px 10px', // Smaller padding will reduce the bar height
-                    fontSize: '0.85rem'
-                }}
-                onClick={(e) => e.stopPropagation()}
-            >
-                <div></div>
-                <div className="flex items-center">
-                    current price: {100} AXM
-                </div>
-            </div>
+            {
+                !(loading || auction === "0x0000000000000000000000000000000000000000") && (
+                    <div
+                        className="absolute bottom-0 left-0 w-full p-2 flex items-center justify-between opacity-0 group-hover:opacity-100"
+                        style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                            color: '#f8f8f8',
+                            padding: '6px 10px', // Smaller padding will reduce the bar height
+                            fontSize: '0.85rem'
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div></div>
+                        <div className="flex items-center">
+                            current price: {currentPrice} AXM
+                        </div>
+                    </div>
+                )
+            }
         </div >
     );
 };

@@ -176,6 +176,21 @@ export const isEnded = async(auctionAddr: string) => {
     }
 }
 
+export const getHightestBid = async(auctionAddr: string) => {
+    try {
+        const hightestBid: BigInt = await readContract({
+            address: auctionAddr,
+            abi: auctionABI,
+            functionName: 'getHighestBid',
+            chainId: chainId,
+            args: []
+        })
+        return Number(hightestBid)
+    } catch (error) {
+        throw error // should be handled by caller
+    }
+}
+
 export const endAuction = async(auctionAddr: string) => {
     try {
         const { hash } = await writeContract({
