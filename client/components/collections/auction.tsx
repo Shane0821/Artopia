@@ -40,13 +40,6 @@ function Auction(shown: any) {
                     console.log("fetching..")
                     setFetching(true);
 
-                    noti['info']({
-                        message: 'Message:',
-                        description:
-                            'Fetching art...',
-                        duration: 3,
-                    });
-
                     const response = await fetch(`/api/publicGallery/`, {
                         method: 'GET'
                     });
@@ -111,7 +104,7 @@ function Auction(shown: any) {
     }
 
     return (
-        shown ? (<>
+        <div hidden={!shown}>
             <Detail popup={popup} setPopup={setPopup} data={popupData} />
 
             <div
@@ -164,7 +157,7 @@ function Auction(shown: any) {
                     />
                 ))}
             </Masonry>
-        </>) : (<></>)
+        </div>
     );
 }
 

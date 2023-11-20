@@ -22,7 +22,7 @@ function Collections() {
             className="sm:px-16 px-6 max-w-7xl"
         >
             <CollectionCarousel setCurrentSlide={setCurrentSlide} />
-            <Auction shown={currentSlide === 0} />
+            {currentSlide === 0 && <Auction />}
         </Space >
     );
 }
