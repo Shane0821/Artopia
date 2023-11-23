@@ -47,20 +47,20 @@ export const POST = async (request) => {
         };
         // console.log(options, data.address)
 
-        // const res = await axios.request(options);
+        const res = await axios.request(options);
 
         // for development
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-        await sleep(3000)
-        // fake res
-        const res = {
-            data: {
-                image: (Math.floor(Math.random() * 2) ? default64_1 : default64_2),
-                seed: 0
-            }
-        }
+        // function sleep(ms) {
+        //     return new Promise(resolve => setTimeout(resolve, ms));
+        // }
+        // await sleep(3000)
+        // // fake res
+        // const res = {
+        //     data: {
+        //         image: (Math.floor(Math.random() * 2) ? default64_1 : default64_2),
+        //         seed: 0
+        //     }
+        // }
 
         // connect to database to store art
         await connectToDB()
