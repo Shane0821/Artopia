@@ -10,7 +10,7 @@ import '@styles/gallery.css'
 import { useInView } from 'react-intersection-observer';
 import { useSession } from "next-auth/react"
 
-import { TransactionOutlined, AccountBookOutlined, KeyOutlined } from '@ant-design/icons';
+import { TransactionOutlined, AccountBookOutlined, KeyOutlined, DollarOutlined } from '@ant-design/icons';
 
 import { createAuction, getAunctionByTokenId, isEnded, getHightestBid } from '@utils/contract'
 
@@ -57,6 +57,7 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
     const addToAuction = async () => {
         try {
             const auctionaddr: string = await createAuction(300, data.tokenId)
+            console.log(auctionaddr)
             setAuction(auctionaddr)
             setCurrentPrice(0)
 
@@ -125,7 +126,7 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                 onClick={(e) => e.stopPropagation()}
             >
                 <Tooltip placement="topLeft" title="Go to auction">
-                    <a href={`/auction/${auction}`} className="item-center justify-center">
+                    <a href={`/collections/auction/${auction}`} className="item-center justify-center">
                         <Button
                             hidden={auction === "0x0000000000000000000000000000000000000000"}
                             className="buttonStyle"
@@ -161,9 +162,12 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                         }}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div></div>
                         <div className="flex items-center">
-                            current price: {currentPrice} AXM
+                            <DollarOutlined style={{ marginRight: 10 }} />
+                            Current price
+                        </div>
+                        <div className="flex items-center">
+                             {currentPrice} AXM
                         </div>
                     </div>
                 )
