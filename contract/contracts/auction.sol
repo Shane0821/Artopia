@@ -93,8 +93,8 @@ contract Auction {
     }
 
     /// pendingReturns by address
-    function getPendingReturns(address addr) public view returns (uint) {
-        return pendingReturns[addr];
+    function getPendingReturns() public view returns (uint) {
+        return pendingReturns[msg.sender];
     }
 
     /// Bid on the auction with the value sent
