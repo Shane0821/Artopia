@@ -136,9 +136,23 @@ export const createAuction = async(duration: number, tokenId: number) => {
 
         const data = await waitForTransaction({
             hash: hash,
-        })
+        })    
+        return '0x' + data.logs[0].topics[1].slice(-40);
+    } catch (error) {
+        throw error // should be handled by caller
+    }
+}
 
-        return data.logs[0].topics[1].replace(/^0x0*/, '0x');;
+export const getAllAuctions = async() => {
+    try {
+        const auctions: string[] = await readContract({
+            address: auctionFactoryAddr,
+            abi: auctionfactoryABI,
+            functionName: 'allAuctions',
+            chainId: chainId,
+            args: []
+        })
+        return auctions
     } catch (error) {
         throw error // should be handled by caller
     }
@@ -176,6 +190,51 @@ export const isEnded = async(auctionAddr: string) => {
     }
 }
 
+export const getAuctionEndTime = async(auctionAddr: string) => {
+    try {
+        const endTime: number = await readContract({
+            address: auctionAddr,
+            abi: auctionABI,
+            functionName: 'getEndTime',
+            chainId: chainId,
+            args: []
+        })
+        return endTime
+    } catch (error) {
+        throw error // should be handled by caller
+    }
+}
+
+export const getAuctionTokenId = async(auctionAddr: string) => {
+    try {
+        const tokenId: number = await readContract({
+            address: auctionAddr,
+            abi: auctionABI,
+            functionName: 'getTokenId',
+            chainId: chainId,
+            args: []
+        })
+        return tokenId
+    } catch (error) {
+        throw error // should be handled by caller
+    }
+}
+
+export const getBeneficiary = async(auctionAddr: string) => {
+    try {
+        const beneficiary: string = await readContract({
+            address: auctionAddr,
+            abi: auctionABI,
+            functionName: 'getBeneficiary',
+            chainId: chainId,
+            args: []
+        })
+        return beneficiary
+    } catch (error) {
+        throw error // should be handled by caller
+    }
+}
+
 export const getHightestBid = async(auctionAddr: string) => {
     try {
         const hightestBid: BigInt = await readContract({
@@ -185,7 +244,7 @@ export const getHightestBid = async(auctionAddr: string) => {
             chainId: chainId,
             args: []
         })
-        return Number(hightestBid)
+        return Number(hightestBid) / Number(parseEther('1'))
     } catch (error) {
         throw error // should be handled by caller
     }
@@ -217,7 +276,7 @@ export const bid = async(auctionAddr: string, amount: number) => {
             functionName: 'bid',
             chainId: chainId,
             args: [],
-            value: parseEther(amount)
+            value: parseEther(`${amount}`)
         })
 
         const data = await waitForTransaction({
