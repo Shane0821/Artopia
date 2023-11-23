@@ -93,8 +93,8 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                 // console.log("ended", ended)
                 if (!ended)
                     setAuction(addr)
-                const hightestBid = await getHighestBid(addr)
-                setCurrentPrice(Math.max(2, hightestBid))
+                const highestBid = await getHighestBid(addr)
+                setCurrentPrice(Math.max(2, highestBid))
             } catch (error) {
                 console.log(error)
             }
