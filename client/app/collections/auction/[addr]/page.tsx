@@ -173,7 +173,6 @@ function Bid({ params }: { params: { addr: string } }) {
                     setNftData(auctionData);
                     setFetching(false);
                 } catch (error) {
-                    setFetching(false);
                 }
             } else {
                 setNftData({});
