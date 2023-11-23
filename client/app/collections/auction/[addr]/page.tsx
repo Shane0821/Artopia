@@ -11,6 +11,16 @@ const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 import Detail from '@components/profile/ArtDetail'
 import '@styles/auction.css'
 
+function truncateMiddle(str: string, frontChars: number, backChars: number, ellipsis = '...') {
+    if (!str) return str;
+    if (str.length <= frontChars + backChars) {
+        return str;
+    }
+    var frontStr = str.substring(0, frontChars);
+    var backStr = str.substring(str.length - backChars);
+    return frontStr + ellipsis + backStr;
+}
+
 function Bid() {
     const [fetching, setFetching] = useState(false);
     const [nftData, setNftData] = useState({});
@@ -105,6 +115,23 @@ function Bid() {
                         <div className="w-2/3 p-4 flex flex-col justify-center items-center" style={{ height: '85vh' }}>
                             <Divider />
 
+                            <div>
+                                <h2>
+                                    <span className="owner-title">NFT owner:</span>
+                                    <a className="owner-link" href={`/profile/${nftData.address}`}>
+                                        {truncateMiddle(nftData.address, 7, 7)}
+                                    </a>
+                                </h2>
+                                <h2>
+                                    <span className="owner-title">Prompt owner:</span>
+                                    <a className="owner-link" href={`/profile/${nftData.address}`}>
+                                        {truncateMiddle(nftData.address, 7, 7)}
+                                    </a>
+                                </h2>
+                            </div>
+
+                            <Divider />
+
                             <Countdown
                                 title="Sale Ends In:"
                                 value={Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30}
@@ -112,16 +139,14 @@ function Bid() {
                             />
 
                             <Divider />
-                            <hr className="mt-4" />
 
-                            <div className="mt-4">
+                            <div>
                                 <h2>Current Highest Price: 10 AXM</h2>
                             </div>
 
                             <Divider />
-                            <hr className="mt-4" />
 
-                            <div className="mt-4 flex justify-center">
+                            <div className="flex justify-center">
                                 <Button className="mr-2">Bid</Button>
                                 <Button className="mr-2">Withdraw</Button>
                                 <Button className="mr-2">Close</Button>
@@ -134,7 +159,7 @@ function Bid() {
                     </div>
                 }
             </div>
-        </Space>
+        </Space >
     );
 }
 
