@@ -365,9 +365,15 @@ function Bid({ params }: { params: { addr: string } }) {
                             <Divider />
 
                             <div className="flex justify-center">
-                                <Button hidden={nftData.pendingReturn === 0} className="mr-2">Withdraw</Button>
+                                <Button
+                                    hidden={nftData.pendingReturn === 0}
+                                    className="mr-2"
+                                >
+                                    Withdraw
+                                </Button>
                                 <Button
                                     className="mr-2"
+                                    hidden={nftData.endTime > 0 || session?.user.name != nftData.beneficiary}
                                     onClick={() => { handleEndAuction(); }}
                                 >
                                     Close
