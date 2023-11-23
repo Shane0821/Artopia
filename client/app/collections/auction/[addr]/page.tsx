@@ -259,7 +259,7 @@ function Bid({ params }: { params: { addr: string } }) {
             });
         } catch (error) {
             console.log(error)
-            noti['success']({
+            noti['error']({
                 message: 'Message:',
                 description:
                     `Failed to end auction!`,
@@ -281,6 +281,12 @@ function Bid({ params }: { params: { addr: string } }) {
             });
         } catch (error) {
             console.log(error)
+            noti['error']({
+                message: 'Message:',
+                description:
+                    `Failed to withdraw!`,
+                duration: 3,
+            });
         }
         setWithdrawing(false)
     }
