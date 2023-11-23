@@ -14,11 +14,11 @@ import '@styles/auction.css'
 import {
     getAuctionTokenId,
     getBeneficiary, getTokenURIOfArtByTokenId,
-    getPromptOwnerByCID,
+    getPromptOwnerByCID, getAuctionEndTime,
     getHighestBid, isAuctionEnded
 } from '@utils/contract';
 
-interface artDataType {
+interface auctionDataType {
     tokenId: number,
     name: string,
     description: string,
@@ -35,7 +35,8 @@ interface artDataType {
     width: number,
     height: number,
     beneficiary: string,
-    promptOwner: string
+    promptOwner: string,
+    endTime: number
 }
 
 function truncateMiddle(str: string, frontChars: number, backChars: number, ellipsis = '...') {
@@ -80,7 +81,7 @@ function Bid({ params }: { params: { addr: string } }) {
                     }
                     const data = await response.json();
 
-                    let artData: artDataType = {
+                    let auctionData: auctionDataType = {
                         tokenId: artId,
                         name: "",
                         description: "",
@@ -97,48 +98,53 @@ function Bid({ params }: { params: { addr: string } }) {
                         width: 0,
                         height: 0,
                         beneficiary: "",
-                        promptOwner: ""
+                        promptOwner: "",
+                        endTime: 0
                     };
-                    artData.name = data.name
-                    artData.description = data.description
-                    artData.cid = data.image.split("ipfs://")[1] ? data.image.split("ipfs://")[1] : data.image.split("ipfs://")[0] // should be 1
-                    artData.beneficiary = await getBeneficiary(params.addr)
+                    auctionData.name = data.name
+                    auctionData.description = data.description
+                    auctionData.cid = data.image.split("ipfs://")[1] ? data.image.split("ipfs://")[1] : data.image.split("ipfs://")[0] // should be 1
+                    auctionData.beneficiary = await getBeneficiary(params.addr)
+
+                    const currentTimestampInSeconds = Math.floor(new Date().getTime() / 1000);
+                    auctionData.endTime = Number(await getAuctionEndTime(params.addr)) - currentTimestampInSeconds
+                    // auctionData.endTime = Math.max(0, auctionData.endTime)
 
                     data.attributes?.forEach((attribute: any) => {
                         switch (attribute.trait_type) {
                             case 'Model':
-                                artData.model = attribute.value;
+                                auctionData.model = attribute.value;
                                 break;
                             case 'Prompt':
-                                artData.promptcid = attribute.value.split("ipfs://")[1] ? attribute.value.split("ipfs://")[1] : attribute.value.split("ipfs://")[0]; // // should be 1
+                                auctionData.promptcid = attribute.value.split("ipfs://")[1] ? attribute.value.split("ipfs://")[1] : attribute.value.split("ipfs://")[0]; // // should be 1
                                 break;
                             case 'Steps':
-                                artData.steps = attribute.value;
+                                auctionData.steps = attribute.value;
                                 break;
                             case 'GuidanceScale':
-                                artData.guidance = attribute.value;
+                                auctionData.guidance = attribute.value;
                                 break;
                             case 'Seed':
-                                artData.seed = attribute.value;
+                                auctionData.seed = attribute.value;
                                 break;
                             case 'Sampler':
-                                artData.sampler = attribute.value;
+                                auctionData.sampler = attribute.value;
                                 break;
                             case 'CreatedAt':
-                                artData.created_at = attribute.value;
+                                auctionData.created_at = attribute.value;
                                 break;
                             case 'Height':
-                                artData.height = attribute.value;
+                                auctionData.height = attribute.value;
                                 break;
                             case 'Width':
-                                artData.width = attribute.value;
+                                auctionData.width = attribute.value;
                                 break;
                         }
                     })
 
                     {
                         // fetch prompt by cid
-                        const promptURI = 'https://ipfs.io/ipfs/' + artData.promptcid
+                        const promptURI = 'https://ipfs.io/ipfs/' + auctionData.promptcid
                         console.log(promptURI)
                         const response = await fetch(promptURI, {
                             method: 'GET'
@@ -148,12 +154,12 @@ function Bid({ params }: { params: { addr: string } }) {
                             throw new Error(message);
                         }
                         const data = await response.json();
-                        artData.prompt = data.textData.prompt
-                        artData.negative_prompt = data.textData.negative_prompt
-                        artData.promptOwner = await getPromptOwnerByCID(artData.promptcid)
+                        auctionData.prompt = data.textData.prompt
+                        auctionData.negative_prompt = data.textData.negative_prompt
+                        auctionData.promptOwner = await getPromptOwnerByCID(auctionData.promptcid)
                     }
 
-                    setNftData(artData);
+                    setNftData(auctionData);
                     setFetching(false);
                 } catch (error) {
                     setFetching(false);
@@ -264,7 +270,7 @@ function Bid({ params }: { params: { addr: string } }) {
                             }}>
                                 <div>🔥 Sale Ends In:</div>
                                 <Countdown
-                                    value={Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30}
+                                    value={Date.now() + nftData.endTime * 1000}
                                     format="HH:mm:ss"
                                     style={{
                                         marginLeft: '10px',
