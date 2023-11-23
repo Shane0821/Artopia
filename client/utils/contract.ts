@@ -58,6 +58,21 @@ export const getTokenURIOfPromptByTokenId = async(tokenId: number) => {
     }
 }
 
+export const getPromptOwnerByCID = async(cid: string) => {
+    try {
+        const owner: string = await readContract({
+            address: promptContractAddr,
+            abi: promptABI,
+            functionName: 'getOnwerByCID',
+            chainId: chainId,
+            args: [cid]
+        })
+        return owner
+    } catch (error) {
+        throw error // should be handled by caller
+    }
+}
+
 // art
 export const getArtCountByUser = async(usr: string) => {
     try {
