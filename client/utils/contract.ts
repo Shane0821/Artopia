@@ -175,7 +175,7 @@ export const getAunctionByTokenId = async(tokenId: number) => {
 }
 
 // auction
-export const isEnded = async(auctionAddr: string) => {
+export const isAuctionEnded = async(auctionAddr: string) => {
     try {
         const ended: boolean = await readContract({
             address: auctionAddr,
