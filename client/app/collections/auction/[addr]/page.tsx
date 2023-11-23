@@ -60,8 +60,18 @@ function Bid({ params }: { params: { addr: string } }) {
     const [fetching, setFetching] = useState(true);
     const [nftData, setNftData] = useState({});
 
-    const { data: session, status } = useSession()
-    const { address, isConnected } = useAccount()
+    const { data: session, status } = useSession();
+    const { address, isConnected } = useAccount();
+    const [userConnected, setUserConnected] = useState(false);
+
+    useEffect(() => {
+        if (isConnected && session?.user) {
+            setUserConnected(true);
+        }
+        else {
+            setUserConnected(false);
+        }
+    }, [isConnected, session?.user]);
 
     const [bidPrice, setBidPrice] = useState(2);
     const [bidding, setBidding] = useState(false);
@@ -187,8 +197,20 @@ function Bid({ params }: { params: { addr: string } }) {
             }
         };
         // console.log(userConnected)
-        fetchData();
-    }, []);
+        if (userConnected && session?.user) fetchData();
+    }, [userConnected]);
+
+    useEffect(() => {
+        if (isConnected && session?.user) {
+            setFetching(false);
+        }
+        else {
+            setFetching(true);
+        }
+        if (!isConnected) {
+            redirect('/');
+        }
+    }, [isConnected, session?.user])
 
     useEffect(() => {
         if (isConnected && session?.user) {
