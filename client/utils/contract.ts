@@ -327,8 +327,6 @@ export const bid = async(auctionAddr: string, amount: number) => {
         const data = await waitForTransaction({
             hash: hash,
         })
-
-        console.log(data)
     } catch (error) {
         throw error // should be handled by caller
     }
