@@ -57,6 +57,7 @@ function truncateMiddle(str: string, frontChars: number, backChars: number, elli
 }
 
 function Bid({ params }: { params: { addr: string } }) {
+    const [noti, contextHolder] = notification.useNotification();
     const [fetching, setFetching] = useState(true);
     const [nftData, setNftData] = useState({});
 
@@ -250,9 +251,20 @@ function Bid({ params }: { params: { addr: string } }) {
         setEnding(true)
         try {
             await endAuction(params.addr);
-
+            noti['success']({
+                message: 'Message:',
+                description:
+                    `Successfully ended auction!`,
+                duration: 3,
+            });
         } catch (error) {
             console.log(error)
+            noti['success']({
+                message: 'Message:',
+                description:
+                    `Failed to end auction!`,
+                duration: 3,
+            });
         }
         setEnding(false)
     }
@@ -261,6 +273,12 @@ function Bid({ params }: { params: { addr: string } }) {
         setWithdrawing(true)
         try {
             await withdrawOverBid(params.addr);
+            noti['success']({
+                message: 'Message:',
+                description:
+                    `Successfully withdrew  ${nftData.pendingReturn} AXM :)`,
+                duration: 3,
+            });
         } catch (error) {
             console.log(error)
         }
@@ -273,6 +291,7 @@ function Bid({ params }: { params: { addr: string } }) {
             style={{ width: '100%' }}
             className="sm:px-16 px-6 max-w-7xl"
         >
+            {contextHolder}
             <div
                 className="flex border p-4 m-4 rounded shadow-lg flex-col justify-between"
                 style={{
