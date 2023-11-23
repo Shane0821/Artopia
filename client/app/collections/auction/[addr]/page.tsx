@@ -290,6 +290,9 @@ function Bid({ params }: { params: { addr: string } }) {
                     `Successfully withdrew  ${nftData.pendingReturn} AXM :)`,
                 duration: 3,
             });
+            setNftData(prevData => {
+                return { ...prevData, pendingReturn: 0 };
+            })
         } catch (error) {
             console.log(error)
             noti['error']({
