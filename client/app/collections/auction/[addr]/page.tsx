@@ -18,6 +18,7 @@ import {
     bid, getPendingReturns,
     getHighestBid
 } from '@utils/contract';
+import { profileEnd } from 'console';
 
 interface auctionDataType {
     tokenId: number,
@@ -170,6 +171,8 @@ function Bid({ params }: { params: { addr: string } }) {
 
                     auctionData.pendingReturn = await getPendingReturns(params.addr);
 
+                    console.log(auctionData.pendingReturn)
+
                     setNftData(auctionData);
                     setFetching(false);
                 } catch (error) {
@@ -188,8 +191,7 @@ function Bid({ params }: { params: { addr: string } }) {
                 await bid(params.addr, bidPrice);
 
                 setNftData(prevData => {
-                    prevData.highestBid = bidPrice;
-                    return prevData;
+                    return { ...prevData, highestBid: bidPrice };
                 })
                 setBidding(false);
             } catch (error) {
@@ -339,6 +341,7 @@ function Bid({ params }: { params: { addr: string } }) {
                                 <Button
                                     title={nftData.endTime <= 0 ? "Auction is closed" : "Bid"}
                                     onClick={() => { handleBid(); }}
+                                    loading={bidding}
                                     disabled={nftData.endTime <= 0}
                                 >
                                     Bid
