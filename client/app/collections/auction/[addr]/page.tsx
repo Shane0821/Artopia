@@ -20,7 +20,7 @@ import {
     getBeneficiary, getTokenURIOfArtByTokenId,
     getPromptOwnerByCID, getAuctionEndTime,
     bid, getPendingReturns,
-    getHighestBid, endAuction
+    getHighestBid, endAuction, withdrawOverBid
 } from '@utils/contract';
 
 interface auctionDataType {
@@ -75,7 +75,8 @@ function Bid({ params }: { params: { addr: string } }) {
 
     const [bidPrice, setBidPrice] = useState(2);
     const [bidding, setBidding] = useState(false);
-
+    const [withdrawing, setWithdrawing] = useState(false);
+    const [ending, setEnding] = useState(false);
     const [popup, setPopup] = useState(false);
 
     // fetch art
@@ -246,11 +247,24 @@ function Bid({ params }: { params: { addr: string } }) {
     }
 
     const handleEndAuction = async () => {
+        setEnding(true)
         try {
             await endAuction(params.addr);
+
         } catch (error) {
             console.log(error)
         }
+        setEnding(false)
+    }
+
+    const handleWithdraw = async () => {
+        setWithdrawing(true)
+        try {
+            await withdrawOverBid(params.addr);
+        } catch (error) {
+            console.log(error)
+        }
+        setWithdrawing(false)
     }
 
     return (
@@ -403,6 +417,8 @@ function Bid({ params }: { params: { addr: string } }) {
                                 <Button
                                     hidden={nftData.pendingReturn === 0}
                                     className="mr-2"
+                                    onClick={() => { handleWithdraw(); }}
+                                    loading={withdrawing}
                                 >
                                     Withdraw
                                 </Button>
@@ -410,6 +426,7 @@ function Bid({ params }: { params: { addr: string } }) {
                                     className="mr-2"
                                     hidden={nftData.endTime > 0 || session?.user.name != nftData.beneficiary}
                                     onClick={() => { handleEndAuction(); }}
+                                    loading={ending}
                                 >
                                     Close
                                 </Button>
