@@ -350,14 +350,14 @@ export const withdrawOverBid = async(auctionAddr: string) => {
     }
 }
 
-export const getPendingReturns = async(auctionAddr: string) => {
+export const getPendingReturns = async(auctionAddr: string, usr: string) => {
     try {
         const pendingReturn: BigInt = await readContract({
             address: auctionAddr,
             abi: auctionABI,
             functionName: 'getPendingReturns',
             chainId: chainId,
-            args: []
+            args: [usr]
         })
         console.log("return", pendingReturn)
         return Number(pendingReturn) / Number(parseEther('1'))
