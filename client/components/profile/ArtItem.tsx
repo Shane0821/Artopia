@@ -10,9 +10,11 @@ import '@styles/gallery.css'
 import { useInView } from 'react-intersection-observer';
 import { useSession } from "next-auth/react"
 
-import { TransactionOutlined, AccountBookOutlined, KeyOutlined, DollarOutlined } from '@ant-design/icons';
+import { TransactionOutlined, AccountBookOutlined, MoneyCollectOutlined, DollarOutlined } from '@ant-design/icons';
 
 import { createAuction, getAunctionByTokenId, isEnded, getHightestBid } from '@utils/contract'
+
+import { bid, endAuction, approveArt} from '@utils/contract'
 
 function truncateMiddle(str: string, frontChars: number, backChars: number, ellipsis = '...') {
     if (str.length <= frontChars + backChars) {
@@ -48,6 +50,7 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
     const [auction, setAuction] = useState("0x0000000000000000000000000000000000000000")
     const [loading, setLoading] = useState(true)
     const [currentPrice, setCurrentPrice] = useState(0)
+    const [addWaiting, setAddWaiting] = useState(false)
 
     const [ref, inView] = useInView({
         threshold: 0,
@@ -55,10 +58,13 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
     });
 
     const addToAuction = async () => {
+        setAddWaiting(true)
         try {
             const auctionaddr: string = await createAuction(300, data.tokenId)
             setAuction(auctionaddr)
-            setCurrentPrice(0)
+            setCurrentPrice(2)
+
+            await approveArt(auction, data.tokenId)
 
             noti['success']({
                 message: 'Message:',
@@ -75,6 +81,7 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                 duration: 3,
             });
         }
+        setAddWaiting(false)
     }
 
     useEffect(() => {
@@ -87,7 +94,7 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                 if (!ended)
                     setAuction(addr)
                 const hightestBid = await getHightestBid(addr)
-                setCurrentPrice(hightestBid)
+                setCurrentPrice(Math.max(2, hightestBid))
             } catch (error) {
                 console.log(error)
             }
@@ -121,24 +128,25 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
             {/* buttons */}
             < div
                 hidden={owner !== session?.user?.name || loading}
-                className="absolute top-0 right-0 p-1 opacity-0 group-hover:opacity-100"
+                className="absolute top-0 right-0 p-1"
                 onClick={(e) => e.stopPropagation()}
             >
                 <Tooltip placement="topLeft" title="Go to auction">
                     <a href={`/collections/auction/${auction}`} className="item-center justify-center">
                         <Button
-                            hidden={auction === "0x0000000000000000000000000000000000000000"}
+                            hidden={auction === "0x0000000000000000000000000000000000000000" || addWaiting === true}
                             className="buttonStyle"
-                            icon={<KeyOutlined />}
+                            icon={<MoneyCollectOutlined />}
                         />
                     </a>
                 </Tooltip>
                 <Tooltip placement="topLeft" title="Add to auction">
                     <Button
-                        hidden={auction !== "0x0000000000000000000000000000000000000000"}
+                        hidden={auction !== "0x0000000000000000000000000000000000000000" && addWaiting === false }
                         className="buttonStyle"
                         icon={<TransactionOutlined />}
                         onClick={addToAuction}
+                        loading={addWaiting}
                     />
                 </Tooltip>
                 {/* <Tooltip placement="topLeft" title="Sell at fixed price">
@@ -152,7 +160,7 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
             {
                 !(loading || auction === "0x0000000000000000000000000000000000000000") && (
                     <div
-                        className="absolute bottom-0 left-0 w-full p-2 flex items-center justify-between opacity-0 group-hover:opacity-100"
+                        className="absolute bottom-0 left-0 w-full p-2 flex items-center justify-between"
                         style={{
                             backgroundColor: 'rgba(0, 0, 0, 0.6)',
                             color: '#f8f8f8',
