@@ -11,6 +11,31 @@ const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 import Detail from '@components/profile/ArtDetail'
 import '@styles/auction.css'
 
+import {
+    getAuctionTokenId,
+    getBeneficiary, getTokenURIOfArtByTokenId,
+    getHighestBid, isAuctionEnded
+} from '@utils/contract';
+
+interface artDataType {
+    tokenId: number,
+    name: string,
+    description: string,
+    cid: string,
+    promptcid: string,
+    prompt: string,
+    negative_prompt: string
+    model: string,
+    steps: number,
+    guidance: number,
+    seed: number,
+    sampler: string,
+    created_at: string,
+    width: number,
+    height: number,
+    beneficiary: string
+}
+
 function truncateMiddle(str: string, frontChars: number, backChars: number, ellipsis = '...') {
     if (!str) return str;
     if (str.length <= frontChars + backChars) {
@@ -21,7 +46,7 @@ function truncateMiddle(str: string, frontChars: number, backChars: number, elli
     return frontStr + ellipsis + backStr;
 }
 
-function Bid() {
+function Bid({ params }: { params: { addr: string } }) {
     const [fetching, setFetching] = useState(false);
     const [nftData, setNftData] = useState({});
 
@@ -37,19 +62,94 @@ function Bid() {
                     console.log("fetching..")
                     setFetching(true);
 
-                    const response = await fetch(`/api/publicGallery/`, {
-                        method: 'GET'
-                    });
+                    const artId = await getAuctionTokenId(params.addr);
 
-                    // Handle the response
+                    // get metadata uri
+                    const tokenURI: string = await getTokenURIOfArtByTokenId(artId)
+                    const metaURI = 'https://ipfs.io/ipfs/' + tokenURI.split("ipfs://")[1]
+
+                    // get info from metadata
+                    const response = await fetch(metaURI, {
+                        method: 'GET'
+                    })
                     if (!response.ok) {
                         const message = `An error has occurred: ${response.status}`;
                         throw new Error(message);
                     }
-
                     const data = await response.json();
 
-                    setNftData(data[0])
+                    let imgData: artDataType = {
+                        tokenId: artId,
+                        name: "",
+                        description: "",
+                        cid: "",
+                        promptcid: "",
+                        prompt: "",
+                        negative_prompt: "",
+                        model: "",
+                        steps: 0,
+                        guidance: 0,
+                        seed: 0,
+                        sampler: "",
+                        created_at: "",
+                        width: 0,
+                        height: 0,
+                        beneficiary: ""
+                    };
+                    imgData.name = data.name
+                    imgData.description = data.description
+                    imgData.cid = data.image.split("ipfs://")[1] ? data.image.split("ipfs://")[1] : data.image.split("ipfs://")[0] // should be 1
+                    imgData.beneficiary = await getBeneficiary(params.addr)
+
+                    data.attributes?.forEach((attribute: any) => {
+                        switch (attribute.trait_type) {
+                            case 'Model':
+                                imgData.model = attribute.value;
+                                break;
+                            case 'Prompt':
+                                imgData.promptcid = attribute.value.split("ipfs://")[1] ? attribute.value.split("ipfs://")[1] : attribute.value.split("ipfs://")[0]; // // should be 1
+                                break;
+                            case 'Steps':
+                                imgData.steps = attribute.value;
+                                break;
+                            case 'GuidanceScale':
+                                imgData.guidance = attribute.value;
+                                break;
+                            case 'Seed':
+                                imgData.seed = attribute.value;
+                                break;
+                            case 'Sampler':
+                                imgData.sampler = attribute.value;
+                                break;
+                            case 'CreatedAt':
+                                imgData.created_at = attribute.value;
+                                break;
+                            case 'Height':
+                                imgData.height = attribute.value;
+                                break;
+                            case 'Width':
+                                imgData.width = attribute.value;
+                                break;
+                        }
+                    })
+
+                    {
+                        // fetch prompt by cid
+                        const promptURI = 'https://ipfs.io/ipfs/' + imgData.promptcid
+                        console.log(promptURI)
+                        const response = await fetch(promptURI, {
+                            method: 'GET'
+                        })
+                        if (!response.ok) {
+                            const message = `An error has occurred: ${response.status}`;
+                            throw new Error(message);
+                        }
+                        const data = await response.json();
+                        imgData.prompt = data.textData.prompt
+                        imgData.negative_prompt = data.textData.negative_prompt
+                    }
+
+                    setNftData(imgData);
                     setFetching(false);
                 } catch (error) {
                     setFetching(false);
@@ -106,7 +206,7 @@ function Bid() {
                         >
                             <img
                                 className="rounded auction_pic"
-                                src={nftData.base64}
+                                src={`https://ipfs.io/ipfs/${nftData.cid}`}
                                 alt="Nft"
                                 onClick={() => { setPopup(true); }}
                             />
@@ -129,16 +229,16 @@ function Bid() {
                                     <span className="owner-title">
                                         <HighlightOutlined /> NFT owner:
                                     </span>
-                                    <a className="owner-link" href={`/profile/${nftData.address}`}>
-                                        {truncateMiddle(nftData.address, 9, 9)}
+                                    <a className="owner-link" href={`/profile/${nftData.beneficiary}`}>
+                                        {truncateMiddle(nftData.beneficiary, 9, 9)}
                                     </a>
                                 </h2>
                                 <h2>
                                     <span className="owner-title">
                                         <AlertOutlined /> Prompt owner:
                                     </span>
-                                    <a className="owner-link" href={`/profile/${nftData.address}`}>
-                                        {truncateMiddle(nftData.address, 9, 9)}
+                                    <a className="owner-link" href={`/profile/${nftData.beneficiary}`}>
+                                        {truncateMiddle(nftData.beneficiary, 9, 9)}
                                     </a>
                                 </h2>
                             </div>
