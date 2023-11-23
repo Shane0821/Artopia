@@ -18,7 +18,6 @@ import {
     bid, getPendingReturns,
     getHighestBid
 } from '@utils/contract';
-import { profileEnd } from 'console';
 
 interface auctionDataType {
     tokenId: number,
