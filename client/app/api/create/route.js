@@ -21,6 +21,10 @@ export const POST = async (request) => {
         // get address
         const address = token.sub;
 
+        if (!data.prompt.trim()) {
+            throw new Error("Empty prompt.");
+        }
+
         const options = {
             method: 'POST',
             url: 'https://api.getimg.ai/v1/stable-diffusion/text-to-image',
