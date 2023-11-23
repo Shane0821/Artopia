@@ -14,6 +14,7 @@ import '@styles/auction.css'
 import {
     getAuctionTokenId,
     getBeneficiary, getTokenURIOfArtByTokenId,
+    getPromptOwnerByCID,
     getHighestBid, isAuctionEnded
 } from '@utils/contract';
 
@@ -33,7 +34,8 @@ interface artDataType {
     created_at: string,
     width: number,
     height: number,
-    beneficiary: string
+    beneficiary: string,
+    promptOwner: string
 }
 
 function truncateMiddle(str: string, frontChars: number, backChars: number, ellipsis = '...') {
@@ -78,7 +80,7 @@ function Bid({ params }: { params: { addr: string } }) {
                     }
                     const data = await response.json();
 
-                    let imgData: artDataType = {
+                    let artData: artDataType = {
                         tokenId: artId,
                         name: "",
                         description: "",
@@ -94,48 +96,49 @@ function Bid({ params }: { params: { addr: string } }) {
                         created_at: "",
                         width: 0,
                         height: 0,
-                        beneficiary: ""
+                        beneficiary: "",
+                        promptOwner: ""
                     };
-                    imgData.name = data.name
-                    imgData.description = data.description
-                    imgData.cid = data.image.split("ipfs://")[1] ? data.image.split("ipfs://")[1] : data.image.split("ipfs://")[0] // should be 1
-                    imgData.beneficiary = await getBeneficiary(params.addr)
+                    artData.name = data.name
+                    artData.description = data.description
+                    artData.cid = data.image.split("ipfs://")[1] ? data.image.split("ipfs://")[1] : data.image.split("ipfs://")[0] // should be 1
+                    artData.beneficiary = await getBeneficiary(params.addr)
 
                     data.attributes?.forEach((attribute: any) => {
                         switch (attribute.trait_type) {
                             case 'Model':
-                                imgData.model = attribute.value;
+                                artData.model = attribute.value;
                                 break;
                             case 'Prompt':
-                                imgData.promptcid = attribute.value.split("ipfs://")[1] ? attribute.value.split("ipfs://")[1] : attribute.value.split("ipfs://")[0]; // // should be 1
+                                artData.promptcid = attribute.value.split("ipfs://")[1] ? attribute.value.split("ipfs://")[1] : attribute.value.split("ipfs://")[0]; // // should be 1
                                 break;
                             case 'Steps':
-                                imgData.steps = attribute.value;
+                                artData.steps = attribute.value;
                                 break;
                             case 'GuidanceScale':
-                                imgData.guidance = attribute.value;
+                                artData.guidance = attribute.value;
                                 break;
                             case 'Seed':
-                                imgData.seed = attribute.value;
+                                artData.seed = attribute.value;
                                 break;
                             case 'Sampler':
-                                imgData.sampler = attribute.value;
+                                artData.sampler = attribute.value;
                                 break;
                             case 'CreatedAt':
-                                imgData.created_at = attribute.value;
+                                artData.created_at = attribute.value;
                                 break;
                             case 'Height':
-                                imgData.height = attribute.value;
+                                artData.height = attribute.value;
                                 break;
                             case 'Width':
-                                imgData.width = attribute.value;
+                                artData.width = attribute.value;
                                 break;
                         }
                     })
 
                     {
                         // fetch prompt by cid
-                        const promptURI = 'https://ipfs.io/ipfs/' + imgData.promptcid
+                        const promptURI = 'https://ipfs.io/ipfs/' + artData.promptcid
                         console.log(promptURI)
                         const response = await fetch(promptURI, {
                             method: 'GET'
@@ -145,11 +148,12 @@ function Bid({ params }: { params: { addr: string } }) {
                             throw new Error(message);
                         }
                         const data = await response.json();
-                        imgData.prompt = data.textData.prompt
-                        imgData.negative_prompt = data.textData.negative_prompt
+                        artData.prompt = data.textData.prompt
+                        artData.negative_prompt = data.textData.negative_prompt
+                        artData.promptOwner = await getPromptOwnerByCID(artData.promptcid)
                     }
 
-                    setNftData(imgData);
+                    setNftData(artData);
                     setFetching(false);
                 } catch (error) {
                     setFetching(false);
@@ -237,8 +241,8 @@ function Bid({ params }: { params: { addr: string } }) {
                                     <span className="owner-title">
                                         <AlertOutlined /> Prompt owner:
                                     </span>
-                                    <a className="owner-link" href={`/profile/${nftData.beneficiary}`}>
-                                        {truncateMiddle(nftData.beneficiary, 9, 9)}
+                                    <a className="owner-link" href={`/profile/${nftData.promptOwner}`}>
+                                        {truncateMiddle(nftData.promptOwner, 9, 9)}
                                     </a>
                                 </h2>
                             </div>
