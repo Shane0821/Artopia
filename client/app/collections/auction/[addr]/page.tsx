@@ -10,6 +10,7 @@ const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
 import Detail from '@components/profile/ArtDetail'
 import '@styles/auction.css'
+import { redirect } from 'next/navigation'
 
 import { useSession } from "next-auth/react"
 import { useAccount } from "wagmi"
@@ -56,7 +57,7 @@ function truncateMiddle(str: string, frontChars: number, backChars: number, elli
 }
 
 function Bid({ params }: { params: { addr: string } }) {
-    const [fetching, setFetching] = useState(false);
+    const [fetching, setFetching] = useState(true);
     const [nftData, setNftData] = useState({});
 
     const { data: session, status } = useSession()
@@ -179,6 +180,7 @@ function Bid({ params }: { params: { addr: string } }) {
                     setNftData(auctionData);
                     setFetching(false);
                 } catch (error) {
+                    console.log(error);
                 }
             } else {
                 setNftData({});
@@ -187,6 +189,18 @@ function Bid({ params }: { params: { addr: string } }) {
         // console.log(userConnected)
         fetchData();
     }, []);
+
+    useEffect(() => {
+        if (isConnected && session?.user) {
+            setFetching(false);
+        }
+        else {
+            setFetching(true);
+        }
+        if (!isConnected) {
+            redirect('/');
+        }
+    }, [isConnected, session?.user])
 
     const handleBid = () => {
         const _bid = async () => {
