@@ -127,7 +127,6 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
 
             {/* buttons */}
             < div
-                hidden={owner !== session?.user?.name || loading}
                 className="absolute top-0 right-0 p-1"
                 onClick={(e) => e.stopPropagation()}
             >
@@ -142,7 +141,8 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                 </Tooltip>
                 <Tooltip placement="topLeft" title="Add to auction">
                     <Button
-                        hidden={auction !== "0x0000000000000000000000000000000000000000" && addWaiting === false }
+                        hidden={owner !== session?.user?.name || loading || 
+                                (auction !== "0x0000000000000000000000000000000000000000" && addWaiting === false) }
                         className="buttonStyle"
                         icon={<TransactionOutlined />}
                         onClick={addToAuction}
