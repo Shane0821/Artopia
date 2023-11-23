@@ -162,7 +162,9 @@ const GalleryItem = ({ data, index, setPopup, setPopupData, user }: GalleryItemP
                 <div className="flex items-center">
                     <UserOutlined style={{ marginRight: 10 }} />
                     <Tooltip placement="topLeft" color='rgba(0, 0, 0, 0.6)'>
-                        {truncateMiddle(data.address, 7, 7)}
+                        <a href={`/profile/${data.address}`}>
+                            {truncateMiddle(data.address, 7, 7)}
+                        </a>
                     </Tooltip>
                 </div>
 
