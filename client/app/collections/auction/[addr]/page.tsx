@@ -16,7 +16,7 @@ import {
     getBeneficiary, getTokenURIOfArtByTokenId,
     getPromptOwnerByCID, getAuctionEndTime,
     bid, getPendingReturns,
-    getHighestBid
+    getHighestBid, endAuction
 } from '@utils/contract';
 
 interface auctionDataType {
@@ -204,6 +204,14 @@ function Bid({ params }: { params: { addr: string } }) {
         }
     }
 
+    const handleEndAuction = async() => {
+        try {
+            await endAuction(params.addr);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <Space
             direction="vertical"
@@ -350,7 +358,12 @@ function Bid({ params }: { params: { addr: string } }) {
 
                             <div className="flex justify-center">
                                 <Button hidden={nftData.pendingReturn === 0} className="mr-2">Withdraw</Button>
-                                <Button className="mr-2">Close</Button>
+                                <Button 
+                                    className="mr-2"
+                                    onClick={() => { handleEndAuction(); }}
+                                >
+                                    Close
+                                </Button>
                             </div>
 
                             <Divider />
