@@ -359,6 +359,7 @@ export const getPendingReturns = async(auctionAddr: string) => {
             chainId: chainId,
             args: []
         })
+        console.log("return", pendingReturn)
         return Number(pendingReturn) / Number(parseEther('1'))
     } catch (error) {
         throw error // should be handled by caller
