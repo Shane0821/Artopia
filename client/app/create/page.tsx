@@ -32,6 +32,7 @@ const Create = () => {
     const [fetching, setFetching] = useState(false);
     const [changingVis, setChangingVis] = useState(false);
     const [prepareMinting, setPrepareMinting] = useState('');
+    const [currentPrompt, setCurrentPrompt] = useState('');
 
     const [canGetCredit, setCanGetCredit] = useState(false);
     const [gettingCredit, setGettingCredit] = useState(false);
@@ -47,6 +48,17 @@ const Create = () => {
 
         const useCredits = async () => {
             try {
+                if (!currentPrompt.trim()) {
+                    noti['error']({
+                        message: 'Message:',
+                        description:
+                            `Prompt should not be empty.`,
+                        duration: 3,
+                    });
+                    setCooldown(false);
+                    return;
+                }
+
                 const { hash } = await writeContract({
                     address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
                     abi: genCreditABI,
@@ -70,7 +82,7 @@ const Create = () => {
                         duration: 3,
                     });
                 } else {
-                    throw new Error('An Error occurs when spending credit.');
+                    throw new Error('An Error occurs when using credit.');
                 }
                 setTimeout(() => {
                     setCooldown(false);
@@ -79,7 +91,7 @@ const Create = () => {
                 noti['error']({
                     message: 'Message:',
                     description:
-                        'An Error occurs when spending credit.',
+                        'An Error occurs when using credit.',
                     duration: 3,
                 });
                 setCooldown(false);
@@ -301,6 +313,7 @@ const Create = () => {
                                                     generating={generating}
                                                     resetGenerating={resetGenerating}
                                                     setJsonData={setJsonData}
+                                                    setCurrentPrompt={setCurrentPrompt}
                                                 />
                                             </div>
 
