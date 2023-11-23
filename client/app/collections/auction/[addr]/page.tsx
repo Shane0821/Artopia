@@ -380,7 +380,11 @@ function Bid({ params }: { params: { addr: string } }) {
                                 </Button>
                             </div>
 
-                            <Divider />
+                            {
+                                (nftData.endTime <= 0 && session?.user.name === nftData.beneficiary)
+                                &&
+                                <Divider />
+                            }
                         </div>
 
 
