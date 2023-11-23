@@ -138,7 +138,7 @@ export const createAuction = async(duration: number, tokenId: number) => {
             hash: hash,
         })
 
-        return data.logs[0].topics[1];
+        return data.logs[0].topics[1].replace(/^0x0*/, '0x');;
     } catch (error) {
         throw error // should be handled by caller
     }

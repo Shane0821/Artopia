@@ -57,7 +57,6 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
     const addToAuction = async () => {
         try {
             const auctionaddr: string = await createAuction(300, data.tokenId)
-            console.log(auctionaddr)
             setAuction(auctionaddr)
             setCurrentPrice(0)
 
