@@ -11,6 +11,9 @@ const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 import Detail from '@components/profile/ArtDetail'
 import '@styles/auction.css'
 
+import { useSession } from "next-auth/react"
+import { useAccount } from "wagmi"
+
 import {
     getAuctionTokenId,
     getBeneficiary, getTokenURIOfArtByTokenId,
@@ -55,6 +58,9 @@ function truncateMiddle(str: string, frontChars: number, backChars: number, elli
 function Bid({ params }: { params: { addr: string } }) {
     const [fetching, setFetching] = useState(false);
     const [nftData, setNftData] = useState({});
+
+    const { data: session, status } = useSession()
+    const { address, isConnected } = useAccount()
 
     const [bidPrice, setBidPrice] = useState(2);
     const [bidding, setBidding] = useState(false);
@@ -205,7 +211,7 @@ function Bid({ params }: { params: { addr: string } }) {
         }
     }
 
-    const handleEndAuction = async() => {
+    const handleEndAuction = async () => {
         try {
             await endAuction(params.addr);
         } catch (error) {
@@ -349,7 +355,7 @@ function Bid({ params }: { params: { addr: string } }) {
                                     title={nftData.endTime <= 0 ? "Auction is closed" : "Bid"}
                                     onClick={() => { handleBid(); }}
                                     loading={bidding}
-                                    disabled={nftData.endTime <= 0}
+                                    disabled={!session?.user || nftData.endTime <= 0 || session?.user.name === nftData.beneficiary}
                                 >
                                     Bid
                                 </Button>
@@ -360,7 +366,7 @@ function Bid({ params }: { params: { addr: string } }) {
 
                             <div className="flex justify-center">
                                 <Button hidden={nftData.pendingReturn === 0} className="mr-2">Withdraw</Button>
-                                <Button 
+                                <Button
                                     className="mr-2"
                                     onClick={() => { handleEndAuction(); }}
                                 >
