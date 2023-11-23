@@ -138,6 +138,21 @@ export const approveArt = async(to: string, tokenId: number) => {
     }
 }
 
+export const getArtApprovedByTokenId = async(tokenId: number) => {
+    try {
+        const approved: string = await readContract({
+            address: artContractAddr,
+            abi: imgABI,
+            functionName: 'getApproved',
+            chainId: chainId,
+            args: [tokenId]
+        })
+        return approved
+    } catch (error) {
+        throw error // should be handled by caller
+    }
+}
+
 export const getArtOwnerByTokenId = async(tokenId: number) => {
     try {
         const owner: string = await readContract({

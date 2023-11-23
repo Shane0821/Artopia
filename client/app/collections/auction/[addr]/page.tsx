@@ -20,7 +20,8 @@ import {
     getBeneficiary, getTokenURIOfArtByTokenId,
     getPromptOwnerByCID, getAuctionEndTime,
     bid, getPendingReturns,
-    getHighestBid, endAuction, withdrawOverBid
+    getHighestBid, endAuction, withdrawOverBid, 
+    getArtApprovedByTokenId, approveArt
 } from '@utils/contract';
 
 interface auctionDataType {
@@ -250,6 +251,10 @@ function Bid({ params }: { params: { addr: string } }) {
     const handleEndAuction = async () => {
         setEnding(true)
         try {
+            const approved = await getArtApprovedByTokenId(nftData.tokenId)
+            if (approved !== params.addr) {
+                await approveArt(params.addr, nftData.tokenId);
+            }
             await endAuction(params.addr);
             noti['success']({
                 message: 'Message:',
