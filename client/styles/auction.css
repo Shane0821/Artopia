@@ -6,3 +6,13 @@
     cursor: pointer;
     filter: opacity(.9);
 }
+
+.owner-title {
+    margin-right: 10px;
+    color: #777777;
+}
+
+.owner-link {
+    color: #007bff;
+    text-decoration: none;
+}

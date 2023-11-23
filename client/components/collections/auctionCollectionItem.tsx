@@ -70,12 +70,14 @@ const AuctionCollectionItem = ({ data, index, user }: Props) => {
                 }}
             >
                 <Tooltip placement="topLeft" title="Bid">
-                    <Button
-                        className="buttonStyle"
-                        icon={<TransactionOutlined />}
-                        danger={true}
-                        href={`/collections/auction/${data._id}`}
-                    />
+                    <a href={`/collections/auction/${data._id}`}>
+                        <Button
+                            className="buttonStyle"
+                            icon={<TransactionOutlined />}
+                            danger={true}
+                        />
+                    </a>
+
                 </Tooltip>
             </div>
 
