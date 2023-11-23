@@ -235,7 +235,7 @@ export const getBeneficiary = async(auctionAddr: string) => {
     }
 }
 
-export const getHightestBid = async(auctionAddr: string) => {
+export const getHighestBid = async(auctionAddr: string) => {
     try {
         const hightestBid: BigInt = await readContract({
             address: auctionAddr,
@@ -245,6 +245,21 @@ export const getHightestBid = async(auctionAddr: string) => {
             args: []
         })
         return Number(hightestBid) / Number(parseEther('1'))
+    } catch (error) {
+        throw error // should be handled by caller
+    }
+}
+
+export const getHighestBidder = async(auctionAddr: string) => {
+    try {
+        const highestBidder: string = await readContract({
+            address: auctionAddr,
+            abi: auctionABI,
+            functionName: 'getHighestBidder',
+            chainId: chainId,
+            args: []
+        })
+        return highestBidder
     } catch (error) {
         throw error // should be handled by caller
     }
