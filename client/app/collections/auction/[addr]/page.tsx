@@ -176,8 +176,6 @@ function Bid({ params }: { params: { addr: string } }) {
 
                     auctionData.pendingReturn = await getPendingReturns(params.addr);
 
-                    console.log(auctionData.pendingReturn)
-
                     setNftData(auctionData);
                     setFetching(false);
                 } catch (error) {
