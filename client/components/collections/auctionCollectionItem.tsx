@@ -55,7 +55,7 @@ const AuctionCollectionItem = ({ data, index, user }: Props) => {
             < img
                 className="no-visual-search"
                 style={{ width: '100%' }}
-                src={`${data.base64} `}
+                src={`https://ipfs.io/ipfs/${data.cid} `}
             />
 
             {/* buttons */}
@@ -70,7 +70,7 @@ const AuctionCollectionItem = ({ data, index, user }: Props) => {
                 }}
             >
                 <Tooltip placement="topLeft" title="Bid">
-                    <a href={`/collections/auction/${data._id}`}>
+                    <a href={`/collections/auction/${data.addr}`}>
                         <Button
                             className="buttonStyle"
                             icon={<TransactionOutlined />}
@@ -83,7 +83,6 @@ const AuctionCollectionItem = ({ data, index, user }: Props) => {
 
 
             < div
-                hidden={!data.completed}
                 className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100"
                 onClick={(e) => e.stopPropagation()}
             >
@@ -91,7 +90,7 @@ const AuctionCollectionItem = ({ data, index, user }: Props) => {
                     <Button
                         className="buttonStyle"
                         icon={<SmileOutlined />}
-                        hidden={!(user && data && user.name === data.address)}
+                        hidden={!(user && data && user.name === data.beneficiary)}
                     />
                 </Tooltip>
             </div>
@@ -113,7 +112,7 @@ const AuctionCollectionItem = ({ data, index, user }: Props) => {
                 </div>
 
                 <div className="flex items-center">
-                    {"20 AXM"}
+                    {`${Math.max(data.highestBid, 2)} AXM`}
                 </div>
             </div>
         </div >

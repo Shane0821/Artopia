@@ -13,6 +13,11 @@ const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
 import '@styles/gallery.css'
 import AuctionCollectionItem from '@components/collections/auctionCollectionItem'
+import {
+    getAllAuctions, getAuctionTokenId,
+    getBeneficiary, getTokenURIOfArtByTokenId,
+    getHightestBid
+} from '@utils/contract';
 
 import Masonry from "react-responsive-masonry"
 
@@ -28,6 +33,33 @@ function AuctionCollection() {
     const [dataArray, setDataArray] = useState([]);
     const [fetching, setFetching] = useState(false);
 
+    const fetchArt = async (addr: string) => {
+        try {
+            console.log(addr);
+            const artId = await getAuctionTokenId(addr);
+            // get metadata uri
+            const tokenURI: string = await getTokenURIOfArtByTokenId(artId);
+            const metaURI = 'https://ipfs.io/ipfs/' + tokenURI.split("ipfs://")[1];
+
+            // get info from metadata
+            const response = await fetch(metaURI, {
+                method: 'GET'
+            });
+            if (!response.ok) {
+                const message = `An error has occurred: ${response.status}`;
+                throw new Error(message);
+            }
+            const data = await response.json();
+
+            const cid = data.image.split("ipfs://")[1] ? data.image.split("ipfs://")[1] : data.image.split("ipfs://")[0]; // should be 1
+            const beneficiary = await getBeneficiary(addr);
+            const highestBid = await getHightestBid(addr);
+            return { cid, beneficiary, highestBid, addr };
+        } catch (error) {
+            return undefined;
+        }
+    }
+
     // fetch art
     useEffect(() => {
         const fetchData = async () => {
@@ -36,26 +68,17 @@ function AuctionCollection() {
                     console.log("fetching..")
                     setFetching(true);
 
-                    const response = await fetch(`/api/publicGallery/`, {
-                        method: 'GET'
-                    });
+                    const response = await getAllAuctions();
 
-                    // Handle the response
-                    if (!response.ok) {
-                        const message = `An error has occurred: ${response.status}`;
-                        throw new Error(message);
+                    let _data = [];
+                    for await (const art of Array.from({ length: response.length },
+                        (_, index) => fetchArt(response[index]))) {
+                        if (art != undefined) {
+                            _data.push(art);
+                        }
                     }
 
-                    const data = await response.json();
-
-                    data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                    data.forEach(item => {
-                        if (item) {
-                            item.completed = true;
-                        }
-                    });
-
-                    setDataArray(data)
+                    setDataArray(_data)
                     setFetching(false);
                 } catch (error) {
                     setFetching(false);
