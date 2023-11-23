@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { Divider, Space, Button, Statistic, notification, Spin, Badge, InputNumber } from 'antd';
 const { Countdown } = Statistic;
 
-import { LoadingOutlined, ClockCircleOutlined, LikeOutlined, EyeOutlined, DashboardOutlined } from '@ant-design/icons';
+import { LoadingOutlined, AlertOutlined, HighlightOutlined } from '@ant-design/icons';
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
 import Detail from '@components/profile/ArtDetail'
@@ -25,7 +25,7 @@ function Bid() {
     const [fetching, setFetching] = useState(false);
     const [nftData, setNftData] = useState({});
 
-    const [bid, setBid] = useState(1)
+    const [bid, setBid] = useState(2)
 
     const [popup, setPopup] = useState(false);
 
@@ -117,20 +117,32 @@ function Bid() {
                         <div className="w-2/3 p-4 flex flex-col justify-center items-center" style={{ height: '85vh' }}>
                             <Divider />
 
-                            <div>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            >
                                 <h2>
-                                    <span className="owner-title">NFT owner:</span>
+                                    <span className="owner-title">
+                                        <HighlightOutlined /> NFT owner:
+                                    </span>
                                     <a className="owner-link" href={`/profile/${nftData.address}`}>
                                         {truncateMiddle(nftData.address, 9, 9)}
                                     </a>
                                 </h2>
                                 <h2>
-                                    <span className="owner-title">Prompt owner:</span>
+                                    <span className="owner-title">
+                                        <AlertOutlined /> Prompt owner:
+                                    </span>
                                     <a className="owner-link" href={`/profile/${nftData.address}`}>
                                         {truncateMiddle(nftData.address, 9, 9)}
                                     </a>
                                 </h2>
                             </div>
+
 
                             <Divider />
 
@@ -163,7 +175,7 @@ function Bid() {
 
                             <div>
                                 <h2>
-                                    <span className="owner-title">Current Highest Price:</span>
+                                    <span className="owner-title">✨ Current Highest Price:</span>
                                     <a className="owner-link">
                                         {`10 AXM`}
                                     </a>
@@ -174,8 +186,10 @@ function Bid() {
 
                             <div className="flex justify-center">
                                 <InputNumber
-                                    min={bid}
+                                    min={2}
+                                    step={0.1}
                                     value={bid}
+                                    onChange={(e) => { setBid(Number(e)); }}
                                     placeholder="Enter your bid"
                                     className="mr-2"
                                     style={{ width: '200px', marginRight: 20 }}
