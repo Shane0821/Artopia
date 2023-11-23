@@ -123,6 +123,21 @@ export const approveArt = async(to: string, tokenId: number) => {
     }
 }
 
+export const getArtOwnerByTokenId = async(tokenId: number) => {
+    try {
+        const owner: string = await readContract({
+            address: artContractAddr,
+            abi: imgABI,
+            functionName: 'ownerOf',
+            chainId: chainId,
+            args: [tokenId]
+        })
+        return owner
+    } catch (error) {
+        throw error // should be handled by caller
+    }
+}
+
 // auction factory
 export const createAuction = async(duration: number, tokenId: number) => {
     try {
