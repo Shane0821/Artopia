@@ -22,7 +22,8 @@ const Home = () => {
 
   const left = ['museum-1.png', 'museum-2.png', 'museum-3.png']
 
-  const right = ['blue-pink-girl-1.png', 'blue-pink-girl-2.png', 'blue-pink-girl-3.png', 'blue-pink-girl-4.png']
+  const right = ['blue-pink-girl-1.png', 'blue-pink-girl-2.png', 'blue-pink-girl-3.png', 'blue-pink-girl-4.png',
+                 'blue-pink-girl-5.png', 'blue-pink-girl-6.png']
 
   const ul = ['blue-hair-girl-1.png', 'blue-hair-girl-2.png', 'blue-hair-girl-3.png', 'blue-hair-girl-4.png']
 
