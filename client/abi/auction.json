@@ -187,13 +187,7 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "addr",
-				"type": "address"
-			}
-		],
+		"inputs": [],
 		"name": "getPendingReturns",
 		"outputs": [
 			{
