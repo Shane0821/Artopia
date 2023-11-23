@@ -16,7 +16,7 @@ import AuctionCollectionItem from '@components/collections/auctionCollectionItem
 import {
     getAllAuctions, getAuctionTokenId,
     getBeneficiary, getTokenURIOfArtByTokenId,
-    getHightestBid
+    getHightestBid, isAuctionEnded
 } from '@utils/contract';
 
 import Masonry from "react-responsive-masonry"
@@ -33,9 +33,10 @@ function AuctionCollection() {
     const [dataArray, setDataArray] = useState([]);
     const [fetching, setFetching] = useState(false);
 
+    const [filter, setFilter] = useState(false);
+
     const fetchArt = async (addr: string) => {
         try {
-            console.log(addr);
             const artId = await getAuctionTokenId(addr);
             // get metadata uri
             const tokenURI: string = await getTokenURIOfArtByTokenId(artId);
@@ -54,7 +55,8 @@ function AuctionCollection() {
             const cid = data.image.split("ipfs://")[1] ? data.image.split("ipfs://")[1] : data.image.split("ipfs://")[0]; // should be 1
             const beneficiary = await getBeneficiary(addr);
             const highestBid = await getHightestBid(addr);
-            return { cid, beneficiary, highestBid, addr };
+            const isEnded = await isAuctionEnded(addr);
+            return { cid, beneficiary, highestBid, addr, isEnded };
         } catch (error) {
             return undefined;
         }
@@ -92,27 +94,11 @@ function AuctionCollection() {
     }, []);
 
     const handleSelectChange = (value: string) => {
-        if (value === 'latest') {
-            setDataArray(prevArray => {
-                let newArray = [...prevArray];
-                newArray.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                return newArray;
-            })
+        if (value === 'Ongoing') {
+            setFilter(false);
         }
-        else if (value === 'earliest') {
-            console.log(value);
-            setDataArray(prevArray => {
-                let newArray = [...prevArray];
-                newArray.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-                return newArray;
-            });
-        }
-        else if (value === 'price') {
-            setDataArray(prevArray => {
-                let newArray = [...prevArray];
-                newArray.sort((a, b) => b.price - a.price);
-                return newArray;
-            });
+        else if (value === 'Past') {
+            setFilter(true);
         }
     }
 
@@ -135,9 +121,8 @@ function AuctionCollection() {
                     }}
                     onChange={handleSelectChange}
                 >
-                    <Option value="latest"><ClockCircleOutlined /> Latest</Option>
-                    <Option value="earliest"><DashboardOutlined /> Earliest</Option>
-                    <Option value="price"><LikeOutlined /> Price</Option>
+                    <Option value="Ongoing"><ClockCircleOutlined /> Ongoing </Option>
+                    <Option value="Past"><DashboardOutlined /> Past </Option>
                 </Select>
             </div>
 
@@ -156,7 +141,7 @@ function AuctionCollection() {
             />
 
             <Masonry className="gallery" columnsCount={4}>
-                {dataArray.map((data, index) => (
+                {dataArray.filter(data => { return data.isEnded === filter }).map((data, index) => (
                     <AuctionCollectionItem
                         key={index}
                         data={data}
