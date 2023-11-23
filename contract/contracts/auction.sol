@@ -97,10 +97,6 @@ contract Auction {
         return pendingReturns[addr];
     }
 
-    function canEnd() public view returns (bool) {
-        return block.timestamp >= auctionEndTime;
-    }
-
     /// Bid on the auction with the value sent
     /// together with this transaction.
     /// The value will only be refunded if the
@@ -173,6 +169,8 @@ contract Auction {
         // contracts, they also have to be considered interaction with
         // external contracts.
 
+        require(msg.sender == beneficiary, "only the beneficiary can end the auction");
+
         // 1. Conditions
         if (block.timestamp < auctionEndTime) revert AuctionNotYetEnded();
         if (ended) revert AuctionEndAlreadyCalled();
@@ -180,6 +178,7 @@ contract Auction {
         // 2. Effects
         if (highestBidder != address(0)) {
             // 3. Interaction
+            imgContract.approve(address(this), tokenId);
             imgContract.transferFrom(beneficiary, highestBidder, tokenId);
             uint beneficiaryTransfer = (highestBid * 975) / 1000; // overflow?
             beneficiary.transfer(beneficiaryTransfer);
