@@ -119,13 +119,13 @@ function Bid() {
                                 <h2>
                                     <span className="owner-title">NFT owner:</span>
                                     <a className="owner-link" href={`/profile/${nftData.address}`}>
-                                        {truncateMiddle(nftData.address, 7, 7)}
+                                        {truncateMiddle(nftData.address, 9, 9)}
                                     </a>
                                 </h2>
                                 <h2>
                                     <span className="owner-title">Prompt owner:</span>
                                     <a className="owner-link" href={`/profile/${nftData.address}`}>
-                                        {truncateMiddle(nftData.address, 7, 7)}
+                                        {truncateMiddle(nftData.address, 9, 9)}
                                     </a>
                                 </h2>
                             </div>
