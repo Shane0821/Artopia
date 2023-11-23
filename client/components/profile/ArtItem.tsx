@@ -12,7 +12,7 @@ import { useSession } from "next-auth/react"
 
 import { TransactionOutlined, AccountBookOutlined, MoneyCollectOutlined, DollarOutlined } from '@ant-design/icons';
 
-import { createAuction, getAunctionByTokenId, isEnded, getHightestBid } from '@utils/contract'
+import { createAuction, getAunctionByTokenId, isAuctionEnded, getHighestBid } from '@utils/contract'
 
 import { bid, endAuction, approveArt} from '@utils/contract'
 
@@ -89,11 +89,11 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
             try {
                 const addr = await getAunctionByTokenId(data.tokenId)
                 // console.log(addr)
-                const ended: boolean = await isEnded(addr)
+                const ended: boolean = await isAuctionEnded(addr)
                 // console.log("ended", ended)
                 if (!ended)
                     setAuction(addr)
-                const hightestBid = await getHightestBid(addr)
+                const hightestBid = await getHighestBid(addr)
                 setCurrentPrice(Math.max(2, hightestBid))
             } catch (error) {
                 console.log(error)
