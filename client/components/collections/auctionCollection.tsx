@@ -119,6 +119,7 @@ function AuctionCollection() {
                         width: 240,
                         marginRight: 5
                     }}
+                    disabled={fetching}
                     onChange={handleSelectChange}
                 >
                     <Option value="Ongoing"><ClockCircleOutlined /> Ongoing </Option>

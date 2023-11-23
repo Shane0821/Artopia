@@ -167,6 +167,7 @@ function PublicGalery() {
                         width: 240,
                         marginRight: 5
                     }}
+                    disabled={fetching}
                     onChange={handleSelectChange}
                 >
                     <Option value="latest"><ClockCircleOutlined /> Latest</Option>
