@@ -16,7 +16,7 @@ import AuctionCollectionItem from '@components/collections/auctionCollectionItem
 import {
     getAllAuctions, getAuctionTokenId,
     getBeneficiary, getTokenURIOfArtByTokenId,
-    getHightestBid, isAuctionEnded
+    getHighestBid, isAuctionEnded
 } from '@utils/contract';
 
 import Masonry from "react-responsive-masonry"
@@ -54,7 +54,7 @@ function AuctionCollection() {
 
             const cid = data.image.split("ipfs://")[1] ? data.image.split("ipfs://")[1] : data.image.split("ipfs://")[0]; // should be 1
             const beneficiary = await getBeneficiary(addr);
-            const highestBid = await getHightestBid(addr);
+            const highestBid = await getHighestBid(addr);
             const isEnded = await isAuctionEnded(addr);
             return { cid, beneficiary, highestBid, addr, isEnded };
         } catch (error) {
@@ -119,6 +119,7 @@ function AuctionCollection() {
                         width: 240,
                         marginRight: 5
                     }}
+                    disabled={fetching}
                     onChange={handleSelectChange}
                 >
                     <Option value="Ongoing"><ClockCircleOutlined /> Ongoing </Option>
