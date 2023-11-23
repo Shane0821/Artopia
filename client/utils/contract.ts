@@ -303,3 +303,36 @@ export const bid = async(auctionAddr: string, amount: number) => {
         throw error // should be handled by caller
     }
 }
+
+export const withdrawOverBid = async(auctionAddr: string) => {
+    try {
+        const { hash } = await writeContract({
+            address: auctionAddr,
+            abi: auctionABI,
+            functionName: 'withdraw',
+            chainId: chainId,
+            args: []
+        })
+
+        await waitForTransaction({
+            hash: hash,
+        })
+    } catch (error) {
+        throw error // should be handled by caller
+    }
+}
+
+export const getPendingReturns = async(auctionAddr: string, bidder: string) => {
+    try {
+        const pendingReturn: BigInt = await readContract({
+            address: auctionAddr,
+            abi: auctionABI,
+            functionName: 'getPendingReturns',
+            chainId: chainId,
+            args: [bidder]
+        })
+        return Number(pendingReturn) / Number(parseEther('1'))
+    } catch (error) {
+        throw error // should be handled by caller
+    }
+}
