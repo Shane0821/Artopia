@@ -249,10 +249,12 @@ function page({ params }: { params: { addr: string } }) {
       setArtFetching(false)
     }
 
-    setTimeout(() => {
+    const timerId = setTimeout(() => {
       loadPrompt(params.addr)
       loadArt(params.addr)
     }, 2000)
+
+    return () => clearTimeout(timerId);
   }, []);
 
   return (
