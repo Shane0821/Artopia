@@ -15,7 +15,7 @@ import {
     getAuctionTokenId,
     getBeneficiary, getTokenURIOfArtByTokenId,
     getPromptOwnerByCID, getAuctionEndTime,
-    bid,
+    bid, getPendingReturns,
     getHighestBid
 } from '@utils/contract';
 
@@ -38,7 +38,8 @@ interface auctionDataType {
     beneficiary: string,
     promptOwner: string,
     endTime: number,
-    highestBid: number
+    highestBid: number,
+    pendingReturn: number
 }
 
 function truncateMiddle(str: string, frontChars: number, backChars: number, ellipsis = '...') {
@@ -55,7 +56,8 @@ function Bid({ params }: { params: { addr: string } }) {
     const [fetching, setFetching] = useState(false);
     const [nftData, setNftData] = useState({});
 
-    const [bidPrice, setBidPrice] = useState(2)
+    const [bidPrice, setBidPrice] = useState(2);
+    const [bidding, setBidding] = useState(false);
 
     const [popup, setPopup] = useState(false);
 
@@ -102,7 +104,8 @@ function Bid({ params }: { params: { addr: string } }) {
                         beneficiary: "",
                         promptOwner: "",
                         endTime: 0,
-                        highestBid: 2
+                        highestBid: 2,
+                        pendingReturn: 0
                     };
                     auctionData.name = data.name
                     auctionData.description = data.description
@@ -162,8 +165,10 @@ function Bid({ params }: { params: { addr: string } }) {
                         auctionData.promptOwner = await getPromptOwnerByCID(auctionData.promptcid)
                     }
 
-                    auctionData.highestBid = await getHighestBid(params.addr)
+                    auctionData.highestBid = await getHighestBid(params.addr);
                     setBidPrice(Math.max(1.9, auctionData.highestBid) + 0.1);
+
+                    auctionData.pendingReturn = await getPendingReturns(params.addr);
 
                     setNftData(auctionData);
                     setFetching(false);
@@ -180,9 +185,24 @@ function Bid({ params }: { params: { addr: string } }) {
 
     const handleBid = () => {
         const _bid = async () => {
+            try {
+                await bid(params.addr, bidPrice);
 
+                setNftData(prevData => {
+                    prevData.highestBid = bidPrice;
+                    return prevData;
+                })
+                setBidding(false);
+            } catch (error) {
+                console.log(error)
+                setBidding(false)
+            }
         }
-        _bid();
+
+        if (!bidding) {
+            setBidding(true);
+            _bid();
+        }
     }
 
     return (
@@ -317,14 +337,20 @@ function Bid({ params }: { params: { addr: string } }) {
                                     className="mr-2"
                                     style={{ width: '200px', marginRight: 20 }}
                                 />
-                                <Button>Bid</Button>
+                                <Button
+                                    title={nftData.endTime <= 0 ? "Auction is closed" : "Bid"}
+                                    onClick={() => { handleBid(); }}
+                                    disabled={nftData.endTime <= 0}
+                                >
+                                    Bid
+                                </Button>
                             </div>
 
 
                             <Divider />
 
                             <div className="flex justify-center">
-                                <Button className="mr-2">Withdraw</Button>
+                                <Button hidden={nftData.pendingReturn === 0} className="mr-2">Withdraw</Button>
                                 <Button className="mr-2">Close</Button>
                             </div>
 
