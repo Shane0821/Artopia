@@ -114,7 +114,7 @@ function AuctionCollection() {
                 }}
             >
                 <Select
-                    defaultValue="latest"
+                    defaultValue="Ongoing"
                     style={{
                         width: 240,
                         marginRight: 5
