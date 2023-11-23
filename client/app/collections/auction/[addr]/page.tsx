@@ -163,8 +163,7 @@ function Bid({ params }: { params: { addr: string } }) {
                     }
 
                     auctionData.highestBid = await getHighestBid(params.addr)
-                    auctionData.highestBid = Math.max(1.9, auctionData.highestBid)
-                    setBidPrice(auctionData.highestBid + 0.1);
+                    setBidPrice(Math.max(1.9, auctionData.highestBid) + 0.1);
 
                     setNftData(auctionData);
                     setFetching(false);
@@ -310,7 +309,7 @@ function Bid({ params }: { params: { addr: string } }) {
 
                             <div className="flex justify-center">
                                 <InputNumber
-                                    min={nftData.highestBid + 0.1}
+                                    min={Math.max(1.9, nftData.highestBid) + 0.1}
                                     step={0.1}
                                     value={bidPrice}
                                     onChange={(e) => { setBidPrice(Number(e)); }}
