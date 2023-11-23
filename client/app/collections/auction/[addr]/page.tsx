@@ -383,6 +383,7 @@ function Bid({ params }: { params: { addr: string } }) {
                                     onChange={(e) => { setBidPrice(Number(e)); }}
                                     placeholder="Enter your bid"
                                     className="mr-2"
+                                    precision={1}
                                     style={{ width: '200px', marginRight: 20 }}
                                 />
                                 <Button
@@ -415,7 +416,11 @@ function Bid({ params }: { params: { addr: string } }) {
                             </div>
 
                             {
-                                (nftData.endTime <= 0 && session?.user.name === nftData.beneficiary)
+                                (
+                                    (nftData.endTime <= 0 && session?.user.name === nftData.beneficiary)
+                                    ||
+                                    (nftData.pendingReturn === 0)
+                                )
                                 &&
                                 <Divider />
                             }
