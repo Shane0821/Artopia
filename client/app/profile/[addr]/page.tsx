@@ -18,10 +18,6 @@ import Masonry from "react-responsive-masonry"
 import { useAccount } from "wagmi"
 import { useSession } from "next-auth/react"
 
-import { readContract } from '@wagmi/core'
-import imgABI from '@abi/imagenft.json'
-import promptABI from '@abi/promptnft.json'
-
 import {
   getPromptCountByUser,
   getPromptTokenIdOfUserByIndex,

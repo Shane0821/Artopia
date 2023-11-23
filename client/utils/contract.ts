@@ -152,7 +152,7 @@ export const getAllAuctions = async() => {
             chainId: chainId,
             args: []
         })
-        return auctions
+        return auctions.reverse()
     } catch (error) {
         throw error // should be handled by caller
     }
