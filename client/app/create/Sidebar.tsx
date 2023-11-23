@@ -39,9 +39,10 @@ interface SidebarCreateProps {
     generating: boolean;
     resetGenerating: () => void;
     setJsonData: (jsonData: any) => void;
+    setCurrentPrompt: (currentPrompt: string) => void;
 }
 
-function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCreateProps) {
+function SidebarCreate({ generating, resetGenerating, setJsonData, setCurrentPrompt }: SidebarCreateProps) {
     const [model, setModel] = useState('absolute-reality-v1-8-1');
     const [height, setHeight] = useState(512);
     const [width, setWidth] = useState(512);
@@ -50,6 +51,11 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
     const [seed, setSeed] = useState('');
     const [sampler, setSampler] = useState('dpmsolver++')
     const [prompt, setPrompt] = useState('');
+
+    useEffect(() => {
+        setCurrentPrompt(prompt);
+    }, [prompt])
+
     const [negative_prompt, setNegativePrompt] = useState('Disfigured, cartoon, blurry');
 
     const [noti, contextHolder] = notification.useNotification();
@@ -265,13 +271,13 @@ function SidebarCreate({ generating, resetGenerating, setJsonData }: SidebarCrea
                                 placeholder="Describe something you'd like to see generated. Experiment with different words and styles... "
                                 autoSize={{ minRows: 4 }}
                                 value={prompt}
-                                onChange={(e) => setPrompt(e.target.value)}
+                                onChange={(e) => { setPrompt(e.target.value); }}
                             />
                         </div>
                         <Button
                             type="default"
                             style={{ float: 'right', marginBottom: '20px', marginTop: '2px' }}
-                            onClick={() => setPrompt(generatePrompts())}
+                            onClick={() => { setPrompt(generatePrompts()); }}
                             icon={<SyncOutlined />}
                             title={'Random'}
                             size='small'
