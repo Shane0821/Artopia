@@ -20,8 +20,9 @@ import {
     getBeneficiary, getTokenURIOfArtByTokenId,
     getPromptOwnerByCID, getAuctionEndTime,
     bid, getPendingReturns,
-    getHighestBid, endAuction, withdrawOverBid, 
-    getArtApprovedByTokenId, approveArt
+    getHighestBid, endAuction, withdrawOverBid,
+    getArtApprovedByTokenId, approveArt,
+    isAuctionEnded
 } from '@utils/contract';
 
 interface auctionDataType {
@@ -44,7 +45,8 @@ interface auctionDataType {
     promptOwner: string,
     endTime: number,
     highestBid: number,
-    pendingReturn: number
+    pendingReturn: number,
+    isEnded: boolean
 }
 
 function truncateMiddle(str: string, frontChars: number, backChars: number, ellipsis = '...') {
@@ -125,7 +127,8 @@ function Bid({ params }: { params: { addr: string } }) {
                         promptOwner: "",
                         endTime: 0,
                         highestBid: 2,
-                        pendingReturn: 0
+                        pendingReturn: 0,
+                        isEnded: false
                     };
                     auctionData.name = data.name
                     auctionData.description = data.description
@@ -134,7 +137,7 @@ function Bid({ params }: { params: { addr: string } }) {
 
                     const currentTimestampInSeconds = Math.floor(new Date().getTime() / 1000);
                     auctionData.endTime = Number(await getAuctionEndTime(params.addr)) - currentTimestampInSeconds
-                    // auctionData.endTime = Math.max(0, auctionData.endTime)
+                    auctionData.isEnded = await isAuctionEnded(params.addr);
 
                     data.attributes?.forEach((attribute: any) => {
                         switch (attribute.trait_type) {
@@ -256,6 +259,9 @@ function Bid({ params }: { params: { addr: string } }) {
                 await approveArt(params.addr, nftData.tokenId);
             }
             await endAuction(params.addr);
+            setNftData(prevData => {
+                return { ...prevData, isEnded: true };
+            })
             noti['success']({
                 message: 'Message:',
                 description:
@@ -362,7 +368,7 @@ function Bid({ params }: { params: { addr: string } }) {
                             >
                                 <h2>
                                     <span className="owner-title">
-                                        <HighlightOutlined /> NFT owner:
+                                        <HighlightOutlined /> Auction seller:
                                     </span>
                                     <a className="owner-link" href={`/profile/${nftData.beneficiary}`}>
                                         {truncateMiddle(nftData.beneficiary, 9, 9)}
@@ -457,6 +463,7 @@ function Bid({ params }: { params: { addr: string } }) {
                                     hidden={nftData.endTime > 0 || session?.user.name != nftData.beneficiary}
                                     onClick={() => { handleEndAuction(); }}
                                     loading={ending}
+                                    disabled={nftData.isEnded}
                                 >
                                     Close
                                 </Button>
