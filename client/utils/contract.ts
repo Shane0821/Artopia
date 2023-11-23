@@ -58,14 +58,14 @@ export const getTokenURIOfPromptByTokenId = async(tokenId: number) => {
     }
 }
 
-export const getPromptOwnerByTokenId = async(tokenId: number) => {
+export const getPromptOwnerByCID = async(cid: string) => {
     try {
         const owner: string = await readContract({
             address: promptContractAddr,
             abi: promptABI,
-            functionName: 'ownerOf',
+            functionName: 'getOnwerByCID',
             chainId: chainId,
-            args: [tokenId]
+            args: [cid]
         })
         return owner
     } catch (error) {
