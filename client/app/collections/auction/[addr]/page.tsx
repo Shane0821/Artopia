@@ -415,7 +415,11 @@ function Bid({ params }: { params: { addr: string } }) {
                             </div>
 
                             {
-                                (nftData.endTime <= 0 && session?.user.name === nftData.beneficiary)
+                                (
+                                    (nftData.endTime <= 0 && session?.user.name === nftData.beneficiary)
+                                    ||
+                                    (nftData.pendingReturn === 0)
+                                )
                                 &&
                                 <Divider />
                             }
