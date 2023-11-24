@@ -216,8 +216,7 @@ export const createAuction = async(duration: number, tokenId: number) => {
         const data = await waitForTransaction({
             hash: hash,
         })    
-        console.log(getAddress(data.logs[0].topics[1]))
-        return '0x' + data.logs[0].topics[1].slice(-40);
+        return getAddress('0x' + data.logs[0].topics[1].slice(-40));
     } catch (error) {
         throw error // should be handled by caller
     }
