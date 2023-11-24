@@ -190,7 +190,7 @@ function Bid({ params }: { params: { addr: string } }) {
                 auctionData.highestBid = await getHighestBid(params.addr);
                 setBidPrice(Math.max(1.9, auctionData.highestBid) + 0.1);
 
-                auctionData.pendingReturn = await getPendingReturns(params.addr, session?.user.name);
+                auctionData.pendingReturn = await getPendingReturns(params.addr, session?.user?.name);
 
                 setNftData(auctionData);
                 setFetching(false);
