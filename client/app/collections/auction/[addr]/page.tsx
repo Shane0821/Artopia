@@ -283,7 +283,7 @@ function Bid({ params }: { params: { addr: string } }) {
             noti['error']({
                 message: 'Message:',
                 description:
-                    `Failed to end auction!`,
+                    `Failed to end auction! Waiting for blocktime update...`,
                 duration: 3,
             });
         }
