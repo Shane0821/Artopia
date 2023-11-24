@@ -139,7 +139,7 @@ function page({ params }: { params: { addr: string } }) {
       {
         // fetch prompt by cid
         const promptURI = 'https://ipfs.io/ipfs/' + imgData.promptcid
-        console.log(promptURI)
+        // console.log(promptURI)
         const response = await fetch(promptURI, {
           method: 'GET'
         })
