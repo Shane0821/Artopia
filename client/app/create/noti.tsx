@@ -94,7 +94,7 @@ const openVisNotification = ({
 
         const btn = (
             <Space>
-                <Checkbox onChange={onChange}>Don't show again </Checkbox>
+                <Checkbox onChange={onChange}>{"Don't show again"} </Checkbox>
                 <Button
                     type="default"
                     size="small"

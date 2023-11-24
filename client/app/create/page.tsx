@@ -44,9 +44,9 @@ const Create = () => {
     const [jsonData, setJsonData] = useState(null);
 
     const handleClick = () => {
-        console.log('handleclick', generating)
+        console.log('handleClick', generating)
 
-        const useCredits = async () => {
+        const spendCredits = async () => {
             try {
                 if (!currentPrompt.trim()) {
                     noti['error']({
@@ -62,7 +62,7 @@ const Create = () => {
                 const { hash } = await writeContract({
                     address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
                     abi: genCreditABI,
-                    functionName: 'useCredits',
+                    functionName: 'spendCredits',
                     chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
                     args: [1]
                 })
@@ -139,7 +139,7 @@ const Create = () => {
 
         if (credits) {
             setCooldown(true);
-            useCredits();
+            spendCredits();
         } else {
             const key = `openNoCreditNotification`;
             let _continueButton = false;
