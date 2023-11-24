@@ -56,7 +56,7 @@ function SidebarCreate({ generating, resetGenerating, setJsonData, setCurrentPro
         setCurrentPrompt(prompt);
     }, [prompt])
 
-    const [negative_prompt, setNegativePrompt] = useState('Disfigured, cartoon, blurry');
+    const [negative_prompt, setNegativePrompt] = useState('Disfigured, cartoon, blurry, nude');
 
     const [noti, contextHolder] = notification.useNotification();
     const { data: session, status } = useSession()
@@ -288,7 +288,7 @@ function SidebarCreate({ generating, resetGenerating, setJsonData, setCurrentPro
                     <div style={{ marginTop: '30px' }}>
                         Negative prompt
                         <Input.TextArea
-                            placeholder="Enter negative prompt: Disfigured, cartoon, blurry, ..."
+                            placeholder="Enter negative prompt: Disfigured, cartoon, blurry, nude, ..."
                             style={{ marginTop: '10px' }}
                             autoSize={{ minRows: 3 }}
                             value={negative_prompt}
