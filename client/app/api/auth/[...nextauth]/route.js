@@ -2,7 +2,6 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from "next-auth/providers/credentials"
 import { getCsrfToken } from "next-auth/react"
 import { SiweMessage } from "siwe"
-import { cookies } from 'next/headers';
 
 const authOptions = (req) => ({
   providers: [
@@ -29,13 +28,7 @@ const authOptions = (req) => ({
           const result = await siwe.verify({
             signature: credentials?.signature || "",
             domain: nextAuthUrl.host,
-            nonce: await getCsrfToken({
-              req: {
-                headers: {
-                  cookie: cookies().toString(),
-                },
-              },
-            })
+            nonce: await getCsrfToken({ req }),
           })
           
           if (result.success) {
