@@ -4,7 +4,7 @@ import { getCsrfToken } from "next-auth/react"
 import { SiweMessage } from "siwe"
 import { cookies } from 'next/headers';
 
-export const authOptions = (req) => ({
+const authOptions = (req) => ({
   providers: [
     CredentialsProvider({
       name: "Ethereum",
