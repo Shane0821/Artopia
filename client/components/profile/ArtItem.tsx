@@ -64,7 +64,7 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
             setAuction(auctionaddr)
             setCurrentPrice(2)
 
-            await approveArt(auction, data.tokenId)
+            await approveArt(auctionaddr, data.tokenId)
 
             noti['success']({
                 message: 'Message:',
