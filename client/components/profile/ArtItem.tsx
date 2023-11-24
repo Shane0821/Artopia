@@ -14,7 +14,7 @@ import { TransactionOutlined, AccountBookOutlined, MoneyCollectOutlined, DollarO
 
 import { createAuction, getAunctionByTokenId, isAuctionEnded, getHighestBid } from '@utils/contract'
 
-import { bid, endAuction, approveArt} from '@utils/contract'
+import { bid, endAuction, approveArt } from '@utils/contract'
 
 function truncateMiddle(str: string, frontChars: number, backChars: number, ellipsis = '...') {
     if (str.length <= frontChars + backChars) {
@@ -89,12 +89,14 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
             try {
                 const addr = await getAunctionByTokenId(data.tokenId)
                 // console.log(addr)
-                const ended: boolean = await isAuctionEnded(addr)
-                // console.log("ended", ended)
-                if (!ended)
-                    setAuction(addr)
-                const highestBid = await getHighestBid(addr)
-                setCurrentPrice(Math.max(2, highestBid))
+                if (addr != '0x0000000000000000000000000000000000000000') {
+                    const ended: boolean = await isAuctionEnded(addr)
+                    // console.log("ended", ended)
+                    if (!ended)
+                        setAuction(addr)
+                    const highestBid = await getHighestBid(addr)
+                    setCurrentPrice(Math.max(2, highestBid))
+                }
             } catch (error) {
                 console.log(error)
             }
@@ -141,8 +143,8 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                 </Tooltip>
                 <Tooltip placement="topLeft" title="Add to auction">
                     <Button
-                        hidden={owner !== session?.user?.name || loading || 
-                                (auction !== "0x0000000000000000000000000000000000000000" && addWaiting === false) }
+                        hidden={owner !== session?.user?.name || loading ||
+                            (auction !== "0x0000000000000000000000000000000000000000" && addWaiting === false)}
                         className="buttonStyle"
                         icon={<TransactionOutlined />}
                         onClick={addToAuction}
@@ -174,7 +176,7 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                             Current price
                         </div>
                         <div className="flex items-center">
-                             {currentPrice} AXM
+                            {currentPrice} AXM
                         </div>
                     </div>
                 )
