@@ -52,7 +52,7 @@ interface artDataType {
   height: number
 }
 
-function page({ params }: { params: { addr: string } }) {
+function Profile({ params }: { params: { addr: string } }) {
   const { data: session, status } = useSession()
   const { address, isConnected } = useAccount()
 
@@ -350,4 +350,4 @@ function page({ params }: { params: { addr: string } }) {
   )
 }
 
-export default page
+export default Profile

@@ -19,7 +19,7 @@ interface promptDataType {
     negative_prompt: string
 }
 
-function page() {
+function Prompts() {
     const [promptFetching, setPromptFetching] = useState(true);
     const [promptList, setPromptList] = useState<promptDataType[]>([])
 
@@ -127,4 +127,4 @@ function page() {
 
 }
 
-export default page
+export default Prompts
