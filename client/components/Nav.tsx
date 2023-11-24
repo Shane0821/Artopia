@@ -63,7 +63,7 @@ function Nav() {
           </div>
         </Dropdown> */}
 
-        <Link href='/collections' className='nav_link'>Collecttions</Link>
+        <Link href='/collections' className='nav_link'>Collections</Link>
         <Link href='/publicGallery' className='nav_link'>Gallery</Link>
         <Link href='/prompts' className='nav_link'>Prompts</Link>
       </div>
