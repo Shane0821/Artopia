@@ -62,7 +62,7 @@ const Create = () => {
                 const { hash } = await writeContract({
                     address: process.env.NEXT_PUBLIC_GEN_CREDIT_CONTRACT,
                     abi: genCreditABI,
-                    functionName: 'spendCredits',
+                    functionName: 'useCredits',
                     chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
                     args: [1]
                 })
