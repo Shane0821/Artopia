@@ -25,6 +25,7 @@
     "react-dom": "^18",
     "react-intersection-observer": "^9.5.2",
     "react-responsive-masonry": "^2.1.7",
+    "sharp": "^0.32.6",
     "siwe": "^2.1.4",
     "viem": "^1.16.6",
     "wagmi": "^1.4.5"
