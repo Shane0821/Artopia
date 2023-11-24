@@ -40,7 +40,7 @@ function AuctionCollection() {
             const artId = await getAuctionTokenId(addr);
             // get metadata uri
             const tokenURI: string = await getTokenURIOfArtByTokenId(artId);
-            const metaURI = 'https://ipfs.io/ipfs/' + tokenURI.split("ipfs://")[1];
+            const metaURI = 'https://tan-bright-gibbon-975.mypinata.cloud/ipfs/' + tokenURI.split("ipfs://")[1];
 
             // get info from metadata
             const response = await fetch(metaURI, {

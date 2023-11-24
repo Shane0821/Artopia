@@ -94,7 +94,7 @@ function Bid({ params }: { params: { addr: string } }) {
 
                 // get metadata uri
                 const tokenURI: string = await getTokenURIOfArtByTokenId(artId)
-                const metaURI = 'https://ipfs.io/ipfs/' + tokenURI.split("ipfs://")[1]
+                const metaURI = 'https://tan-bright-gibbon-975.mypinata.cloud/ipfs/' + tokenURI.split("ipfs://")[1]
 
                 // get info from metadata
                 const response = await fetch(metaURI, {
@@ -172,7 +172,7 @@ function Bid({ params }: { params: { addr: string } }) {
 
                 {
                     // fetch prompt by cid
-                    const promptURI = 'https://ipfs.io/ipfs/' + auctionData.promptcid
+                    const promptURI = 'https://tan-bright-gibbon-975.mypinata.cloud/ipfs/' + auctionData.promptcid
                     console.log(promptURI)
                     const response = await fetch(promptURI, {
                         method: 'GET'
@@ -360,7 +360,7 @@ function Bid({ params }: { params: { addr: string } }) {
                         >
                             <img
                                 className="rounded auction_pic"
-                                src={`https://ipfs.io/ipfs/${nftData.cid}`}
+                                src={`https://tan-bright-gibbon-975.mypinata.cloud/ipfs/${nftData.cid}`}
                                 alt="Nft"
                                 onClick={() => { setPopup(true); }}
                             />

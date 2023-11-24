@@ -55,7 +55,7 @@ const AuctionCollectionItem = ({ data, index, user }: Props) => {
             < img
                 className="no-visual-search"
                 style={{ width: '100%' }}
-                src={`https://ipfs.io/ipfs/${data.cid} `}
+                src={`https://tan-bright-gibbon-975.mypinata.cloud/ipfs/${data.cid} `}
             />
 
             {/* buttons */}

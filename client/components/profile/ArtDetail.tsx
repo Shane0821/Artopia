@@ -62,7 +62,7 @@ const Detail = ({ popup, setPopup, data }: DetailProps) => {
                                     alt={`${data.cid}`}
                                     sizes='100vw'
                                     className="image no-visual-search" 
-                                    src={`https://ipfs.io/ipfs/${data.cid}`} />}
+                                    src={`https://tan-bright-gibbon-975.mypinata.cloud/ipfs/${data.cid}`} />}
                 <Paragraph>
                     <p className="site-description-item-profile-p">Prompt</p>
                     <Row>

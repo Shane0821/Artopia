@@ -125,7 +125,7 @@ const ArtItem = ({ data, index, setPopup, setPopupData, owner }: ArtItemProps) =
                 alt={`${data.cid}`}
                 sizes='100vw'
                 className="no-visual-search w-full h-auto"
-                src={`https://ipfs.io/ipfs/${data.cid}`} />
+                src={`https://tan-bright-gibbon-975.mypinata.cloud/ipfs/${data.cid}`} />
 
             {/* buttons */}
             < div

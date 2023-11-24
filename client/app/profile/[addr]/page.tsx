@@ -71,7 +71,7 @@ function page({ params }: { params: { addr: string } }) {
 
       // get metadata uri
       const tokenURI: string = await getTokenURIOfArtByTokenId(artId)
-      const metaURI = 'https://ipfs.io/ipfs/' + tokenURI.split("ipfs://")[1]
+      const metaURI = 'https://tan-bright-gibbon-975.mypinata.cloud/ipfs/' + tokenURI.split("ipfs://")[1]
 
       // get info from metadata
       const response = await fetch(metaURI, {
@@ -138,7 +138,7 @@ function page({ params }: { params: { addr: string } }) {
 
       {
         // fetch prompt by cid
-        const promptURI = 'https://ipfs.io/ipfs/' + imgData.promptcid
+        const promptURI = 'https://tan-bright-gibbon-975.mypinata.cloud/ipfs/' + imgData.promptcid
         // console.log(promptURI)
         const response = await fetch(promptURI, {
           method: 'GET'
@@ -166,7 +166,7 @@ function page({ params }: { params: { addr: string } }) {
 
       // get metadata uri
       const tokenURI: string = await getTokenURIOfPromptByTokenId(promptId)
-      const metaURI = 'https://ipfs.io/ipfs/' + tokenURI.split("ipfs://")[1]
+      const metaURI = 'https://tan-bright-gibbon-975.mypinata.cloud/ipfs/' + tokenURI.split("ipfs://")[1]
 
       // get prompt from metadata
       const response = await fetch(metaURI, {

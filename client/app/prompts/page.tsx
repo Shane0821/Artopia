@@ -30,7 +30,7 @@ function page() {
 
             // get metadata uri
             const tokenURI: string = await getTokenURIOfPromptByTokenId(promptId)
-            const metaURI = 'https://ipfs.io/ipfs/' + tokenURI.split("ipfs://")[1]
+            const metaURI = 'https://tan-bright-gibbon-975.mypinata.cloud/ipfs/' + tokenURI.split("ipfs://")[1]
 
             // get prompt from metadata
             const response = await fetch(metaURI, {
