@@ -412,7 +412,7 @@ function Bid({ params }: { params: { addr: string } }) {
                                 borderRadius: '10px',
                                 backgroundColor: '#ffe4e1'
                             }}>
-                                <div>🔥 Sale Ends In:</div>
+                                <div>🔥 Auction Ends In:</div>
                                 <Countdown
                                     value={Date.now() + nftData.endTime * 1000}
                                     format="HH:mm:ss"
