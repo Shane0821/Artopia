@@ -28,6 +28,22 @@ export const getPromptCountByUser = async(usr: string) => {
     }
 }   
 
+export const getTotalPromptCount = async() => {
+    try {
+        const totalSupply: BigInt = await readContract({
+            address: promptContractAddr,
+            abi: promptABI,
+            functionName: 'totalSupply',
+            chainId: chainId,
+            args: []
+        })
+        const cntPrompt = Number(totalSupply)
+        return cntPrompt
+    } catch (error) {
+        throw error // should be handled by caller
+    }
+}
+
 export const getPromptTokenIdOfUserByIndex = async(usr: string, idx: number) => {
     try {
         const tokenId: BigInt = await readContract({
@@ -42,6 +58,24 @@ export const getPromptTokenIdOfUserByIndex = async(usr: string, idx: number) => 
         throw error // should be handled by caller
     }
 }
+
+export const getPromptTokenIdByIndex = async(idx: number) => {
+    try {
+        const tokenId: BigInt = await readContract({
+            address: promptContractAddr,
+            abi: promptABI,
+            functionName: 'tokenByIndex',
+            chainId: chainId,
+            args: [idx]
+        })
+        return Number(tokenId)
+    } catch (error) {
+        throw error // should be handled by caller
+    }
+}
+
+
+
 
 export const getTokenURIOfPromptByTokenId = async(tokenId: number) => {
     try {
