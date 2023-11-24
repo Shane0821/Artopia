@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { Divider, Space, Button, Statistic, notification, Spin, Badge, InputNumber } from 'antd';
 const { Countdown } = Statistic;
 
-import { LoadingOutlined, AlertOutlined, HighlightOutlined } from '@ant-design/icons';
+import { LoadingOutlined, AlertOutlined, HighlightOutlined, SyncOutlined } from '@ant-design/icons';
 const antIcon = <LoadingOutlined style={{ fontSize: 40 }} spin />;
 
 import Detail from '@components/profile/ArtDetail'
@@ -62,6 +62,7 @@ function truncateMiddle(str: string, frontChars: number, backChars: number, elli
 function Bid({ params }: { params: { addr: string } }) {
     const [noti, contextHolder] = notification.useNotification();
     const [fetching, setFetching] = useState(true);
+    const [reFetching, setReFetching] = useState(false);
     const [nftData, setNftData] = useState({});
 
     const { data: session, status } = useSession();
@@ -83,22 +84,97 @@ function Bid({ params }: { params: { addr: string } }) {
     const [ending, setEnding] = useState(false);
     const [popup, setPopup] = useState(false);
 
-    // fetch art
-    useEffect(() => {
-        const fetchData = async () => {
-            if (!fetching) {
-                try {
-                    console.log("fetching..")
-                    setFetching(true);
+    const fetchData = async () => {
+        if (!fetching) {
+            try {
+                console.log("fetching..")
+                setFetching(true);
 
-                    const artId = await getAuctionTokenId(params.addr);
+                const artId = await getAuctionTokenId(params.addr);
 
-                    // get metadata uri
-                    const tokenURI: string = await getTokenURIOfArtByTokenId(artId)
-                    const metaURI = 'https://ipfs.io/ipfs/' + tokenURI.split("ipfs://")[1]
+                // get metadata uri
+                const tokenURI: string = await getTokenURIOfArtByTokenId(artId)
+                const metaURI = 'https://ipfs.io/ipfs/' + tokenURI.split("ipfs://")[1]
 
-                    // get info from metadata
-                    const response = await fetch(metaURI, {
+                // get info from metadata
+                const response = await fetch(metaURI, {
+                    method: 'GET'
+                })
+                if (!response.ok) {
+                    const message = `An error has occurred: ${response.status}`;
+                    throw new Error(message);
+                }
+                const data = await response.json();
+
+                let auctionData: auctionDataType = {
+                    tokenId: artId,
+                    name: "",
+                    description: "",
+                    cid: "",
+                    promptcid: "",
+                    prompt: "",
+                    negative_prompt: "",
+                    model: "",
+                    steps: 0,
+                    guidance: 0,
+                    seed: 0,
+                    sampler: "",
+                    created_at: "",
+                    width: 0,
+                    height: 0,
+                    beneficiary: "",
+                    promptOwner: "",
+                    endTime: 0,
+                    highestBid: 2,
+                    pendingReturn: 0,
+                    isEnded: false
+                };
+                auctionData.name = data.name
+                auctionData.description = data.description
+                auctionData.cid = data.image.split("ipfs://")[1] ? data.image.split("ipfs://")[1] : data.image.split("ipfs://")[0] // should be 1
+                auctionData.beneficiary = await getBeneficiary(params.addr)
+
+                const currentTimestampInSeconds = Math.floor(new Date().getTime() / 1000);
+                auctionData.endTime = Number(await getAuctionEndTime(params.addr)) - currentTimestampInSeconds
+                auctionData.isEnded = await isAuctionEnded(params.addr);
+
+                data.attributes?.forEach((attribute: any) => {
+                    switch (attribute.trait_type) {
+                        case 'Model':
+                            auctionData.model = attribute.value;
+                            break;
+                        case 'Prompt':
+                            auctionData.promptcid = attribute.value.split("ipfs://")[1] ? attribute.value.split("ipfs://")[1] : attribute.value.split("ipfs://")[0]; // // should be 1
+                            break;
+                        case 'Steps':
+                            auctionData.steps = attribute.value;
+                            break;
+                        case 'GuidanceScale':
+                            auctionData.guidance = attribute.value;
+                            break;
+                        case 'Seed':
+                            auctionData.seed = attribute.value;
+                            break;
+                        case 'Sampler':
+                            auctionData.sampler = attribute.value;
+                            break;
+                        case 'CreatedAt':
+                            auctionData.created_at = attribute.value;
+                            break;
+                        case 'Height':
+                            auctionData.height = attribute.value;
+                            break;
+                        case 'Width':
+                            auctionData.width = attribute.value;
+                            break;
+                    }
+                })
+
+                {
+                    // fetch prompt by cid
+                    const promptURI = 'https://ipfs.io/ipfs/' + auctionData.promptcid
+                    console.log(promptURI)
+                    const response = await fetch(promptURI, {
                         method: 'GET'
                     })
                     if (!response.ok) {
@@ -106,105 +182,39 @@ function Bid({ params }: { params: { addr: string } }) {
                         throw new Error(message);
                     }
                     const data = await response.json();
-
-                    let auctionData: auctionDataType = {
-                        tokenId: artId,
-                        name: "",
-                        description: "",
-                        cid: "",
-                        promptcid: "",
-                        prompt: "",
-                        negative_prompt: "",
-                        model: "",
-                        steps: 0,
-                        guidance: 0,
-                        seed: 0,
-                        sampler: "",
-                        created_at: "",
-                        width: 0,
-                        height: 0,
-                        beneficiary: "",
-                        promptOwner: "",
-                        endTime: 0,
-                        highestBid: 2,
-                        pendingReturn: 0,
-                        isEnded: false
-                    };
-                    auctionData.name = data.name
-                    auctionData.description = data.description
-                    auctionData.cid = data.image.split("ipfs://")[1] ? data.image.split("ipfs://")[1] : data.image.split("ipfs://")[0] // should be 1
-                    auctionData.beneficiary = await getBeneficiary(params.addr)
-
-                    const currentTimestampInSeconds = Math.floor(new Date().getTime() / 1000);
-                    auctionData.endTime = Number(await getAuctionEndTime(params.addr)) - currentTimestampInSeconds
-                    auctionData.isEnded = await isAuctionEnded(params.addr);
-
-                    data.attributes?.forEach((attribute: any) => {
-                        switch (attribute.trait_type) {
-                            case 'Model':
-                                auctionData.model = attribute.value;
-                                break;
-                            case 'Prompt':
-                                auctionData.promptcid = attribute.value.split("ipfs://")[1] ? attribute.value.split("ipfs://")[1] : attribute.value.split("ipfs://")[0]; // // should be 1
-                                break;
-                            case 'Steps':
-                                auctionData.steps = attribute.value;
-                                break;
-                            case 'GuidanceScale':
-                                auctionData.guidance = attribute.value;
-                                break;
-                            case 'Seed':
-                                auctionData.seed = attribute.value;
-                                break;
-                            case 'Sampler':
-                                auctionData.sampler = attribute.value;
-                                break;
-                            case 'CreatedAt':
-                                auctionData.created_at = attribute.value;
-                                break;
-                            case 'Height':
-                                auctionData.height = attribute.value;
-                                break;
-                            case 'Width':
-                                auctionData.width = attribute.value;
-                                break;
-                        }
-                    })
-
-                    {
-                        // fetch prompt by cid
-                        const promptURI = 'https://ipfs.io/ipfs/' + auctionData.promptcid
-                        console.log(promptURI)
-                        const response = await fetch(promptURI, {
-                            method: 'GET'
-                        })
-                        if (!response.ok) {
-                            const message = `An error has occurred: ${response.status}`;
-                            throw new Error(message);
-                        }
-                        const data = await response.json();
-                        auctionData.prompt = data.textData.prompt
-                        auctionData.negative_prompt = data.textData.negative_prompt
-                        auctionData.promptOwner = await getPromptOwnerByCID(auctionData.promptcid)
-                    }
-
-                    auctionData.highestBid = await getHighestBid(params.addr);
-                    setBidPrice(Math.max(1.9, auctionData.highestBid) + 0.1);
-
-                    auctionData.pendingReturn = await getPendingReturns(params.addr, session?.user.name);
-
-                    setNftData(auctionData);
-                    setFetching(false);
-                } catch (error) {
-                    console.log(error);
+                    auctionData.prompt = data.textData.prompt
+                    auctionData.negative_prompt = data.textData.negative_prompt
+                    auctionData.promptOwner = await getPromptOwnerByCID(auctionData.promptcid)
                 }
-            } else {
-                setNftData({});
+
+                auctionData.highestBid = await getHighestBid(params.addr);
+                setBidPrice(Math.max(1.9, auctionData.highestBid) + 0.1);
+
+                auctionData.pendingReturn = await getPendingReturns(params.addr, session?.user.name);
+
+                setNftData(auctionData);
+                setFetching(false);
+                setReFetching(false);
+            } catch (error) {
+                console.log(error);
             }
-        };
+        } else {
+            setNftData({});
+        }
+    };
+
+    // fetch art
+    useEffect(() => {
         // console.log(userConnected)
         if (userConnected && session?.user) fetchData();
     }, [userConnected]);
+
+    const handleReFetch = () => {
+        if (userConnected && session?.user) {
+            setReFetching(true);
+            fetchData();
+        }
+    }
 
     useEffect(() => {
         if (isConnected && session?.user) {
@@ -320,7 +330,7 @@ function Bid({ params }: { params: { addr: string } }) {
                 }}
             >
                 {
-                    fetching
+                    (fetching && !reFetching)
                     &&
                     <Spin
                         style={{
@@ -335,7 +345,7 @@ function Bid({ params }: { params: { addr: string } }) {
                     />
                 }
                 {
-                    !fetching
+                    !(fetching && !reFetching)
                     &&
                     <div className="w-full flex">
                         <Detail popup={popup} setPopup={setPopup} data={nftData} />
@@ -423,6 +433,14 @@ function Bid({ params }: { params: { addr: string } }) {
                                     <a className="owner-link">
                                         {`${nftData.highestBid} AXM`}
                                     </a>
+                                    <Button
+                                        title="fetch"
+                                        style={{ marginLeft: 10 }}
+                                        icon={<SyncOutlined />}
+                                        onClick={() => { handleReFetch() }}
+                                        loading={reFetching}
+                                    >
+                                    </Button>
                                 </h2>
                             </div>
 
