@@ -43,6 +43,6 @@ Pinata
 - Sell NFTs
 
 ## Test and Deployment
-For testing, you can directly visit our website: https://artopia-one.vercel.app/. Remember to install MetaMask and add [Aries testnet](https://docs.axiomesh.io/en/documentation/getting-started/resources/resources).
+To test our functionalities, you can directly visit our website: https://artopia-one.vercel.app/. Remember to install MetaMask and add [Aries testnet](https://docs.axiomesh.io/en/documentation/getting-started/resources/resources).
 
 If you want to deploy this project on your own, please refer to the .env_example file in /client and /contract and create your own .env file. You'll also have to redeploy smart contracts.
