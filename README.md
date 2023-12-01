@@ -22,13 +22,13 @@ It guides users through the process of creating and listing their NFTs, offering
 React, Next.js
 
 ### Wallet Connection and Contract Interaction 
-Rainbowkit, wagmi, viem
+MetaMask, RainbowKit, Wagmi, Viem
 
 ### Backend
 MongoDB
 
 ### Contract Development
-Solidity
+Solidity, Hardhat, Openzeppelin
 
 ### IPFS
 Pinata
@@ -43,6 +43,6 @@ Pinata
 - Sell NFTs
 
 ## Test and Deployment
-For testing, you can directly visit this website: https://artopia-one.vercel.app/. Remember to install MetaMask and add [Aries testnet](https://docs.axiomesh.io/en/documentation/getting-started/resources/resources).
+For testing, you can directly visit our website: https://artopia-one.vercel.app/. Remember to install MetaMask and add [Aries testnet](https://docs.axiomesh.io/en/documentation/getting-started/resources/resources).
 
 If you want to deploy this project on your own, please refer to the .env_example file in /client and /contract and create your own .env file. You'll also have to redeploy smart contracts.
